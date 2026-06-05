@@ -36,11 +36,34 @@
   --radius-pill: 100px;
 }
 
+/* ── THEMES ── */
+body.theme-kadoatery {
+  --bg: #1f1621; --glass: rgba(42, 26, 41, 0.4); --glass-hover: rgba(56, 36, 55, 0.6);
+  --green: #34d399; --green-glow: rgba(52, 211, 153, 0.4); --red: #fb7185;
+  --blue: #60a5fa; --amber: #fbbf24; --purple: #f472b6; --teal: #38bdf8;
+}
+body.theme-darkfaerie {
+  --bg: #120914; --glass: rgba(35, 15, 40, 0.4); --glass-hover: rgba(45, 20, 50, 0.6);
+  --green: #84cc16; --green-glow: rgba(132, 204, 22, 0.4); --red: #e11d48;
+  --blue: #7e22ce; --amber: #d946ef; --purple: #c026d3; --teal: #4d7c0f;
+}
+body.theme-virtupets {
+  --bg: #050a05; --glass: rgba(10, 25, 10, 0.4); --glass-hover: rgba(15, 35, 15, 0.6);
+  --green: #10b981; --green-glow: rgba(16, 185, 129, 0.4); --red: #ef4444;
+  --blue: #059669; --amber: #fbbf24; --purple: #047857; --teal: #064e3b;
+}
+body.theme-jelly {
+  --bg: #1a0b0b; --glass: rgba(40, 15, 15, 0.4); --glass-hover: rgba(50, 20, 20, 0.6);
+  --green: #a3e635; --green-glow: rgba(163, 230, 53, 0.4); --red: #f43f5e;
+  --blue: #f97316; --amber: #fbbf24; --purple: #eab308; --teal: #ec4899;
+}
+
 html { font-size: 15px; }
 body {
   background-color: var(--bg); color: var(--text);
   font-family: var(--body); min-height: 100vh;
   -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative;
+  transition: background-color 0.5s ease;
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -52,7 +75,7 @@ body {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none; z-index: -1; overflow: hidden; filter: blur(100px);
 }
-.blob { position: absolute; border-radius: 50%; opacity: 0.3; animation: float 20s infinite alternate ease-in-out; }
+.blob { position: absolute; border-radius: 50%; opacity: 0.3; animation: float 20s infinite alternate ease-in-out; transition: background 0.8s ease; }
 .blob-1 { width: 40vw; height: 40vw; background: var(--blue); top: -10%; left: -10%; animation-duration: 25s; }
 .blob-2 { width: 50vw; height: 50vw; background: var(--purple); bottom: -20%; right: -10%; animation-duration: 28s; animation-direction: alternate-reverse; }
 .blob-3 { width: 35vw; height: 35vw; background: var(--teal); top: 30%; left: 40%; opacity: 0.2; animation-duration: 35s; }
@@ -105,6 +128,18 @@ body {
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
 .btn-primary:hover { background: #e2e8f0; border-color: transparent; box-shadow: 0 6px 20px rgba(255,255,255,0.3); }
 
+/* ── MODAL SETTINGS ── */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+  opacity: 1; transition: opacity 0.2s ease;
+}
+.modal-overlay.hidden { opacity: 0; pointer-events: none; }
+.modal-card { width: 100%; max-width: 450px; margin: 20px; padding: 32px; position: relative; }
+.theme-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.theme-btn.active { background: var(--text); color: var(--bg); border-color: transparent; box-shadow: 0 4px 10px rgba(255,255,255,0.2); }
+
 /* ── FILTER BAR ── */
 .filter-bar {
   display: flex; align-items: center; justify-content: space-between;
@@ -116,7 +151,7 @@ body {
   background: transparent; border: none; color: var(--text);
   font-family: var(--display); font-size: 1.1rem; font-weight: 700; outline: none; cursor: pointer; text-transform: uppercase;
 }
-.month-select option { background: var(--bg); color: var(--text); }
+.month-select option { background: #0d0f14; color: #ffffff; }
 
 /* ── MAIN ── */
 .main { padding: 40px 36px; max-width: 1400px; margin: 0 auto; }
@@ -163,17 +198,12 @@ body {
 
 .c-green { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.2); }
 .c-green .stat-num { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
-
-/* De-emphasize snipes visually */
 .c-red { background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.05); }
 .c-red .stat-num { color: var(--text3); text-shadow: none; }
-
 .c-blue { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
 .c-blue .stat-num { color: var(--blue); }
 .c-amber { background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.2); }
 .c-amber .stat-num { color: var(--amber); text-shadow: 0 0 20px rgba(245, 158, 11, 0.3); }
-.c-purple { background: rgba(139, 92, 246, 0.05); border-color: rgba(139, 92, 246, 0.2); }
-.c-purple .stat-num { color: var(--purple); }
 
 /* ── TABS ── */
 .tabs {
@@ -217,11 +247,11 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 /* ── BADGES & BARS ── */
 .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; font-size: .8rem; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
 .badge-green { background: var(--green-glow); color: var(--green); }
-.badge-red   { background: rgba(255,255,255,0.05); color: var(--text3); } /* Subdued sniped badge */
+.badge-red   { background: rgba(255,255,255,0.05); color: var(--text3); }
 
 .rate-row { display: flex; align-items: center; gap: 12px; min-width: 140px; }
 .rate-track { flex: 1; height: 8px; background: rgba(0,0,0,0.4); border-radius: 10px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
-.rate-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); background: var(--green); } /* Always green, we only care about success rate */
+.rate-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); background: var(--green); }
 .rate-pct { font-family: var(--display); font-size: .9rem; font-weight: 700; color: var(--text); min-width: 36px; text-align: right; }
 
 /* ── LOG ── */
@@ -237,7 +267,7 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 .log-price { font-family: 'DM Sans', monospace; font-size: .85rem; color: var(--text2); text-align: right; font-weight: 600;}
 .log-dot { width: 10px; height: 10px; border-radius: 50%; justify-self: center; }
 .log-dot.success { background: var(--green); box-shadow: 0 0 10px var(--green); }
-.log-dot.sniped  { background: var(--border-strong); } /* De-emphasized dot */
+.log-dot.sniped  { background: var(--border-strong); }
 .log-status { display: flex; justify-content: flex-end; }
 
 /* ── TOAST ── */
@@ -267,8 +297,6 @@ input[type=file] { display: none; }
   .stat-num { font-size: 2.2rem; }
   .tabs { flex-wrap: wrap; justify-content: center; width: 100%; }
   .tab { width: 48%; text-align: center; margin-bottom: 4px; }
-  
-  /* Log mobile layout */
   .log-entry { grid-template-columns: 36px 1fr 80px; padding: 12px; gap: 12px; }
   .log-price, .log-ts, .log-dot { display: none; }
 }
@@ -301,11 +329,9 @@ input[type=file] { display: none; }
       <span class="pulse" id="pulse-dot" style="display:none"></span>
       <span id="status-text">Awaiting Data</span>
     </div>
-    <button class="btn" onclick="document.getElementById('file-input').click()">Load JSON</button>
-    <input type="file" id="file-input" accept=".json" onchange="handleFileLoad(event)">
-    <button class="btn" id="export-btn" style="display:none" onclick="exportData()">Export</button>
-    <button class="btn btn-primary" id="import-sessions-btn">Import Extension</button>
-    <button class="btn btn-icon" onclick="clearData()" title="Wipe Data">✕</button>
+    <button class="btn btn-icon" onclick="openSettings()" title="Settings">
+      <svg viewBox="0 0 24 24" style="width:18px; height:18px;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" fill="currentColor"/></svg>
+    </button>
   </div>
 </header>
 
@@ -321,6 +347,41 @@ input[type=file] { display: none; }
   <button class="btn" onclick="resetFilters()">Reset View</button>
 </div>
 
+<div id="settings-modal" class="modal-overlay hidden">
+  <div class="modal-card card">
+    <div class="card-header" style="margin-bottom: 24px;">
+      <span class="card-title">Settings & Data</span>
+      <button class="btn btn-icon" style="height:32px; width:32px;" onclick="closeSettings()">✕</button>
+    </div>
+    
+    <div style="margin-bottom: 24px;">
+      <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">THEME</div>
+      <div class="theme-grid">
+        <button class="btn theme-btn" data-theme="default" onclick="setTheme('default')">Default</button>
+        <button class="btn theme-btn" data-theme="kadoatery" onclick="setTheme('kadoatery')">Kadoatery</button>
+        <button class="btn theme-btn" data-theme="darkfaerie" onclick="setTheme('darkfaerie')">Dark Faerie</button>
+        <button class="btn theme-btn" data-theme="virtupets" onclick="setTheme('virtupets')">Virtupets</button>
+        <button class="btn theme-btn" data-theme="jelly" onclick="setTheme('jelly')">Jelly World*</button>
+      </div>
+      <div style="font-size:0.75rem; color:var(--text3); margin-top:8px; font-style:italic;">* Doesn't exist.</div>
+    </div>
+
+    <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
+
+    <div>
+      <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">DATA MANAGEMENT</div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <button class="btn btn-primary" id="modal-import-ext" style="justify-content:center;">Import Extension Data</button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <button class="btn" onclick="document.getElementById('file-input').click(); closeSettings();" style="justify-content:center;">Load JSON</button>
+          <button class="btn" id="modal-export-btn" onclick="exportData(); closeSettings();" style="justify-content:center;">Export JSON</button>
+        </div>
+        <button class="btn" onclick="clearData(); closeSettings();" style="justify-content:center; color:var(--red); border-color:var(--red-muted);">Wipe Dashboard Data</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <main class="main">
 
   <div id="import-screen" class="import-screen">
@@ -330,7 +391,8 @@ input[type=file] { display: none; }
     <h2>It's quiet in here...</h2>
     <p>Connect your Tampermonkey extension, drop in a JSON save file, or load up some dummy data to see the dashboard in action.</p>
     <div class="import-btns">
-      <button class="btn btn-primary" onclick="document.getElementById('import-sessions-btn').click()">Import Extension Data</button>
+      <button class="btn btn-primary" id="empty-import-btn">Import Extension Data</button>
+      <input type="file" id="file-input" accept=".json" onchange="handleFileLoad(event)">
       <button class="btn" onclick="document.getElementById('file-input').click()">Load JSON</button>
       <button class="btn" onclick="loadDemoData()">Try Demo Data</button>
     </div>
@@ -432,13 +494,68 @@ input[type=file] { display: none; }
 <div class="toast" id="toast"></div>
 
 <script>
+// ─── STATE & CONSTANTS ───
 let feedLog = [];
 let charts  = {};
 let currentMonth = 'all';
 let availableMonths = [];
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-// Chart Defaults
+const THEMES = {
+  default:    { bg: '#0d0f14', green: '#22c55e', red: '#ef4444', blue: '#3b82f6', amber: '#f59e0b', purple: '#8b5cf6', teal: '#14b8a6' },
+  kadoatery:  { bg: '#1f1621', green: '#34d399', red: '#fb7185', blue: '#60a5fa', amber: '#fbbf24', purple: '#f472b6', teal: '#38bdf8' },
+  darkfaerie: { bg: '#120914', green: '#84cc16', red: '#e11d48', blue: '#7e22ce', amber: '#d946ef', purple: '#c026d3', teal: '#4d7c0f' },
+  virtupets:  { bg: '#050a05', green: '#10b981', red: '#ef4444', blue: '#059669', amber: '#fbbf24', purple: '#047857', teal: '#064e3b' },
+  jelly:      { bg: '#1a0b0b', green: '#a3e635', red: '#f43f5e', blue: '#f97316', amber: '#fbbf24', purple: '#eab308', teal: '#ec4899' }
+};
+
+let currentThemeKey = localStorage.getItem('statdoatie_theme') || 'default';
+let C = THEMES[currentThemeKey];
+
+// ─── INITIALIZATION ───
+document.addEventListener('DOMContentLoaded', () => {
+  // Apply saved theme
+  applyThemeDOM(currentThemeKey);
+
+  // Load saved data
+  const saved = localStorage.getItem('statdoatie_save');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (parsed.length > 0) {
+        feedLog = parsed;
+        populateMonths();
+        document.getElementById('import-screen').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('filter-bar').classList.remove('hidden');
+        document.getElementById('pulse-dot').style.display = '';
+        renderWidgets();
+      }
+    } catch (e) { console.error("Failed to parse local storage", e); }
+  }
+});
+
+// ─── THEME & MODAL LOGIC ───
+function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
+function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
+
+function applyThemeDOM(key) {
+  document.body.className = key === 'default' ? '' : `theme-${key}`;
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.querySelector(`.theme-btn[data-theme="${key}"]`);
+  if(activeBtn) activeBtn.classList.add('active');
+}
+
+function setTheme(key) {
+  if (!THEMES[key]) return;
+  currentThemeKey = key;
+  C = THEMES[key];
+  localStorage.setItem('statdoatie_theme', key);
+  applyThemeDOM(key);
+  if(feedLog.length > 0) renderWidgets(); // Force chart re-draw with new hex codes
+}
+
+// ─── CHART DEFAULTS ───
 Chart.defaults.color = '#a0aec0';
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.font.size = 12;
@@ -450,28 +567,7 @@ Chart.defaults.plugins.tooltip.cornerRadius = 12;
 Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
 Chart.defaults.plugins.tooltip.borderWidth = 1;
 
-// Load data on start
-document.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('statdoatie_save');
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      if (parsed.length > 0) {
-        feedLog = parsed;
-        populateMonths();
-        document.getElementById('import-screen').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        document.getElementById('filter-bar').classList.remove('hidden');
-        document.getElementById('export-btn').style.display = '';
-        document.getElementById('pulse-dot').style.display = '';
-        renderWidgets();
-      }
-    } catch (e) {
-      console.error("Failed to parse local storage", e);
-    }
-  }
-});
-
+// ─── UTILS ───
 function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg; el.classList.add('show');
@@ -485,29 +581,25 @@ function getCost(itemName) {
 }
 
 function getItemImage(itemName) {
-  const imgs = [
-    'drn_tigersquash', 'foo_cheeseburger', 'plu_slorg_green', 'boo_brain_muffin', 
-    'fd_faeriepancakes', 'foo_blueberrycrepes', 'grf_puntec', 'piz_smellydung', 
-    'foo_grapes_purple', 'drn_borovan', 'foo_tombola', 'piz_cheese', 
-    'foo_jam_thornberry', 'foo_kebab', 'foo_driedfish', 'can_jellylolly', 
-    'foo_toastjam', 'foo_carrotpeaomelette', 'can_gummygrundo', 'pla_honeyblossom'
-  ];
+  const imgs = ['drn_tigersquash', 'foo_cheeseburger', 'plu_slorg_green', 'boo_brain_muffin', 'fd_faeriepancakes', 'foo_blueberrycrepes', 'grf_puntec', 'piz_smellydung', 'foo_grapes_purple', 'drn_borovan', 'foo_tombola', 'piz_cheese', 'foo_jam_thornberry', 'foo_kebab', 'foo_driedfish', 'can_jellylolly', 'foo_toastjam', 'foo_carrotpeaomelette', 'can_gummygrundo', 'pla_honeyblossom'];
   let hash = 0;
   for(let i=0; i<itemName.length; i++) hash = itemName.charCodeAt(i) + ((hash<<5)-hash);
-  const idx = Math.abs(hash) % imgs.length;
-  return `https://images.neopets.com/items/${imgs[idx]}.gif`;
+  return `https://images.neopets.com/items/${imgs[Math.abs(hash) % imgs.length]}.gif`;
 }
 
-// ─── DATA SYNC ───────────────────────────────────────
+// ─── DATA SYNC ───
 window.addEventListener('KadDataSync', e => {
   if (e.detail && e.detail.length > 0) { mergeData(e.detail); toast(`Imported ${e.detail.length} records`); } 
   else { toast('No data found in extension'); }
 });
 
-document.getElementById('import-sessions-btn').addEventListener('click', () => {
+function triggerExtensionSync() {
   toast('Requesting data from extension...');
   setTimeout(() => { if (!feedLog.length) toast('No active extension detected'); }, 2000);
-});
+  closeSettings();
+}
+document.getElementById('modal-import-ext').addEventListener('click', triggerExtensionSync);
+document.getElementById('empty-import-btn').addEventListener('click', triggerExtensionSync);
 
 function handleFileLoad(e) {
   const file = e.target.files[0]; if (!file) return;
@@ -522,6 +614,7 @@ function handleFileLoad(e) {
 }
 
 function exportData() {
+  if(feedLog.length === 0) return toast('Nothing to export');
   const b = new Blob([JSON.stringify(feedLog, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b);
   a.download = `statdoatie_${new Date().toISOString().slice(0,10)}.json`; a.click(); toast('Exported JSON');
@@ -534,14 +627,13 @@ function clearData() {
   document.getElementById('dashboard').classList.add('hidden');
   document.getElementById('filter-bar').classList.add('hidden');
   document.getElementById('import-screen').classList.remove('hidden');
-  document.getElementById('export-btn').style.display = 'none';
   document.getElementById('streak-badge').classList.add('hidden');
   document.getElementById('pulse-dot').style.display = 'none';
   document.getElementById('status-text').textContent = 'Awaiting Data';
   toast('Dashboard reset');
 }
 
-// ─── FILTER LOGIC ────────────────────────────────────
+// ─── FILTER LOGIC ───
 function populateMonths() {
   const monthSet = new Set(feedLog.map(e => e.timestamp.slice(0, 7)));
   availableMonths = Array.from(monthSet).sort((a, b) => b.localeCompare(a));
@@ -573,7 +665,6 @@ function mergeData(entries) {
   document.getElementById('import-screen').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('filter-bar').classList.remove('hidden');
-  document.getElementById('export-btn').style.display = '';
   document.getElementById('pulse-dot').style.display = '';
   renderWidgets();
 }
@@ -586,7 +677,6 @@ function loadDemoData() {
     const n = Math.floor(Math.random() * 15) + 3;
     for (let i = 0; i < n; i++) {
       const ts = new Date(base); ts.setHours(Math.floor(Math.random()*24), Math.floor(Math.random()*60), 0, 0);
-      // Give it a slightly higher success rate for the demo to show off the green focus
       demo.push({ item: items[Math.floor(Math.random()*items.length)], status: Math.random() < .65 ? 'success' : 'sniped', timestamp: ts.toISOString() });
     }
   }
@@ -599,7 +689,7 @@ function switchTab(name, btn) {
   btn.classList.add('active'); document.getElementById('panel-' + name).classList.add('active');
 }
 
-// ─── CHARTS ──────────────────────────────────────────
+// ─── CHARTS ───
 function destroyCharts() { Object.values(charts).forEach(c => { try { c.destroy(); } catch {} }); charts = {}; }
 function gridLines() { return { color: 'rgba(255,255,255,.05)', drawBorder: false, borderDash: [5, 5] }; }
 function buildRichTooltip(l, v, t) { const pct = t>0 ? Math.round((v/t)*100) : 0; return `${l}: ${v.toLocaleString()} (${pct}%)`; }
@@ -619,9 +709,6 @@ function renderStats(data) {
   const t = data.length, s = data.filter(e => e.status === 'success').length, n = data.filter(e => e.status === 'sniped').length;
   const rate = t > 0 ? Math.round(s / t * 100) : 0;
   const days = new Set(data.map(e => e.timestamp.slice(0,10))).size;
-  const hrs = Array(24).fill(0); data.filter(e=>e.status==='success').forEach(e => hrs[new Date(e.timestamp).getHours()]++); // Focus peak hour on successes
-  const bH = hrs.indexOf(Math.max(...hrs));
-  const bHLabel = bH === 0 ? '12am' : bH < 12 ? bH+'am' : bH === 12 ? '12pm' : (bH-12)+'pm';
   const vF = data.filter(e=>e.status==='success').reduce((a, c) => a + getCost(c.item), 0);
 
   document.getElementById('stats-grid').innerHTML = `
@@ -634,10 +721,10 @@ function renderStats(data) {
     </div>
     <div class="stat-card c-amber"><div class="stat-label">Win Rate</div><div class="stat-num">${rate}%</div></div>
     <div class="stat-card c-blue"><div class="stat-label">NP Value Secured</div><div class="stat-num">${(vF/1000).toFixed(1)}k</div></div>
-    <div class="stat-card c-purple"><div class="stat-label">Best Hour to Feed</div><div class="stat-num">${bHLabel}</div></div>
   `;
   
-  // Lower grid gets the secondary / muted stats
+  const vS = data.filter(e=>e.status==='sniped').reduce((a, c) => a + getCost(c.item), 0);
+  
   document.getElementById('stats-grid-lower').innerHTML = `
     <div class="stat-card"><div class="stat-label">Unique Items Fed</div><div class="stat-num">${new Set(data.filter(e=>e.status==='success').map(e=>e.item)).size}</div></div>
     <div class="stat-card"><div class="stat-label">Active Days</div><div class="stat-num">${days}</div></div>
@@ -664,15 +751,10 @@ function renderPie(data) {
   
   charts.pie = new Chart(document.getElementById('pieChart'), {
     type: 'doughnut',
-    // Snipes faded to 10% white
-    data: { labels: ['Fed', 'Sniped'], datasets: [{ data: [s, n], backgroundColor: ['#22c55e', 'rgba(255,255,255,0.05)'], borderWidth: 0 }] },
+    data: { labels: ['Fed', 'Sniped'], datasets: [{ data: [s, n], backgroundColor: [C.green, 'rgba(255,255,255,0.05)'], borderWidth: 0 }] },
     options: {
-      responsive: true, maintainAspectRatio: false, 
-      cutout: '82%', borderRadius: 20, spacing: 6,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => buildRichTooltip(ctx.label, ctx.raw, s+n) } }
-      }
+      responsive: true, maintainAspectRatio: false, cutout: '82%', borderRadius: 20, spacing: 6,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => buildRichTooltip(ctx.label, ctx.raw, s+n) } } }
     }
   });
 }
@@ -687,7 +769,7 @@ function renderDow(data) {
     data: {
       labels: DAYS,
       datasets: [
-        { label: 'Fed', data: sC, backgroundColor: '#22c55e', stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Fed', data: sC, backgroundColor: C.green, stack: 'a', borderRadius: 10, borderSkipped: false },
         { label: 'Sniped', data: nC, backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
@@ -710,7 +792,7 @@ function renderHour(data) {
     data: {
       labels: lbls,
       datasets: [
-        { label: 'Fed', data: sC, backgroundColor: '#f59e0b', stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Fed', data: sC, backgroundColor: C.amber, stack: 'a', borderRadius: 10, borderSkipped: false },
         { label: 'Sniped', data: nC, backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
@@ -726,7 +808,6 @@ function renderItemsChart(data) {
   if(!data.length) return;
   const c = {};
   data.forEach(e => { if(!c[e.item]) c[e.item] = { t:0, s:0, n:0, cost: getCost(e.item) }; c[e.item].t++; c[e.item][e.status==='success'?'s':'n']++; });
-  // Sort heavily by successes first
   const arr = Object.entries(c).sort((a,b) => b[1].s - a[1].s).slice(0,15);
   document.getElementById('topItemsWrap').style.height = Math.max(300, arr.length * 40 + 40) + 'px';
   
@@ -735,7 +816,7 @@ function renderItemsChart(data) {
     data: {
       labels: arr.map(([k]) => k),
       datasets: [
-        { label: 'Fed', data: arr.map(([,v]) => v.s), backgroundColor: '#14b8a6', stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Fed', data: arr.map(([,v]) => v.s), backgroundColor: C.teal, stack: 'a', borderRadius: 10, borderSkipped: false },
         { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
@@ -750,21 +831,17 @@ function renderItemsChart(data) {
 function renderItemTable(ds) {
   const c = {};
   ds.forEach(e => { if (!c[e.item]) c[e.item] = {s:0,n:0,cost:getCost(e.item)}; c[e.item][e.status==='success'?'s':'n']++; });
-  // Sort primarily by successes
   const r = Object.entries(c).map(([i,{s,n,cost}]) => ({ i, cost, spent: s*cost, t: s+n, s, n, rate: Math.round(s/(s+n)*100) })).sort((a,b) => b.s - a.s);
   document.getElementById('item-count').textContent = r.length + ' Items';
   document.querySelector('#item-table tbody').innerHTML = r.map(x => `
     <tr>
-      <td class="td-name">
-        <img src="${getItemImage(x.i)}" class="item-img" alt="icon">
-        ${x.i}
-      </td>
+      <td class="td-name"><img src="${getItemImage(x.i)}" class="item-img" alt="icon">${x.i}</td>
       <td class="td-right" style="font-family:monospace;">${x.cost.toLocaleString()}</td>
       <td class="td-right">${x.t}</td>
       <td class="td-right"><span class="badge badge-green">${x.s}</span></td>
       <td class="td-right"><span class="badge badge-red">${x.n}</span></td>
       <td class="td-right" style="color:#fff; font-weight:700; font-family:monospace;">${x.spent.toLocaleString()}</td>
-      <td><div class="rate-row"><div class="rate-track"><div class="rate-fill" style="width:${x.rate}%;"></div></div><span class="rate-pct">${x.rate}%</span></div></td>
+      <td><div class="rate-row"><div class="rate-track"><div class="rate-fill" style="width:${x.rate}%; background:var(--green)"></div></div><span class="rate-pct">${x.rate}%</span></div></td>
     </tr>
   `).join('');
 }
@@ -780,7 +857,7 @@ function renderDaily(data) {
     data: {
       labels: lbls,
       datasets: [
-        { label: 'Fed', data: lbls.map(d => dObj[d].s), backgroundColor: '#3b82f6', stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Fed', data: lbls.map(d => dObj[d].s), backgroundColor: C.blue, stack: 'a', borderRadius: 10, borderSkipped: false },
         { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
@@ -798,14 +875,23 @@ function renderCumul(data) {
   let s=0, n=0;
   
   const ctx = document.getElementById('cumulChart').getContext('2d');
-  const gGreen = ctx.createLinearGradient(0, 0, 0, 300); gGreen.addColorStop(0, 'rgba(34, 197, 94, 0.4)'); gGreen.addColorStop(1, 'transparent');
+  
+  // Create gradient dynamically based on current theme's green
+  // Chart.js canvas uses rgba values for gradients so we translate the hex
+  const hex2rgba = (hex, alpha = 1) => {
+    const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
+    return `rgba(${r},${g},${b},${alpha})`;
+  };
+  
+  const gGreen = ctx.createLinearGradient(0, 0, 0, 300); 
+  gGreen.addColorStop(0, hex2rgba(C.green, 0.4)); gGreen.addColorStop(1, 'transparent');
 
   charts.cumul = new Chart(document.getElementById('cumulChart'), {
     type: 'line',
     data: {
       labels: arr.map(e => e.timestamp.slice(0,10)),
       datasets: [
-        { label:'Total Fed', data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor:'#22c55e', backgroundColor: gGreen, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
+        { label:'Total Fed', data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor: C.green, backgroundColor: gGreen, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
         { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }), borderColor:'rgba(255,255,255,0.2)', fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
       ]
     },
