@@ -12,7 +12,7 @@
 
 :root {
   --bg:        #0d0f14;
-  --glass:     rgba(25, 29, 38, 0.5);
+  --glass:     rgba(25, 29, 38, 0.4);
   --glass-hover: rgba(35, 41, 54, 0.6);
   --border:    rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.15);
@@ -20,7 +20,6 @@
   --text2:     #a0aec0;
   --text3:     #718096;
   
-  /* Vibrant, blob-friendly colors */
   --green:     #22c55e;
   --green-glow: rgba(34, 197, 94, 0.4);
   --red:       #ef4444;
@@ -39,61 +38,44 @@
 
 html { font-size: 15px; }
 body {
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: var(--body);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-  position: relative;
+  background-color: var(--bg); color: var(--text);
+  font-family: var(--body); min-height: 100vh;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative;
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 10px; }
 
-/* ── FUN BLOBS (BACKGROUND) ── */
+/* ── BACKGROUND BLOBS ── */
 .bg-blobs {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  pointer-events: none; z-index: -1; overflow: hidden;
-  filter: blur(100px);
+  pointer-events: none; z-index: -1; overflow: hidden; filter: blur(100px);
 }
-.blob {
-  position: absolute; border-radius: 50%; opacity: 0.4;
-  animation: float 20s infinite alternate ease-in-out;
-}
-.blob-1 {
-  width: 40vw; height: 40vw; background: var(--blue);
-  top: -10%; left: -10%; animation-duration: 25s;
-}
-.blob-2 {
-  width: 50vw; height: 50vw; background: var(--purple);
-  bottom: -20%; right: -10%; animation-duration: 28s; animation-direction: alternate-reverse;
-}
-.blob-3 {
-  width: 35vw; height: 35vw; background: var(--teal);
-  top: 30%; left: 40%; opacity: 0.25; animation-duration: 35s;
-}
+.blob { position: absolute; border-radius: 50%; opacity: 0.3; animation: float 20s infinite alternate ease-in-out; }
+.blob-1 { width: 40vw; height: 40vw; background: var(--blue); top: -10%; left: -10%; animation-duration: 25s; }
+.blob-2 { width: 50vw; height: 50vw; background: var(--purple); bottom: -20%; right: -10%; animation-duration: 28s; animation-direction: alternate-reverse; }
+.blob-3 { width: 35vw; height: 35vw; background: var(--teal); top: 30%; left: 40%; opacity: 0.2; animation-duration: 35s; }
 @keyframes float {
   0% { transform: translate(0, 0) scale(1) rotate(0deg); border-radius: 50%; }
   50% { border-radius: 40% 60% 60% 40% / 50% 40% 60% 50%; }
   100% { transform: translate(10vw, 5vh) scale(1.1) rotate(20deg); border-radius: 50%; }
 }
 
-/* ── GLASS HEADER ── */
+/* ── HEADER ── */
 .header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 36px; height: 72px;
-  background: rgba(13, 15, 20, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; z-index: 100;
+  padding: 0 36px; height: 72px; background: rgba(13, 15, 20, 0.6);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
 }
 .logo { display: flex; align-items: center; gap: 14px; }
 .logo-icon {
   width: 38px; height: 38px; background: linear-gradient(135deg, var(--blue), var(--purple));
   border-radius: 12px; display: flex; align-items: center; justify-content: center;
-  font-size: 20px; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
 }
+.logo-icon svg { width: 20px; height: 20px; fill: white; }
 .logo-text { font-family: var(--display); font-weight: 800; font-size: 1.25rem; letter-spacing: -.02em; }
 .logo-sub { font-size: .75rem; color: var(--text2); font-weight: 500; }
 .header-right { display: flex; align-items: center; gap: 10px; }
@@ -105,8 +87,7 @@ body {
 }
 .pulse {
   width: 8px; height: 8px; border-radius: 50%; background: var(--green);
-  box-shadow: 0 0 10px var(--green); flex-shrink: 0;
-  animation: pulsing 2s infinite;
+  box-shadow: 0 0 10px var(--green); flex-shrink: 0; animation: pulsing 2s infinite;
 }
 @keyframes pulsing { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
 .status-chip { display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--text2); font-weight: 600; background: var(--glass); padding: 6px 16px; border-radius: var(--radius-pill); border: 1px solid var(--border); }
@@ -120,12 +101,8 @@ body {
   display: inline-flex; align-items: center; gap: 8px;
 }
 .btn:hover { background: var(--glass-hover); border-color: var(--border-strong); transform: translateY(-1px); }
-.btn:active { transform: translateY(1px); }
 .btn-icon { padding: 0; width: 40px; justify-content: center; font-size: 1.2rem; }
-.btn-primary {
-  background: var(--text); color: var(--bg); border: none; font-weight: 700;
-  box-shadow: 0 4px 15px rgba(255,255,255,0.2);
-}
+.btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
 .btn-primary:hover { background: #e2e8f0; border-color: transparent; box-shadow: 0 6px 20px rgba(255,255,255,0.3); }
 
 /* ── FILTER BAR ── */
@@ -147,13 +124,13 @@ body {
 /* ── IMPORT SCREEN ── */
 .import-screen {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-height: 50vh; text-align: center;
-  background: var(--glass); border: 1px solid var(--border); border-radius: var(--radius);
-  backdrop-filter: blur(20px); padding: 60px 20px;
+  min-height: 50vh; text-align: center; background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--radius); backdrop-filter: blur(20px); padding: 60px 20px;
 }
 .import-screen h2 { font-family: var(--display); font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
 .import-screen p { font-size: 1rem; color: var(--text2); max-width: 450px; line-height: 1.6; margin-bottom: 32px; }
-.import-icon-wrap { font-size: 4rem; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(255,255,255,0.2)); }
+.import-icon-wrap { width: 64px; height: 64px; margin-bottom: 20px; opacity: 0.8; }
+.import-icon-wrap svg { width: 100%; height: 100%; fill: var(--text); }
 .import-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
 /* ── GLASS CARDS ── */
@@ -166,27 +143,46 @@ body {
 .card-title { font-family: var(--display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
 .card-meta { font-size: .8rem; color: var(--text3); font-weight: 500; }
 
-/* ── STAT GRID ── */
+/* ── STAT BLOBS ── */
 .stats-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px; margin-bottom: 20px;
+  gap: 24px; margin-bottom: 32px;
 }
-.stat-card {
-  background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 24px; display: flex; flex-direction: column;
+.stat-blob {
+  background: var(--glass); backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  padding: 30px 20px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  aspect-ratio: 1 / 1;
+  animation: morphBlob 8s ease-in-out infinite alternate;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   transition: transform 0.2s, background 0.2s;
 }
-.stat-card:hover { transform: translateY(-4px); background: var(--glass-hover); border-color: var(--border-strong); }
-.stat-label { font-size: .75rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
-.stat-num { font-family: var(--display); font-size: 2.8rem; font-weight: 800; line-height: 1; color: var(--text); margin-bottom: 8px; }
-.stat-sub { font-size: .8rem; color: var(--text3); font-weight: 500; }
+.stat-blob:hover { transform: scale(1.05); background: var(--glass-hover); }
+.stat-label { font-size: .75rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; z-index: 2;}
+.stat-num { font-family: var(--display); font-size: 2.8rem; font-weight: 800; line-height: 1; color: var(--text); margin-bottom: 6px; z-index: 2;}
+.stat-sub { font-size: .8rem; color: var(--text3); font-weight: 500; z-index: 2;}
 
+.c-green { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.2); }
 .c-green .stat-num { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
+.c-red { background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2); }
 .c-red .stat-num { color: var(--red); text-shadow: 0 0 20px var(--red-glow); }
+.c-blue { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
 .c-blue .stat-num { color: var(--blue); }
+.c-amber { background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.2); }
 .c-amber .stat-num { color: var(--amber); }
+.c-purple { background: rgba(139, 92, 246, 0.05); border-color: rgba(139, 92, 246, 0.2); }
+.c-purple .stat-num { color: var(--purple); }
 
-/* ── TABS (SEGMENTED CONTROL) ── */
+@keyframes morphBlob {
+  0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+  34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+  67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
+  100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+}
+
+/* ── TABS ── */
 .tabs {
   display: flex; gap: 8px; margin: 32px 0; background: rgba(0,0,0,0.3);
   padding: 8px; border-radius: var(--radius-pill); width: fit-content;
@@ -204,38 +200,32 @@ body {
 .panel { display: none; animation: fadeup 0.4s ease both; }
 .panel.active { display: block; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-bottom: 20px; }
-@media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
 .chart-wrap { position: relative; width: 100%; }
 
-/* ── CUSTOM DOUGHNUT CENTER ── */
+/* ── DOUGHNUT CENTER ── */
 .doughnut-wrapper { position: relative; display: flex; align-items: center; justify-content: center; height: 260px; }
-.doughnut-center {
-  position: absolute; text-align: center; pointer-events: none;
-}
+.doughnut-center { position: absolute; text-align: center; pointer-events: none; }
 .doughnut-pct { font-family: var(--display); font-size: 3rem; font-weight: 800; color: var(--text); line-height: 1; }
 .doughnut-lbl { font-size: 0.8rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
 
 /* ── TABLE ── */
 .table-wrap { overflow-x: auto; margin: -10px; padding: 10px; }
-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-thead th {
-  text-align: left; font-size: .75rem; font-weight: 600; letter-spacing: .05em;
-  text-transform: uppercase; color: var(--text3); padding: 0 16px 8px;
-}
+table { width: 100%; border-collapse: separate; border-spacing: 0 8px; min-width: 800px; }
+thead th { text-align: left; font-size: .75rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--text3); padding: 0 16px 8px; }
 tbody tr { background: rgba(0,0,0,0.2); transition: transform 0.1s, background 0.1s; }
 tbody tr td:first-child { border-radius: 12px 0 0 12px; }
 tbody tr td:last-child { border-radius: 0 12px 12px 0; }
 tbody tr:hover { background: rgba(255,255,255,0.05); transform: scale(1.01); }
-tbody td { padding: 16px; font-size: .9rem; color: var(--text2); border: 1px solid transparent; }
-.td-name { color: var(--text); font-weight: 600; font-size: 1rem; }
+tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1px solid transparent; }
+.td-name { color: var(--text); font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 12px; }
+.item-img { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.4); object-fit: cover; }
 .td-right { text-align: right; }
 
-/* ── BADGES ── */
+/* ── BADGES & BARS ── */
 .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; font-size: .8rem; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
 .badge-green { background: var(--green-glow); color: var(--green); }
 .badge-red   { background: var(--red-glow);   color: var(--red); }
 
-/* ── RATE BAR ── */
 .rate-row { display: flex; align-items: center; gap: 12px; min-width: 140px; }
 .rate-track { flex: 1; height: 8px; background: rgba(0,0,0,0.4); border-radius: 10px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
 .rate-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -243,8 +233,8 @@ tbody td { padding: 16px; font-size: .9rem; color: var(--text2); border: 1px sol
 
 /* ── LOG ── */
 .log-entry {
-  display: grid; grid-template-columns: 1fr 100px 30px auto 100px;
-  align-items: center; gap: 16px; padding: 16px 20px;
+  display: grid; grid-template-columns: 40px 1fr 100px 30px auto 100px;
+  align-items: center; gap: 16px; padding: 12px 20px;
   background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 8px;
   transition: background .2s, transform .2s;
 }
@@ -271,6 +261,28 @@ tbody td { padding: 16px; font-size: .9rem; color: var(--text2); border: 1px sol
 input[type=file] { display: none; }
 
 @keyframes fadeup { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── MOBILE OPTIMIZATIONS ── */
+@media (max-width: 900px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .header { padding: 16px; height: auto; flex-wrap: wrap; }
+  .header-right { margin-top: 16px; width: 100%; justify-content: space-between; flex-wrap: wrap; }
+  .filter-bar { padding: 16px; flex-wrap: wrap; gap: 16px; }
+  .main { padding: 20px 16px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .stat-blob { padding: 20px 10px; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; animation: none; }
+  .stat-num { font-size: 2rem; }
+  .tabs { flex-wrap: wrap; justify-content: center; width: 100%; }
+  .tab { width: 48%; text-align: center; margin-bottom: 4px; }
+  
+  /* Log mobile layout */
+  .log-entry { grid-template-columns: 36px 1fr 80px; padding: 12px; gap: 12px; }
+  .log-price, .log-ts, .log-dot { display: none; }
+}
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-blob { aspect-ratio: auto; padding: 30px; border-radius: var(--radius); }
+}
 </style>
 </head>
 <body>
@@ -283,14 +295,16 @@ input[type=file] { display: none; }
 
 <header class="header">
   <div class="logo">
-    <div class="logo-icon">✨</div>
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
     <div>
       <div class="logo-text">Statdoatie</div>
       <div class="logo-sub">Tracker</div>
     </div>
   </div>
   <div class="header-right">
-    <span id="streak-badge" class="pill-badge hidden">🔥 <span id="streak-val">0</span> Day Streak</span>
+    <span id="streak-badge" class="pill-badge hidden"><span id="streak-val">0</span> Day Streak</span>
     <div id="status-chip" class="status-chip">
       <span class="pulse" id="pulse-dot" style="display:none"></span>
       <span id="status-text">Awaiting Data</span>
@@ -318,7 +332,9 @@ input[type=file] { display: none; }
 <main class="main">
 
   <div id="import-screen" class="import-screen">
-    <div class="import-icon-wrap">🔮</div>
+    <div class="import-icon-wrap">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 2v12h16V6H4zm8 3a3 3 0 0 1 3 3a3 3 0 0 1-3 3a3 3 0 0 1-3-3a3 3 0 0 1 3-3z" stroke="none" fill="currentColor"/></svg>
+    </div>
     <h2>It's quiet in here...</h2>
     <p>Connect your Tampermonkey extension, drop in a JSON save file, or load up some dummy data to see the glass dashboard in action.</p>
     <div class="import-btns">
@@ -373,8 +389,8 @@ input[type=file] { display: none; }
         <div class="card-header"><span class="card-title">Most Requested Items</span></div>
         <div class="chart-wrap" id="topItemsWrap"><canvas id="topItemsChart"></canvas></div>
       </div>
-      <div class="card">
-        <div class="card-header">
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div class="card-header" style="padding: 28px 28px 0;">
           <span class="card-title">Item Value DB</span>
           <span class="card-meta" id="item-count"></span>
         </div>
@@ -430,7 +446,7 @@ let currentMonth = 'all';
 let availableMonths = [];
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-// Bubbly Chart Defaults
+// Chart Defaults
 Chart.defaults.color = '#a0aec0';
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.font.size = 12;
@@ -442,12 +458,32 @@ Chart.defaults.plugins.tooltip.cornerRadius = 12;
 Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
 Chart.defaults.plugins.tooltip.borderWidth = 1;
 
-let toastTimer;
+// Load data on start
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('statdoatie_save');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (parsed.length > 0) {
+        feedLog = parsed;
+        populateMonths();
+        document.getElementById('import-screen').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('filter-bar').classList.remove('hidden');
+        document.getElementById('export-btn').style.display = '';
+        document.getElementById('pulse-dot').style.display = '';
+        renderWidgets();
+      }
+    } catch (e) {
+      console.error("Failed to parse local storage", e);
+    }
+  }
+});
+
 function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg; el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+  setTimeout(() => el.classList.remove('show'), 3000);
 }
 
 function getCost(itemName) {
@@ -456,14 +492,28 @@ function getCost(itemName) {
   return (Math.abs(hash) % 98000) + 1200;
 }
 
+function getItemImage(itemName) {
+  const imgs = [
+    'drn_tigersquash', 'foo_cheeseburger', 'plu_slorg_green', 'boo_brain_muffin', 
+    'fd_faeriepancakes', 'foo_blueberrycrepes', 'grf_puntec', 'piz_smellydung', 
+    'foo_grapes_purple', 'drn_borovan', 'foo_tombola', 'piz_cheese', 
+    'foo_jam_thornberry', 'foo_kebab', 'foo_driedfish', 'can_jellylolly', 
+    'foo_toastjam', 'foo_carrotpeaomelette', 'can_gummygrundo', 'pla_honeyblossom'
+  ];
+  let hash = 0;
+  for(let i=0; i<itemName.length; i++) hash = itemName.charCodeAt(i) + ((hash<<5)-hash);
+  const idx = Math.abs(hash) % imgs.length;
+  return `https://images.neopets.com/items/${imgs[idx]}.gif`;
+}
+
 // ─── DATA SYNC ───────────────────────────────────────
 window.addEventListener('KadDataSync', e => {
-  if (e.detail && e.detail.length > 0) { mergeData(e.detail); toast(`✨ Imported ${e.detail.length} records`); } 
+  if (e.detail && e.detail.length > 0) { mergeData(e.detail); toast(`Imported ${e.detail.length} records`); } 
   else { toast('No data found in extension'); }
 });
 
 document.getElementById('import-sessions-btn').addEventListener('click', () => {
-  toast('Requesting data from extension…');
+  toast('Requesting data from extension...');
   setTimeout(() => { if (!feedLog.length) toast('No active extension detected'); }, 2000);
 });
 
@@ -473,7 +523,7 @@ function handleFileLoad(e) {
   r.onload = ev => {
     try {
       const d = JSON.parse(ev.target.result);
-      if (Array.isArray(d)) { mergeData(d); toast(`✨ Loaded ${d.length} records`); } else toast('Invalid format');
+      if (Array.isArray(d)) { mergeData(d); toast(`Loaded ${d.length} records`); } else toast('Invalid format');
     } catch { toast('Could not parse file'); }
   };
   r.readAsText(file); e.target.value = '';
@@ -488,6 +538,7 @@ function exportData() {
 function clearData() {
   if (!confirm('Wipe all dashboard data?')) return;
   feedLog = []; currentMonth = 'all'; destroyCharts();
+  localStorage.removeItem('statdoatie_save');
   document.getElementById('dashboard').classList.add('hidden');
   document.getElementById('filter-bar').classList.add('hidden');
   document.getElementById('import-screen').classList.remove('hidden');
@@ -526,6 +577,7 @@ function mergeData(entries) {
   feedLog = [...feedLog, ...entries.filter(e => !ex.has(e.timestamp + '|' + e.item))];
   feedLog.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
   populateMonths();
+  localStorage.setItem('statdoatie_save', JSON.stringify(feedLog));
   document.getElementById('import-screen').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('filter-bar').classList.remove('hidden');
@@ -545,7 +597,7 @@ function loadDemoData() {
       demo.push({ item: items[Math.floor(Math.random()*items.length)], status: Math.random() < .42 ? 'success' : 'sniped', timestamp: ts.toISOString() });
     }
   }
-  mergeData(demo); toast(`✨ Simulated ${demo.length} feeds`);
+  mergeData(demo); toast(`Simulated ${demo.length} feeds`);
 }
 
 function switchTab(name, btn) {
@@ -581,17 +633,17 @@ function renderStats(data) {
   const vS = data.filter(e=>e.status==='sniped').reduce((a, c) => a + getCost(c.item), 0);
 
   document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card c-blue"><div class="stat-label">Total Attempts</div><div class="stat-num">${t.toLocaleString()}</div></div>
-    <div class="stat-card c-green"><div class="stat-label">Kads Fed</div><div class="stat-num">${s.toLocaleString()}</div></div>
-    <div class="stat-card c-red"><div class="stat-label">Sniped</div><div class="stat-num">${n.toLocaleString()}</div></div>
-    <div class="stat-card c-amber"><div class="stat-label">Win Rate</div><div class="stat-num">${rate}%</div></div>
-    <div class="stat-card c-purple"><div class="stat-label">Peak Hour</div><div class="stat-num">${bHLabel}</div></div>
+    <div class="stat-blob c-blue"><div class="stat-label">Total Attempts</div><div class="stat-num">${t.toLocaleString()}</div></div>
+    <div class="stat-blob c-green"><div class="stat-label">Kads Fed</div><div class="stat-num">${s.toLocaleString()}</div></div>
+    <div class="stat-blob c-red"><div class="stat-label">Sniped</div><div class="stat-num">${n.toLocaleString()}</div></div>
+    <div class="stat-blob c-amber"><div class="stat-label">Win Rate</div><div class="stat-num">${rate}%</div></div>
+    <div class="stat-blob c-purple"><div class="stat-label">Peak Hour</div><div class="stat-num">${bHLabel}</div></div>
   `;
   document.getElementById('stats-grid-lower').innerHTML = `
-    <div class="stat-card c-green"><div class="stat-label">NP Value Secured</div><div class="stat-num">${(vF/1000).toFixed(1)}k</div></div>
-    <div class="stat-card c-red"><div class="stat-label">NP Value Missed</div><div class="stat-num">${(vS/1000).toFixed(1)}k</div></div>
-    <div class="stat-card"><div class="stat-label">Unique Items</div><div class="stat-num">${new Set(data.map(e=>e.item)).size}</div></div>
-    <div class="stat-card"><div class="stat-label">Active Days</div><div class="stat-num">${days}</div></div>
+    <div class="stat-blob c-green"><div class="stat-label">NP Value Secured</div><div class="stat-num">${(vF/1000).toFixed(1)}k</div></div>
+    <div class="stat-blob c-red"><div class="stat-label">NP Value Missed</div><div class="stat-num">${(vS/1000).toFixed(1)}k</div></div>
+    <div class="stat-blob"><div class="stat-label">Unique Items</div><div class="stat-num">${new Set(data.map(e=>e.item)).size}</div></div>
+    <div class="stat-blob"><div class="stat-label">Active Days</div><div class="stat-num">${days}</div></div>
   `;
 }
 
@@ -609,7 +661,6 @@ function renderPie(data) {
   const s = data.filter(e => e.status === 'success').length, n = data.filter(e => e.status === 'sniped').length;
   const pct = data.length > 0 ? Math.round((s / data.length) * 100) : 0;
   
-  // HTML Overlay update
   document.getElementById('doughnut-pct').textContent = pct + '%';
   document.getElementById('pie-meta').textContent = data.length.toLocaleString() + ' Total';
   
@@ -618,7 +669,7 @@ function renderPie(data) {
     data: { labels: ['Fed', 'Sniped'], datasets: [{ data: [s, n], backgroundColor: ['#22c55e', '#ef4444'], borderWidth: 0 }] },
     options: {
       responsive: true, maintainAspectRatio: false, 
-      cutout: '82%', borderRadius: 20, spacing: 6, // The "Sleek Ring" look
+      cutout: '82%', borderRadius: 20, spacing: 6,
       plugins: {
         legend: { display: false },
         tooltip: { callbacks: { label: ctx => buildRichTooltip(ctx.label, ctx.raw, s+n) } }
@@ -703,7 +754,10 @@ function renderItemTable(ds) {
   document.getElementById('item-count').textContent = r.length + ' Items';
   document.querySelector('#item-table tbody').innerHTML = r.map(x => `
     <tr>
-      <td class="td-name">${x.i}</td>
+      <td class="td-name">
+        <img src="${getItemImage(x.i)}" class="item-img" alt="icon">
+        ${x.i}
+      </td>
       <td class="td-right" style="font-family:monospace;">${x.cost.toLocaleString()}</td>
       <td class="td-right">${x.t}</td>
       <td class="td-right"><span class="badge badge-green">${x.s}</span></td>
@@ -768,6 +822,7 @@ function renderLog(data) {
   document.getElementById('log-count-label').textContent = `Showing ${Math.min(300,data.length)} of ${data.length.toLocaleString()}`;
   document.getElementById('log-list').innerHTML = arr.map(e => `
     <div class="log-entry">
+      <img src="${getItemImage(e.item)}" class="item-img" alt="icon">
       <div><div class="log-name">${e.item}</div><div class="log-ts">${new Date(e.timestamp).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</div></div>
       <div class="log-price">${getCost(e.item).toLocaleString()} NP</div>
       <span class="log-dot ${e.status}"></span>
