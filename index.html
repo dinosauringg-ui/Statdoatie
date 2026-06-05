@@ -98,7 +98,7 @@ body {
   border-radius: 12px; display: flex; align-items: center; justify-content: center;
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
 }
-.logo-icon svg { width: 20px; height: 20px; fill: white; }
+.logo-icon svg { width: 22px; height: 22px; fill: white; }
 .logo-text { font-family: var(--display); font-weight: 800; font-size: 1.25rem; letter-spacing: -.02em; }
 .logo-sub { font-size: .75rem; color: var(--text2); font-weight: 500; }
 .header-right { display: flex; align-items: center; gap: 10px; }
@@ -164,7 +164,7 @@ body {
 }
 .import-screen h2 { font-family: var(--display); font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
 .import-screen p { font-size: 1rem; color: var(--text2); max-width: 450px; line-height: 1.6; margin-bottom: 32px; }
-.import-icon-wrap { width: 64px; height: 64px; margin-bottom: 20px; opacity: 0.8; }
+.import-icon-wrap { width: 72px; height: 72px; margin-bottom: 20px; opacity: 0.8; }
 .import-icon-wrap svg { width: 100%; height: 100%; fill: var(--text); }
 .import-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
@@ -198,8 +198,11 @@ body {
 
 .c-green { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.2); }
 .c-green .stat-num { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
+
+/* De-emphasize snipes visually */
 .c-red { background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.05); }
 .c-red .stat-num { color: var(--text3); text-shadow: none; }
+
 .c-blue { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
 .c-blue .stat-num { color: var(--blue); }
 .c-amber { background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.2); }
@@ -240,7 +243,8 @@ tbody tr td:first-child { border-radius: 12px 0 0 12px; }
 tbody tr td:last-child { border-radius: 0 12px 12px 0; }
 tbody tr:hover { background: rgba(255,255,255,0.05); transform: scale(1.01); }
 tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1px solid transparent; }
-.td-name { color: var(--text); font-weight: 600; font-size: 1rem; }
+.td-name { color: var(--text); font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 12px; }
+.item-img { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.4); object-fit: cover; }
 .td-right { text-align: right; }
 
 /* ── BADGES & BARS ── */
@@ -255,7 +259,7 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 
 /* ── LOG ── */
 .log-entry {
-  display: grid; grid-template-columns: 1fr 100px 30px auto 100px;
+  display: grid; grid-template-columns: 40px 1fr 100px 30px auto 100px;
   align-items: center; gap: 16px; padding: 12px 20px;
   background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 8px;
   transition: background .2s, transform .2s;
@@ -296,7 +300,7 @@ input[type=file] { display: none; }
   .stat-num { font-size: 2.2rem; }
   .tabs { flex-wrap: wrap; justify-content: center; width: 100%; }
   .tab { width: 48%; text-align: center; margin-bottom: 4px; }
-  .log-entry { grid-template-columns: 1fr 80px; padding: 12px; gap: 12px; }
+  .log-entry { grid-template-columns: 36px 1fr 80px; padding: 12px; gap: 12px; }
   .log-price, .log-ts, .log-dot { display: none; }
 }
 @media (max-width: 480px) {
@@ -315,7 +319,10 @@ input[type=file] { display: none; }
 <header class="header">
   <div class="logo">
     <div class="logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <!-- CAT FACE LOGO -->
+      <svg viewBox="0 0 512 512" fill="currentColor">
+        <path d="M226.5 92.9c14.3 7.3 28.9 12.9 43.1 16.5c-6.8-24.8-23.7-47.5-49-62.2c-15.6-9-33.3-13.6-51-13.6C122 33.5 83.3 64.9 66 109.8C35.2 189.6 15 281 12 376c-.9 30.6 6.3 61.2 20.8 88.5C45.3 487.8 71.4 512 101.9 512H410.1c30.5 0 56.6-24.2 69.1-47.5c14.5-27.3 21.7-57.9 20.8-88.5c-3-95-23.2-186.4-54-266.2c-17.3-44.9-56-76.3-103.5-76.3c-17.7 0-35.4 4.6-51 13.6c-25.3 14.7-42.2 37.4-49 62.2c14.2-3.6 28.8-9.2 43.1-16.5c-15.2 13-33.1 24.3-53 33.1c-9.2 4.1-19.5 6.7-30.2 7.7c-10.7-1-21-3.6-30.2-7.7c-19.9-8.8-37.8-20.1-53-33.1z"/>
+      </svg>
     </div>
     <div>
       <div class="logo-text">Statdoatie</div>
@@ -386,7 +393,10 @@ input[type=file] { display: none; }
 
   <div id="import-screen" class="import-screen">
     <div class="import-icon-wrap">
-      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 2v12h16V6H4zm8 3a3 3 0 0 1 3 3a3 3 0 0 1-3 3a3 3 0 0 1-3-3a3 3 0 0 1 3-3z" stroke="none" fill="currentColor"/></svg>
+      <!-- PAW PRINT EMPTY STATE -->
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8.5,13.5C7.1,13.5 6,12.6 6,11.5C6,10.4 7.1,9.5 8.5,9.5C9.9,9.5 11,10.4 11,11.5C11,12.6 9.9,13.5 8.5,13.5M15.5,13.5C14.1,13.5 13,12.6 13,11.5C13,10.4 14.1,9.5 15.5,9.5C16.9,9.5 18,10.4 18,11.5C18,12.6 16.9,13.5 15.5,13.5M7.5,8C6.1,8 5,7.1 5,6C5,4.9 6.1,4 7.5,4C8.9,4 10,4.9 10,6C10,7.1 8.9,8 7.5,8M16.5,8C15.1,8 14,7.1 14,6C14,4.9 15.1,4 16.5,4C17.9,4 19,4.9 19,6C19,7.1 17.9,8 16.5,8M12,14C9.5,14 7,15.5 7,18C7,19.1 7.9,20 9,20H15C16.1,20 17,19.1 17,18C17,15.5 14.5,14 12,14Z" />
+      </svg>
     </div>
     <h2>It's quiet in here...</h2>
     <p>Connect your Tampermonkey extension, drop in a JSON save file, or load up some dummy data to see the dashboard in action.</p>
@@ -430,12 +440,6 @@ input[type=file] { display: none; }
           <div class="card-header"><span class="card-title">Activity by Day</span></div>
           <div class="chart-wrap" style="height:260px"><canvas id="dowChart"></canvas></div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">Hourly Performance (NST)</span>
-        </div>
-        <div class="chart-wrap" style="height:220px"><canvas id="hourChart"></canvas></div>
       </div>
     </div>
 
@@ -697,7 +701,7 @@ function renderWidgets() {
   
   destroyCharts();
   renderStats(data); renderStreak();
-  renderPie(data); renderDow(data); renderHour(data);
+  renderPie(data); renderDow(data); 
   renderItemsChart(data); renderItemTable(data);
   renderDaily(data); renderCumul(data); renderLog(data);
 }
@@ -774,29 +778,6 @@ function renderDow(data) {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: { label: ctx => buildRichTooltip(ctx.dataset.label, ctx.raw, sC[ctx.dataIndex]+nC[ctx.dataIndex]) } } },
       scales: { x: { stacked: true, grid: { display: false }, border: { display: false } }, y: { stacked: true, grid: gridLines(), border: { display: false } } }
-    }
-  });
-}
-
-function renderHour(data) {
-  if(!data.length) return;
-  const sC = Array(24).fill(0), nC = Array(24).fill(0);
-  data.forEach(e => { if (e.status === 'success') sC[new Date(e.timestamp).getHours()]++; else nC[new Date(e.timestamp).getHours()]++; });
-  const lbls = sC.map((_,i) => i===0?'12a':i<12?i+'a':i===12?'12p':(i-12)+'p');
-
-  charts.hour = new Chart(document.getElementById('hourChart'), {
-    type: 'bar',
-    data: {
-      labels: lbls,
-      datasets: [
-        { label: 'Fed', data: sC, backgroundColor: C.amber, stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: nC, backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: { label: ctx => buildRichTooltip(ctx.dataset.label, ctx.raw, sC[ctx.dataIndex]+nC[ctx.dataIndex]) } } },
-      scales: { x: { stacked: true, grid: { display: false }, ticks: {maxRotation: 0}, border: { display: false } }, y: { stacked: true, grid: gridLines(), border: { display: false } } }
     }
   });
 }
