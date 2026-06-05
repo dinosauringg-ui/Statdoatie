@@ -23,7 +23,7 @@
   --green:     #22c55e;
   --green-glow: rgba(34, 197, 94, 0.4);
   --red:       #ef4444;
-  --red-glow:  rgba(239, 68, 68, 0.4);
+  --red-muted: rgba(239, 68, 68, 0.3);
   --blue:      #3b82f6;
   --amber:     #f59e0b;
   --purple:    #8b5cf6;
@@ -31,7 +31,7 @@
   
   --display:   'Outfit', sans-serif;
   --body:      'DM Sans', sans-serif;
-  --radius:    24px;
+  --radius:    20px;
   --radius-sm: 16px;
   --radius-pill: 100px;
 }
@@ -143,44 +143,37 @@ body {
 .card-title { font-family: var(--display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
 .card-meta { font-size: .8rem; color: var(--text3); font-weight: 500; }
 
-/* ── STAT BLOBS ── */
+/* ── STAT CARDS (Rounded Squares) ── */
 .stats-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 24px; margin-bottom: 32px;
 }
-.stat-blob {
+.stat-card {
   background: var(--glass); backdrop-filter: blur(20px);
   border: 1px solid var(--border);
-  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-  padding: 30px 20px; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; text-align: center;
-  aspect-ratio: 1 / 1;
-  animation: morphBlob 8s ease-in-out infinite alternate;
+  border-radius: var(--radius);
+  padding: 24px; display: flex; flex-direction: column;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   transition: transform 0.2s, background 0.2s;
 }
-.stat-blob:hover { transform: scale(1.05); background: var(--glass-hover); }
-.stat-label { font-size: .75rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; z-index: 2;}
-.stat-num { font-family: var(--display); font-size: 2.8rem; font-weight: 800; line-height: 1; color: var(--text); margin-bottom: 6px; z-index: 2;}
-.stat-sub { font-size: .8rem; color: var(--text3); font-weight: 500; z-index: 2;}
+.stat-card:hover { transform: translateY(-4px); background: var(--glass-hover); border-color: var(--border-strong); }
+.stat-label { font-size: .75rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+.stat-num { font-family: var(--display); font-size: 2.8rem; font-weight: 800; line-height: 1; color: var(--text); margin-bottom: 6px; }
+.stat-sub { font-size: .8rem; color: var(--text3); font-weight: 500; }
 
 .c-green { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.2); }
 .c-green .stat-num { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
-.c-red { background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2); }
-.c-red .stat-num { color: var(--red); text-shadow: 0 0 20px var(--red-glow); }
+
+/* De-emphasize snipes visually */
+.c-red { background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.05); }
+.c-red .stat-num { color: var(--text3); text-shadow: none; }
+
 .c-blue { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
 .c-blue .stat-num { color: var(--blue); }
 .c-amber { background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.2); }
-.c-amber .stat-num { color: var(--amber); }
+.c-amber .stat-num { color: var(--amber); text-shadow: 0 0 20px rgba(245, 158, 11, 0.3); }
 .c-purple { background: rgba(139, 92, 246, 0.05); border-color: rgba(139, 92, 246, 0.2); }
 .c-purple .stat-num { color: var(--purple); }
-
-@keyframes morphBlob {
-  0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-  34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
-  67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
-  100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-}
 
 /* ── TABS ── */
 .tabs {
@@ -224,11 +217,11 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 /* ── BADGES & BARS ── */
 .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; font-size: .8rem; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
 .badge-green { background: var(--green-glow); color: var(--green); }
-.badge-red   { background: var(--red-glow);   color: var(--red); }
+.badge-red   { background: rgba(255,255,255,0.05); color: var(--text3); } /* Subdued sniped badge */
 
 .rate-row { display: flex; align-items: center; gap: 12px; min-width: 140px; }
 .rate-track { flex: 1; height: 8px; background: rgba(0,0,0,0.4); border-radius: 10px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
-.rate-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
+.rate-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); background: var(--green); } /* Always green, we only care about success rate */
 .rate-pct { font-family: var(--display); font-size: .9rem; font-weight: 700; color: var(--text); min-width: 36px; text-align: right; }
 
 /* ── LOG ── */
@@ -244,7 +237,7 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 .log-price { font-family: 'DM Sans', monospace; font-size: .85rem; color: var(--text2); text-align: right; font-weight: 600;}
 .log-dot { width: 10px; height: 10px; border-radius: 50%; justify-self: center; }
 .log-dot.success { background: var(--green); box-shadow: 0 0 10px var(--green); }
-.log-dot.sniped  { background: var(--red);   box-shadow: 0 0 10px var(--red); }
+.log-dot.sniped  { background: var(--border-strong); } /* De-emphasized dot */
 .log-status { display: flex; justify-content: flex-end; }
 
 /* ── TOAST ── */
@@ -270,8 +263,8 @@ input[type=file] { display: none; }
   .filter-bar { padding: 16px; flex-wrap: wrap; gap: 16px; }
   .main { padding: 20px 16px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .stat-blob { padding: 20px 10px; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; animation: none; }
-  .stat-num { font-size: 2rem; }
+  .stat-card { padding: 20px 16px; }
+  .stat-num { font-size: 2.2rem; }
   .tabs { flex-wrap: wrap; justify-content: center; width: 100%; }
   .tab { width: 48%; text-align: center; margin-bottom: 4px; }
   
@@ -281,7 +274,6 @@ input[type=file] { display: none; }
 }
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
-  .stat-blob { aspect-ratio: auto; padding: 30px; border-radius: var(--radius); }
 }
 </style>
 </head>
@@ -336,7 +328,7 @@ input[type=file] { display: none; }
       <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 2v12h16V6H4zm8 3a3 3 0 0 1 3 3a3 3 0 0 1-3 3a3 3 0 0 1-3-3a3 3 0 0 1 3-3z" stroke="none" fill="currentColor"/></svg>
     </div>
     <h2>It's quiet in here...</h2>
-    <p>Connect your Tampermonkey extension, drop in a JSON save file, or load up some dummy data to see the glass dashboard in action.</p>
+    <p>Connect your Tampermonkey extension, drop in a JSON save file, or load up some dummy data to see the dashboard in action.</p>
     <div class="import-btns">
       <button class="btn btn-primary" onclick="document.getElementById('import-sessions-btn').click()">Import Extension Data</button>
       <button class="btn" onclick="document.getElementById('file-input').click()">Load JSON</button>
@@ -415,7 +407,7 @@ input[type=file] { display: none; }
 
     <div id="panel-timeline" class="panel">
       <div class="card">
-        <div class="card-header"><span class="card-title">Daily Volume</span></div>
+        <div class="card-header"><span class="card-title">Daily Feeds</span></div>
         <div class="chart-wrap" style="height:260px"><canvas id="dailyChart"></canvas></div>
       </div>
       <div class="card">
@@ -594,7 +586,8 @@ function loadDemoData() {
     const n = Math.floor(Math.random() * 15) + 3;
     for (let i = 0; i < n; i++) {
       const ts = new Date(base); ts.setHours(Math.floor(Math.random()*24), Math.floor(Math.random()*60), 0, 0);
-      demo.push({ item: items[Math.floor(Math.random()*items.length)], status: Math.random() < .42 ? 'success' : 'sniped', timestamp: ts.toISOString() });
+      // Give it a slightly higher success rate for the demo to show off the green focus
+      demo.push({ item: items[Math.floor(Math.random()*items.length)], status: Math.random() < .65 ? 'success' : 'sniped', timestamp: ts.toISOString() });
     }
   }
   mergeData(demo); toast(`Simulated ${demo.length} feeds`);
@@ -626,24 +619,29 @@ function renderStats(data) {
   const t = data.length, s = data.filter(e => e.status === 'success').length, n = data.filter(e => e.status === 'sniped').length;
   const rate = t > 0 ? Math.round(s / t * 100) : 0;
   const days = new Set(data.map(e => e.timestamp.slice(0,10))).size;
-  const hrs = Array(24).fill(0); data.forEach(e => hrs[new Date(e.timestamp).getHours()]++);
+  const hrs = Array(24).fill(0); data.filter(e=>e.status==='success').forEach(e => hrs[new Date(e.timestamp).getHours()]++); // Focus peak hour on successes
   const bH = hrs.indexOf(Math.max(...hrs));
   const bHLabel = bH === 0 ? '12am' : bH < 12 ? bH+'am' : bH === 12 ? '12pm' : (bH-12)+'pm';
   const vF = data.filter(e=>e.status==='success').reduce((a, c) => a + getCost(c.item), 0);
-  const vS = data.filter(e=>e.status==='sniped').reduce((a, c) => a + getCost(c.item), 0);
 
   document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-blob c-blue"><div class="stat-label">Total Attempts</div><div class="stat-num">${t.toLocaleString()}</div></div>
-    <div class="stat-blob c-green"><div class="stat-label">Kads Fed</div><div class="stat-num">${s.toLocaleString()}</div></div>
-    <div class="stat-blob c-red"><div class="stat-label">Sniped</div><div class="stat-num">${n.toLocaleString()}</div></div>
-    <div class="stat-blob c-amber"><div class="stat-label">Win Rate</div><div class="stat-num">${rate}%</div></div>
-    <div class="stat-blob c-purple"><div class="stat-label">Peak Hour</div><div class="stat-num">${bHLabel}</div></div>
+    <div class="stat-card c-green">
+      <div style="display:flex; justify-content:space-between; width:100%; align-items:center; margin-bottom:8px;">
+        <div class="stat-label" style="margin:0;">Kads Fed</div>
+        <div class="stat-label" style="margin:0; opacity:0.6;">Total: ${t}</div>
+      </div>
+      <div class="stat-num">${s.toLocaleString()}</div>
+    </div>
+    <div class="stat-card c-amber"><div class="stat-label">Win Rate</div><div class="stat-num">${rate}%</div></div>
+    <div class="stat-card c-blue"><div class="stat-label">NP Value Secured</div><div class="stat-num">${(vF/1000).toFixed(1)}k</div></div>
+    <div class="stat-card c-purple"><div class="stat-label">Best Hour to Feed</div><div class="stat-num">${bHLabel}</div></div>
   `;
+  
+  // Lower grid gets the secondary / muted stats
   document.getElementById('stats-grid-lower').innerHTML = `
-    <div class="stat-blob c-green"><div class="stat-label">NP Value Secured</div><div class="stat-num">${(vF/1000).toFixed(1)}k</div></div>
-    <div class="stat-blob c-red"><div class="stat-label">NP Value Missed</div><div class="stat-num">${(vS/1000).toFixed(1)}k</div></div>
-    <div class="stat-blob"><div class="stat-label">Unique Items</div><div class="stat-num">${new Set(data.map(e=>e.item)).size}</div></div>
-    <div class="stat-blob"><div class="stat-label">Active Days</div><div class="stat-num">${days}</div></div>
+    <div class="stat-card"><div class="stat-label">Unique Items Fed</div><div class="stat-num">${new Set(data.filter(e=>e.status==='success').map(e=>e.item)).size}</div></div>
+    <div class="stat-card"><div class="stat-label">Active Days</div><div class="stat-num">${days}</div></div>
+    <div class="stat-card c-red"><div class="stat-label">Missed Opportunities</div><div class="stat-num">${n.toLocaleString()}</div></div>
   `;
 }
 
@@ -666,7 +664,8 @@ function renderPie(data) {
   
   charts.pie = new Chart(document.getElementById('pieChart'), {
     type: 'doughnut',
-    data: { labels: ['Fed', 'Sniped'], datasets: [{ data: [s, n], backgroundColor: ['#22c55e', '#ef4444'], borderWidth: 0 }] },
+    // Snipes faded to 10% white
+    data: { labels: ['Fed', 'Sniped'], datasets: [{ data: [s, n], backgroundColor: ['#22c55e', 'rgba(255,255,255,0.05)'], borderWidth: 0 }] },
     options: {
       responsive: true, maintainAspectRatio: false, 
       cutout: '82%', borderRadius: 20, spacing: 6,
@@ -689,7 +688,7 @@ function renderDow(data) {
       labels: DAYS,
       datasets: [
         { label: 'Fed', data: sC, backgroundColor: '#22c55e', stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: nC, backgroundColor: 'rgba(239, 68, 68, 0.5)', stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Sniped', data: nC, backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -712,7 +711,7 @@ function renderHour(data) {
       labels: lbls,
       datasets: [
         { label: 'Fed', data: sC, backgroundColor: '#f59e0b', stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: nC, backgroundColor: 'rgba(255,255,255,0.1)', stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Sniped', data: nC, backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -727,7 +726,8 @@ function renderItemsChart(data) {
   if(!data.length) return;
   const c = {};
   data.forEach(e => { if(!c[e.item]) c[e.item] = { t:0, s:0, n:0, cost: getCost(e.item) }; c[e.item].t++; c[e.item][e.status==='success'?'s':'n']++; });
-  const arr = Object.entries(c).sort((a,b) => b[1].t - a[1].t).slice(0,15);
+  // Sort heavily by successes first
+  const arr = Object.entries(c).sort((a,b) => b[1].s - a[1].s).slice(0,15);
   document.getElementById('topItemsWrap').style.height = Math.max(300, arr.length * 40 + 40) + 'px';
   
   charts.topItems = new Chart(document.getElementById('topItemsChart'), {
@@ -736,12 +736,12 @@ function renderItemsChart(data) {
       labels: arr.map(([k]) => k),
       datasets: [
         { label: 'Fed', data: arr.map(([,v]) => v.s), backgroundColor: '#14b8a6', stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: 'rgba(255,255,255,0.1)', stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: { afterTitle: ctx => `Total Value: ${(arr[ctx[0].dataIndex][1].cost * arr[ctx[0].dataIndex][1].t).toLocaleString()} NP`, label: ctx => buildRichTooltip(ctx.dataset.label, ctx.raw, arr[ctx.dataIndex][1].t) } } },
+      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: { afterTitle: ctx => `Total Value Fed: ${(arr[ctx[0].dataIndex][1].cost * arr[ctx[0].dataIndex][1].s).toLocaleString()} NP`, label: ctx => buildRichTooltip(ctx.dataset.label, ctx.raw, arr[ctx.dataIndex][1].t) } } },
       scales: { x: { stacked: true, grid: gridLines(), border: { display: false } }, y: { stacked: true, grid: { display: false }, ticks: { color: '#fff' }, border: { display: false } } }
     }
   });
@@ -750,7 +750,8 @@ function renderItemsChart(data) {
 function renderItemTable(ds) {
   const c = {};
   ds.forEach(e => { if (!c[e.item]) c[e.item] = {s:0,n:0,cost:getCost(e.item)}; c[e.item][e.status==='success'?'s':'n']++; });
-  const r = Object.entries(c).map(([i,{s,n,cost}]) => ({ i, cost, spent: s*cost, t: s+n, s, n, rate: Math.round(s/(s+n)*100) })).sort((a,b) => b.t - a.t);
+  // Sort primarily by successes
+  const r = Object.entries(c).map(([i,{s,n,cost}]) => ({ i, cost, spent: s*cost, t: s+n, s, n, rate: Math.round(s/(s+n)*100) })).sort((a,b) => b.s - a.s);
   document.getElementById('item-count').textContent = r.length + ' Items';
   document.querySelector('#item-table tbody').innerHTML = r.map(x => `
     <tr>
@@ -763,7 +764,7 @@ function renderItemTable(ds) {
       <td class="td-right"><span class="badge badge-green">${x.s}</span></td>
       <td class="td-right"><span class="badge badge-red">${x.n}</span></td>
       <td class="td-right" style="color:#fff; font-weight:700; font-family:monospace;">${x.spent.toLocaleString()}</td>
-      <td><div class="rate-row"><div class="rate-track"><div class="rate-fill" style="width:${x.rate}%;background:${x.rate>=50?'#22c55e':'#ef4444'}"></div></div><span class="rate-pct">${x.rate}%</span></div></td>
+      <td><div class="rate-row"><div class="rate-track"><div class="rate-fill" style="width:${x.rate}%;"></div></div><span class="rate-pct">${x.rate}%</span></div></td>
     </tr>
   `).join('');
 }
@@ -780,7 +781,7 @@ function renderDaily(data) {
       labels: lbls,
       datasets: [
         { label: 'Fed', data: lbls.map(d => dObj[d].s), backgroundColor: '#3b82f6', stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: 'rgba(255,255,255,0.1)', stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -798,15 +799,14 @@ function renderCumul(data) {
   
   const ctx = document.getElementById('cumulChart').getContext('2d');
   const gGreen = ctx.createLinearGradient(0, 0, 0, 300); gGreen.addColorStop(0, 'rgba(34, 197, 94, 0.4)'); gGreen.addColorStop(1, 'transparent');
-  const gRed = ctx.createLinearGradient(0, 0, 0, 300); gRed.addColorStop(0, 'rgba(239, 68, 68, 0.3)'); gRed.addColorStop(1, 'transparent');
 
   charts.cumul = new Chart(document.getElementById('cumulChart'), {
     type: 'line',
     data: {
       labels: arr.map(e => e.timestamp.slice(0,10)),
       datasets: [
-        { label:'Fed Total', data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor:'#22c55e', backgroundColor: gGreen, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
-        { label:'Sniped Total', data: arr.map(e => { if(e.status==='sniped') n++; return n; }), borderColor:'#ef4444', backgroundColor: gRed, fill:true, tension:0.4, pointRadius:0, borderWidth:2, borderDash: [5,5] }
+        { label:'Total Fed', data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor:'#22c55e', backgroundColor: gGreen, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
+        { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }), borderColor:'rgba(255,255,255,0.2)', fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
       ]
     },
     options: {
@@ -821,7 +821,7 @@ function renderLog(data) {
   const arr = [...data].sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp)).slice(0,300);
   document.getElementById('log-count-label').textContent = `Showing ${Math.min(300,data.length)} of ${data.length.toLocaleString()}`;
   document.getElementById('log-list').innerHTML = arr.map(e => `
-    <div class="log-entry">
+    <div class="log-entry" style="opacity: ${e.status === 'success' ? '1' : '0.6'}">
       <img src="${getItemImage(e.item)}" class="item-img" alt="icon">
       <div><div class="log-name">${e.item}</div><div class="log-ts">${new Date(e.timestamp).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</div></div>
       <div class="log-price">${getCost(e.item).toLocaleString()} NP</div>
