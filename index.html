@@ -240,8 +240,7 @@ tbody tr td:first-child { border-radius: 12px 0 0 12px; }
 tbody tr td:last-child { border-radius: 0 12px 12px 0; }
 tbody tr:hover { background: rgba(255,255,255,0.05); transform: scale(1.01); }
 tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1px solid transparent; }
-.td-name { color: var(--text); font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 12px; }
-.item-img { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.4); object-fit: cover; }
+.td-name { color: var(--text); font-weight: 600; font-size: 1rem; }
 .td-right { text-align: right; }
 
 /* ── BADGES & BARS ── */
@@ -256,7 +255,7 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 
 /* ── LOG ── */
 .log-entry {
-  display: grid; grid-template-columns: 40px 1fr 100px 30px auto 100px;
+  display: grid; grid-template-columns: 1fr 100px 30px auto 100px;
   align-items: center; gap: 16px; padding: 12px 20px;
   background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 8px;
   transition: background .2s, transform .2s;
@@ -297,7 +296,7 @@ input[type=file] { display: none; }
   .stat-num { font-size: 2.2rem; }
   .tabs { flex-wrap: wrap; justify-content: center; width: 100%; }
   .tab { width: 48%; text-align: center; margin-bottom: 4px; }
-  .log-entry { grid-template-columns: 36px 1fr 80px; padding: 12px; gap: 12px; }
+  .log-entry { grid-template-columns: 1fr 80px; padding: 12px; gap: 12px; }
   .log-price, .log-ts, .log-dot { display: none; }
 }
 @media (max-width: 480px) {
@@ -347,6 +346,7 @@ input[type=file] { display: none; }
   <button class="btn" onclick="resetFilters()">Reset View</button>
 </div>
 
+<!-- SETTINGS MODAL -->
 <div id="settings-modal" class="modal-overlay hidden">
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 24px;">
@@ -410,6 +410,7 @@ input[type=file] { display: none; }
       <button class="tab" onclick="switchTab('log',this)">Feed Log</button>
     </div>
 
+    <!-- OVERVIEW -->
     <div id="panel-overview" class="panel active">
       <div class="grid-2">
         <div class="card">
@@ -438,6 +439,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- ITEMS -->
     <div id="panel-items" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Most Requested Items</span></div>
@@ -467,6 +469,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- TIMELINE -->
     <div id="panel-timeline" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Daily Feeds</span></div>
@@ -478,6 +481,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- LOG -->
     <div id="panel-log" class="panel">
       <div class="card">
         <div class="card-header" style="margin-bottom:16px;">
@@ -578,13 +582,6 @@ function getCost(itemName) {
   let hash = 0;
   for (let i = 0; i < itemName.length; i++) { hash = itemName.charCodeAt(i) + ((hash << 5) - hash); }
   return (Math.abs(hash) % 98000) + 1200;
-}
-
-function getItemImage(itemName) {
-  const imgs = ['drn_tigersquash', 'foo_cheeseburger', 'plu_slorg_green', 'boo_brain_muffin', 'fd_faeriepancakes', 'foo_blueberrycrepes', 'grf_puntec', 'piz_smellydung', 'foo_grapes_purple', 'drn_borovan', 'foo_tombola', 'piz_cheese', 'foo_jam_thornberry', 'foo_kebab', 'foo_driedfish', 'can_jellylolly', 'foo_toastjam', 'foo_carrotpeaomelette', 'can_gummygrundo', 'pla_honeyblossom'];
-  let hash = 0;
-  for(let i=0; i<itemName.length; i++) hash = itemName.charCodeAt(i) + ((hash<<5)-hash);
-  return `https://images.neopets.com/items/${imgs[Math.abs(hash) % imgs.length]}.gif`;
 }
 
 // ─── DATA SYNC ───
@@ -835,7 +832,7 @@ function renderItemTable(ds) {
   document.getElementById('item-count').textContent = r.length + ' Items';
   document.querySelector('#item-table tbody').innerHTML = r.map(x => `
     <tr>
-      <td class="td-name"><img src="${getItemImage(x.i)}" class="item-img" alt="icon">${x.i}</td>
+      <td class="td-name">${x.i}</td>
       <td class="td-right" style="font-family:monospace;">${x.cost.toLocaleString()}</td>
       <td class="td-right">${x.t}</td>
       <td class="td-right"><span class="badge badge-green">${x.s}</span></td>
@@ -876,8 +873,6 @@ function renderCumul(data) {
   
   const ctx = document.getElementById('cumulChart').getContext('2d');
   
-  // Create gradient dynamically based on current theme's green
-  // Chart.js canvas uses rgba values for gradients so we translate the hex
   const hex2rgba = (hex, alpha = 1) => {
     const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
     return `rgba(${r},${g},${b},${alpha})`;
@@ -908,7 +903,6 @@ function renderLog(data) {
   document.getElementById('log-count-label').textContent = `Showing ${Math.min(300,data.length)} of ${data.length.toLocaleString()}`;
   document.getElementById('log-list').innerHTML = arr.map(e => `
     <div class="log-entry" style="opacity: ${e.status === 'success' ? '1' : '0.6'}">
-      <img src="${getItemImage(e.item)}" class="item-img" alt="icon">
       <div><div class="log-name">${e.item}</div><div class="log-ts">${new Date(e.timestamp).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</div></div>
       <div class="log-price">${getCost(e.item).toLocaleString()} NP</div>
       <span class="log-dot ${e.status}"></span>
