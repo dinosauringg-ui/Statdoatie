@@ -3,516 +3,506 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KAD / Analytics</title>
+<title>Statdoatie</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #080b0f;
-    --surface: #0d1117;
-    --surface2: #111820;
-    --border: #1e2a38;
-    --border2: #253344;
-    --text: #e2e8f0;
-    --muted: #4a6275;
-    --muted2: #6b8499;
-    --accent: #00d4ff;
-    --accent-dim:#006680;
-    --green: #00e676;
-    --green-dim: #1a4a2e;
-    --red: #ff3d57;
-    --red-dim: #4a1020;
-    --amber: #ffb300;
-    --amber-dim: #3d2a00;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
-  }
-  html { font-size: 14px; }
-  body {
-    background: var(--bg); color: var(--text);
-    font-family: var(--sans); min-height: 100vh;
-    line-height: 1.5; -webkit-font-smoothing: antialiased;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 4px; height: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border2); }
+:root {
+  --bg:        #111318;
+  --surface:   #191d24;
+  --surface2:  #1f242d;
+  --border:    rgba(255,255,255,.07);
+  --border-strong: rgba(255,255,255,.12);
+  --text:      #f0f2f5;
+  --text2:     #8b93a4;
+  --text3:     #545d6e;
+  --green:     #22d878;
+  --green-bg:  rgba(34,216,120,.1);
+  --red:       #f0485a;
+  --red-bg:    rgba(240,72,90,.1);
+  --blue:      #4f9cf9;
+  --blue-bg:   rgba(79,156,249,.1);
+  --amber:     #f5a623;
+  --amber-bg:  rgba(245,166,35,.1);
+  --purple:    #a78bfa;
+  --display:   'Outfit', sans-serif;
+  --body:      'DM Sans', sans-serif;
+  --radius:    14px;
+  --radius-sm: 8px;
+}
 
-  /* ── HEADER ── */
-  .header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 28px; height: 52px; border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 100; background: var(--bg); gap: 16px;
-  }
-  .header-left { display: flex; align-items: center; gap: 20px; }
-  .logo {
-    font-family: var(--mono); font-weight: 600; font-size: 1rem;
-    letter-spacing: .12em; color: var(--text); display: flex; align-items: center; gap: 10px;
-  }
-  .logo-mark {
-    width: 24px; height: 24px; background: var(--accent);
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    flex-shrink: 0;
-  }
-  .logo-sep { color: var(--muted); font-weight: 300; }
-  .header-meta {
-    font-family: var(--mono); font-size: .68rem; color: var(--muted);
-    letter-spacing: .06em; display: flex; align-items: center; gap: 16px;
-  }
-  .header-meta .dot {
-    width: 6px; height: 6px; border-radius: 50%; background: var(--green);
-    display: inline-block; margin-right: 5px; box-shadow: 0 0 6px var(--green);
-  }
-  .header-meta .dot.off { background: var(--muted); box-shadow: none; }
-  .header-right { display: flex; align-items: center; gap: 8px; }
+html { font-size: 15px; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
 
-  /* ── FILTER BAR ── */
-  .filter-bar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 28px; background: var(--surface); border-bottom: 1px solid var(--border);
-  }
-  .filter-controls { display: flex; align-items: center; gap: 12px; }
-  .filter-group { display: flex; align-items: center; gap: 4px; }
-  .month-select {
-    background: var(--bg); border: 1px solid var(--border2); color: var(--text);
-    padding: 0 10px; font-family: var(--mono); font-size: .7rem; height: 30px;
-    letter-spacing: .05em; outline: none; cursor: pointer; text-transform: uppercase;
-  }
-  .month-select:focus { border-color: var(--accent); }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 3px; }
 
-  /* ── BUTTONS ── */
-  .btn {
-    font-family: var(--mono); font-size: .7rem; font-weight: 500;
-    letter-spacing: .08em; text-transform: uppercase; padding: 0 14px;
-    height: 32px; border: 1px solid var(--border2); background: transparent;
-    color: var(--muted2); cursor: pointer; transition: all .15s;
-    display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
-  }
-  .btn:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-icon { padding: 0; width: 32px; justify-content: center; font-size: 1.1rem; }
-  .btn-primary { border-color: var(--accent); color: var(--accent); }
-  .btn-primary:hover { background: var(--accent); color: var(--bg); }
-  .btn-danger { border-color: var(--border2); }
-  .btn-danger:hover { border-color: var(--red); color: var(--red); }
-  .btn svg { width: 12px; height: 12px; fill: currentColor; }
+/* ── HEADER ── */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 36px; height: 64px; border-bottom: 1px solid var(--border);
+  background: var(--bg); position: sticky; top: 0; z-index: 100; gap: 16px;
+}
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-icon {
+  width: 32px; height: 32px; background: linear-gradient(135deg, #4f9cf9, #a78bfa);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.logo-text {
+  font-family: var(--display); font-weight: 700; font-size: 1.1rem;
+  letter-spacing: -.01em; color: var(--text);
+}
+.logo-sub { font-size: .72rem; color: var(--text3); font-weight: 400; margin-top: 1px; }
+.header-right { display: flex; align-items: center; gap: 8px; }
 
-  /* ── LAYOUT ── */
-  .main { padding: 24px 28px; max-width: 1280px; margin: 0 auto; }
+.pill-badge {
+  display: inline-flex; align-items: center; gap: 5px; font-size: .72rem;
+  font-weight: 500; color: var(--amber); background: var(--amber-bg);
+  border: 1px solid rgba(245,166,35,.2); padding: 4px 12px; border-radius: 100px;
+}
+.pulse {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  box-shadow: 0 0 8px var(--green); flex-shrink: 0;
+}
+.status-chip { display: inline-flex; align-items: center; gap: 6px; font-size: .72rem; color: var(--text3); font-weight: 500; }
 
-  /* ── STAT GRID ── */
-  .stats-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
-    background: var(--border); border: 1px solid var(--border); margin-bottom: 24px;
-  }
-  .stats-grid.lower-stats { grid-template-columns: repeat(4, 1fr); }
+/* ── FILTER BAR ── */
+.filter-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 36px; background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.filter-controls { display: flex; align-items: center; gap: 12px; }
+.filter-group { display: flex; align-items: center; gap: 4px; }
+.month-select {
+  background: var(--bg); border: 1px solid var(--border-strong); color: var(--text);
+  padding: 0 12px; font-family: var(--body); font-size: .85rem; height: 36px;
+  border-radius: var(--radius-sm); outline: none; cursor: pointer; text-transform: uppercase;
+}
+.month-select:focus { border-color: var(--blue); }
 
-  @media (max-width: 900px) {
-    .stats-grid, .stats-grid.lower-stats { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (max-width: 550px) {
-    .stats-grid, .stats-grid.lower-stats { grid-template-columns: repeat(2, 1fr); }
-  }
-  .stat-card {
-    background: var(--surface); padding: 18px 20px;
-    position: relative; overflow: hidden;
-  }
-  .stat-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0;
-    height: 2px; background: var(--border2); transition: background .2s;
-  }
-  .stat-card:hover::before { background: var(--accent); }
-  .stat-label {
-    font-family: var(--mono); font-size: .62rem; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
-  }
-  .stat-num {
-    font-family: var(--mono); font-size: 1.5rem; font-weight: 600;
-    line-height: 1; color: var(--text);
-  }
-  .stat-card.c-green .stat-num { color: var(--green); }
-  .stat-card.c-red .stat-num { color: var(--red); }
-  .stat-card.c-accent .stat-num { color: var(--accent); }
-  .stat-card.c-amber .stat-num { color: var(--amber); }
-  .stat-sub { font-size: 0.6rem; color: var(--muted); margin-top: 6px; letter-spacing: 0.05em; }
+/* ── BUTTONS ── */
+.btn {
+  font-family: var(--body); font-size: .8rem; font-weight: 500; padding: 0 16px;
+  height: 36px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong);
+  background: var(--surface); color: var(--text2); cursor: pointer;
+  transition: all .15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.btn:hover { background: var(--surface2); color: var(--text); border-color: rgba(255,255,255,.18); }
+.btn-icon { padding: 0; width: 36px; justify-content: center; font-size: 1.2rem; }
+.btn-primary { background: var(--blue); color: #fff; border-color: transparent; font-weight: 600; }
+.btn-primary:hover { background: #6aaeff; color: #fff; border-color: transparent; }
+.btn-ghost { background: transparent; border-color: transparent; }
+.btn-ghost:hover { background: var(--surface); }
 
-  /* ── NAV TABS ── */
-  .tabs {
-    display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px;
-  }
-  .tab {
-    font-family: var(--mono); font-size: .7rem; letter-spacing: .1em;
-    text-transform: uppercase; padding: 12px 20px; border: none;
-    background: transparent; color: var(--muted); cursor: pointer;
-    border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s;
-  }
-  .tab:hover { color: var(--text); }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+/* ── MAIN ── */
+.main { padding: 36px; max-width: 1200px; margin: 0 auto; }
 
-  /* ── PANELS ── */
-  .panel { display: none; }
-  .panel.active { display: block; }
+/* ── IMPORT SCREEN ── */
+.import-screen {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 60vh; text-align: center;
+}
+.import-screen h2 {
+  font-family: var(--display); font-size: 2rem; font-weight: 700;
+  letter-spacing: -.03em; margin-bottom: 10px; color: var(--text);
+}
+.import-screen p { font-size: .9rem; color: var(--text2); max-width: 400px; line-height: 1.7; margin-bottom: 28px; }
+.import-icon-wrap {
+  width: 72px; height: 72px; background: var(--surface); border: 1px solid var(--border-strong);
+  border-radius: 20px; display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; margin-bottom: 24px;
+}
+.import-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 
-  /* ── CHART GRIDS ── */
-  .charts-row {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
-    background: var(--border); border: 1px solid var(--border); margin-bottom: 24px;
-  }
-  @media (max-width: 700px) { .charts-row { grid-template-columns: 1fr; } }
-  .chart-block { background: var(--surface); padding: 20px; }
-  .chart-block-full {
-    background: var(--surface); border: 1px solid var(--border);
-    padding: 20px; margin-bottom: 24px;
-  }
-  .chart-title {
-    font-family: var(--mono); font-size: .65rem; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .chart-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .chart-wrap { position: relative; width: 100%; }
+/* ── STAT CARDS ── */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px; margin-bottom: 12px;
+}
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 22px 18px;
+  transition: border-color .2s; cursor: default;
+}
+.stat-card:hover { border-color: var(--border-strong); }
+.stat-label { font-size: .72rem; font-weight: 500; color: var(--text3); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .06em; }
+.stat-num { font-family: var(--display); font-size: 2.2rem; font-weight: 700; letter-spacing: -.03em; line-height: 1; color: var(--text); }
+.stat-card.c-green .stat-num { color: var(--green); }
+.stat-card.c-red   .stat-num { color: var(--red); }
+.stat-card.c-blue  .stat-num { color: var(--blue); }
+.stat-card.c-amber .stat-num { color: var(--amber); }
+.stat-card.c-purple .stat-num { color: var(--purple); }
+.stat-sub { font-size: .72rem; color: var(--text3); margin-top: 4px; }
 
-  /* ── TABLE ── */
-  .table-block {
-    background: var(--surface); border: 1px solid var(--border);
-    margin-bottom: 24px; overflow-x: auto;
-  }
-  .table-header {
-    padding: 14px 20px; border-bottom: 1px solid var(--border);
-    font-family: var(--mono); font-size: .65rem; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--muted);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-  thead th {
-    font-family: var(--mono); font-size: .6rem; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--muted); font-weight: 400;
-    padding: 10px 16px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap;
-  }
-  tbody td {
-    padding: 10px 16px; border-bottom: 1px solid var(--border);
-    font-family: var(--mono); font-size: .75rem; vertical-align: middle;
-  }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover td { background: var(--surface2); }
-  .td-item { font-family: var(--sans); font-size: .82rem; font-weight: 500; color: var(--text); }
-  .td-num { color: var(--muted2); text-align: right; }
-  
-  /* ── BADGE ── */
-  .badge {
-    font-family: var(--mono); font-size: .6rem; letter-spacing: .08em;
-    padding: 3px 8px; font-weight: 500; display: inline-block;
-  }
-  .badge-success { background: var(--green-dim); color: var(--green); border: 1px solid #00e67630; }
-  .badge-fail { background: var(--red-dim); color: var(--red); border: 1px solid #ff3d5730; }
+/* ── TABS ── */
+.tabs {
+  display: flex; gap: 2px; margin-top: 20px; margin-bottom: 28px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 4px; width: fit-content;
+}
+.tab {
+  font-family: var(--body); font-size: .82rem; font-weight: 500;
+  padding: 7px 18px; border-radius: 6px; border: none;
+  background: transparent; color: var(--text3); cursor: pointer; transition: all .15s;
+}
+.tab:hover { color: var(--text2); }
+.tab.active { background: var(--surface2); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
 
-  /* ── RATE BAR ── */
-  .rate-cell { display: flex; align-items: center; gap: 10px; }
-  .rate-track { flex: 1; height: 3px; background: var(--border2); min-width: 60px; }
-  .rate-fill { height: 100%; transition: width .5s ease; }
-  .rate-num { font-family: var(--mono); font-size: .68rem; color: var(--muted2); min-width: 34px; text-align: right; }
+/* ── PANELS ── */
+.panel { display: none; }
+.panel.active { display: block; }
 
-  /* ── LOG FEED ── */
-  .log-list { max-height: 400px; overflow-y: auto; }
-  .log-entry {
-    display: grid; grid-template-columns: 110px 16px 1fr 100px 80px;
-    align-items: center; gap: 12px; padding: 9px 16px;
-    border-bottom: 1px solid var(--border);
-    font-family: var(--mono); font-size: .72rem; transition: background .1s;
-  }
-  .log-entry:hover { background: var(--surface2); }
-  .log-entry:last-child { border-bottom: none; }
-  .log-ts { color: var(--muted); }
-  .log-dot { width: 5px; height: 5px; border-radius: 50%; justify-self: center; }
-  .log-dot.success { background: var(--green); box-shadow: 0 0 4px var(--green); }
-  .log-dot.sniped { background: var(--red); box-shadow: 0 0 4px var(--red); }
-  .log-item-name { color: var(--text); font-family: var(--sans); font-size: .8rem; }
-  .log-price { color: var(--muted2); text-align: right; font-family: var(--mono); font-size: 0.65rem; }
-  .log-status { text-align: right; }
+/* ── GRID LAYOUTS & CARDS ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
 
-  /* ── IMPORT SECTION ── */
-  .import-zone {
-    border: 1px solid var(--border); padding: 60px 40px; text-align: center;
-    margin-bottom: 24px; position: relative; background: var(--surface);
-  }
-  .import-zone::before {
-    content: ''; position: absolute; inset: 4px; border: 1px solid var(--border); pointer-events: none;
-  }
-  .import-zone h2 {
-    font-family: var(--mono); font-size: 1rem; font-weight: 500;
-    letter-spacing: .08em; margin-bottom: 8px; color: var(--text);
-  }
-  .import-zone p {
-    font-size: .82rem; color: var(--muted2); margin-bottom: 24px;
-    max-width: 480px; margin-left: auto; margin-right: auto;
-  }
-  .import-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .import-icon { font-size: 2.5rem; margin-bottom: 16px; opacity: .3; filter: grayscale(1); }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px; margin-bottom: 16px;
+}
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.card-title { font-family: var(--display); font-size: .95rem; font-weight: 600; color: var(--text); letter-spacing: -.01em; }
+.card-meta { font-size: .75rem; color: var(--text3); }
+.chart-wrap { position: relative; width: 100%; }
 
-  /* ── STREAK BADGE ── */
-  .streak {
-    font-family: var(--mono); font-size: .65rem; letter-spacing: .08em; color: var(--amber);
-    border: 1px solid var(--amber-dim); background: var(--amber-dim);
-    padding: 4px 10px; display: inline-flex; align-items: center; gap: 5px;
-  }
+/* ── LEGEND ── */
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: .75rem; color: var(--text2); }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 
-  /* ── TOAST ── */
-  .toast {
-    position: fixed; bottom: 24px; right: 24px; background: var(--surface2);
-    border: 1px solid var(--border2); border-left: 3px solid var(--accent);
-    color: var(--text); padding: 12px 18px; font-family: var(--mono);
-    font-size: .72rem; letter-spacing: .04em; z-index: 999;
-    opacity: 0; transform: translateY(8px); transition: opacity .2s, transform .2s;
-    pointer-events: none; max-width: 320px;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-  .toast.error { border-left-color: var(--red); }
+/* ── TABLE ── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  text-align: left; font-size: .7rem; font-weight: 600;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--text3);
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+}
+tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: .85rem; color: var(--text2); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--surface2); color: var(--text); }
+.td-name { color: var(--text); font-weight: 500; }
+.td-right { text-align: right; }
 
-  /* ── HIDDEN ── */
-  .hidden { display: none !important; }
-  input[type=file] { display: none; }
+/* ── BADGES ── */
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: .72rem; font-weight: 600; padding: 3px 9px; border-radius: 100px; }
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-red   { background: var(--red-bg);   color: var(--red); }
 
-  /* ── SCANLINE EFFECT ── */
-  body::after {
-    content: ''; position: fixed; inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px);
-    pointer-events: none; z-index: 9999;
-  }
+/* ── RATE BAR ── */
+.rate-row { display: flex; align-items: center; gap: 10px; min-width: 120px; }
+.rate-track { flex: 1; height: 4px; background: rgba(255,255,255,.07); border-radius: 2px; overflow: hidden; }
+.rate-fill { height: 100%; border-radius: 2px; transition: width .6s ease; }
+.rate-pct { font-size: .75rem; color: var(--text3); min-width: 30px; text-align: right; }
+
+/* ── LOG ── */
+.log-entry {
+  display: grid; grid-template-columns: 1fr 90px 24px auto 80px;
+  align-items: center; gap: 14px; padding: 13px 24px;
+  border-bottom: 1px solid var(--border); transition: background .1s;
+}
+.log-entry:hover { background: var(--surface2); }
+.log-entry:last-child { border-bottom: none; }
+.log-name { font-size: .87rem; font-weight: 500; color: var(--text); }
+.log-ts { font-size: .75rem; color: var(--text3); }
+.log-price { font-size: .75rem; color: var(--text3); font-family: var(--body); text-align: right; }
+.log-dot { width: 8px; height: 8px; border-radius: 50%; justify-self: center; }
+.log-dot.success { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.log-dot.sniped  { background: var(--red);   box-shadow: 0 0 6px var(--red); }
+.log-status { display: flex; justify-content: flex-end; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 28px; right: 28px; background: var(--surface2);
+  border: 1px solid var(--border-strong); color: var(--text);
+  padding: 13px 18px; border-radius: var(--radius-sm); font-size: .82rem; font-weight: 500;
+  z-index: 999; opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .2s;
+  pointer-events: none; max-width: 300px; box-shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+.hidden { display: none !important; }
+input[type=file] { display: none; }
+
+.main > * { animation: fadeup .35s ease both; }
+@keyframes fadeup {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body>
 
 <header class="header">
-  <div class="header-left">
-    <div class="logo">
-      <div class="logo-mark"></div>
-      KAD <span class="logo-sep">/</span> ANALYTICS
-    </div>
-    <div class="header-meta">
-      <span id="hdr-status"><span class="dot off" id="status-dot"></span><span id="status-text">NO DATA</span></span>
-      <span id="hdr-count" class="hidden">— <span id="record-count">0</span> RECORDS</span>
+  <div class="logo">
+    <div class="logo-icon">🐾</div>
+    <div>
+      <div class="logo-text">Statdoatie</div>
+      <div class="logo-sub">Kadoatery Feed Tracker</div>
     </div>
   </div>
   <div class="header-right">
-    <span id="streak-badge" class="streak hidden">&#9651; <span id="streak-val">0</span>D STREAK</span>
-    <button class="btn" onclick="document.getElementById('file-input').click()">
-      <svg viewBox="0 0 16 16"><path d="M8 1L3 6h3v6h4V6h3L8 1zm-5 11v2h10v-2H3z"/></svg> Load JSON
-    </button>
+    <span id="streak-badge" class="pill-badge hidden">🔥 <span id="streak-val">0</span>d streak</span>
+    <div id="status-chip" class="status-chip" style="margin-right:4px">
+      <span class="pulse" id="pulse-dot" style="display:none"></span>
+      <span id="status-text" style="color:var(--text3)">No data</span>
+    </div>
+    <button class="btn btn-ghost" onclick="document.getElementById('file-input').click()">↑ Load JSON</button>
     <input type="file" id="file-input" accept=".json" onchange="handleFileLoad(event)">
-    <button class="btn" onclick="exportData()" id="export-btn" style="display:none">
-      <svg viewBox="0 0 16 16"><path d="M8 11L3 6h3V1h4v5h3L8 11zm-5 3v-2h10v2H3z"/></svg> Export JSON
-    </button>
-    <button class="btn btn-primary" id="import-sessions-btn">
-      <svg viewBox="0 0 16 16"><path d="M2 2h12v2H2V2zm0 5h5v2H2V7zm0 5h5v2H2v-2zm7-4l4 4-4 4V9z"/></svg> Import from Extension
-    </button>
-    <button class="btn btn-danger" onclick="clearData()" title="Clear all data">
-      <svg viewBox="0 0 16 16"><path d="M6 2V1h4v1h4v2H2V2h4zM3 5h10l-.9 9H3.9L3 5zm3 2v5h1V7H6zm3 0v5h1V7H9z"/></svg>
-    </button>
+    <button class="btn btn-ghost" id="export-btn" style="display:none" onclick="exportData()">↓ Export</button>
+    <button class="btn btn-primary" id="import-sessions-btn">Import from Extension</button>
+    <button class="btn btn-ghost" onclick="clearData()" title="Clear data" style="padding:0 10px">✕</button>
   </div>
 </header>
 
 <div class="filter-bar hidden" id="filter-bar">
   <div class="filter-controls">
     <div class="filter-group">
-      <button class="btn btn-icon" onclick="changeMonth(-1)" title="Previous Month">&#8249;</button>
+      <button class="btn btn-icon btn-ghost" onclick="changeMonth(-1)" title="Previous Month">&#8249;</button>
       <select id="month-select" class="month-select" onchange="setMonth(this.value)">
         <option value="all">ALL TIME</option>
       </select>
-      <button class="btn btn-icon" onclick="changeMonth(1)" title="Next Month">&#8250;</button>
+      <button class="btn btn-icon btn-ghost" onclick="changeMonth(1)" title="Next Month">&#8250;</button>
     </div>
-    <span class="header-meta" style="margin-left: 8px;" id="filter-status">FILTER: OFF</span>
+    <span class="status-chip" style="margin-left: 8px;" id="filter-status">Filter: Off</span>
   </div>
-  <button class="btn" onclick="resetFilters()" title="Reset all filters and view settings">Reset View</button>
+  <button class="btn btn-ghost" onclick="resetFilters()" title="Reset all filters and view settings">Reset View</button>
 </div>
 
 <main class="main">
-  <div id="import-zone" class="import-zone">
-    <div class="import-icon">◈</div>
-    <h2>No feeding data loaded</h2>
-    <p>Import from your Tampermonkey extension, load a saved JSON export, or try the demo to explore the dashboard.</p>
+
+  <div id="import-screen" class="import-screen">
+    <div class="import-icon-wrap">🐾</div>
+    <h2>No data yet</h2>
+    <p>Import from your Tampermonkey extension, load a saved export, or explore with demo data.</p>
     <div class="import-btns">
-      <button class="btn btn-primary" onclick="document.getElementById('import-sessions-btn').click()">
-        Import from Extension
-      </button>
-      <button class="btn" onclick="document.getElementById('file-input').click()">Load JSON File</button>
-      <button class="btn" onclick="loadDemoData()">Demo Data</button>
+      <button class="btn btn-primary" onclick="document.getElementById('import-sessions-btn').click()">Import from Extension</button>
+      <button class="btn" onclick="document.getElementById('file-input').click()">Load JSON</button>
+      <button class="btn" onclick="loadDemoData()">Try Demo Data</button>
     </div>
   </div>
 
   <div id="dashboard" class="hidden">
-    
+
     <div class="stats-grid" id="stats-grid"></div>
-    <div class="stats-grid lower-stats" id="stats-grid-lower"></div>
+    <div class="stats-grid" id="stats-grid-lower"></div>
 
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('overview', this)">Overview</button>
-      <button class="tab" onclick="switchTab('items', this)">Items & Pricing</button>
-      <button class="tab" onclick="switchTab('timeline', this)">Timeline</button>
-      <button class="tab" onclick="switchTab('log', this)">Feed Log</button>
+      <button class="tab active" onclick="switchTab('overview',this)">Overview</button>
+      <button class="tab" onclick="switchTab('items',this)">Items & Pricing</button>
+      <button class="tab" onclick="switchTab('timeline',this)">Timeline</button>
+      <button class="tab" onclick="switchTab('log',this)">Feed Log</button>
     </div>
 
     <div id="panel-overview" class="panel active">
-      <div class="charts-row">
-        <div class="chart-block">
-          <div class="chart-title">Outcome Distribution</div>
-          <div class="chart-wrap" style="height:220px">
-            <canvas id="pieChart"></canvas>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Outcomes</span>
+            <span class="card-meta" id="pie-meta"></span>
+          </div>
+          <div class="chart-wrap" style="height:200px">
+            <canvas id="pieChart" role="img" aria-label="Donut chart of feed outcomes">Feed outcomes</canvas>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Fed successfully</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Sniped</div>
           </div>
         </div>
-        <div class="chart-block">
-          <div class="chart-title">Feeds by Day of Week</div>
-          <div class="chart-wrap" style="height:220px">
-            <canvas id="dowChart"></canvas>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">By Day of Week</span>
+          </div>
+          <div class="chart-wrap" style="height:200px">
+            <canvas id="dowChart" role="img" aria-label="Bar chart by day of week">Feeds per weekday</canvas>
           </div>
         </div>
       </div>
-      <div class="chart-block-full">
-        <div class="chart-title">Activity by Hour of Day (NST / PST)</div>
-        <div class="chart-wrap" style="height:180px">
-          <canvas id="hourChart"></canvas>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Best Hours to Feed</span>
+          <span class="card-meta">NST (Neopian Standard Time = PST)</span>
+        </div>
+        <div class="chart-wrap" style="height:160px">
+          <canvas id="hourChart" role="img" aria-label="Bar chart of activity by hour">Hourly activity</canvas>
         </div>
       </div>
     </div>
 
     <div id="panel-items" class="panel">
-      <div class="chart-block-full">
-        <div class="chart-title">Top 15 Requested Items</div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Top 15 Requested Items</span>
+        </div>
         <div class="chart-wrap" id="topItemsWrap">
-          <canvas id="topItemsChart"></canvas>
+          <canvas id="topItemsChart" role="img" aria-label="Horizontal bar of top items">Top items</canvas>
         </div>
       </div>
-      <div class="table-block">
-        <div class="table-header">
-          <span>Item Success & Pricing</span>
-          <span id="item-count"></span>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">All Items & Value</span>
+          <span class="card-meta" id="item-count"></span>
         </div>
-        <table id="item-table">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th style="text-align:right">Est. Unit Cost</th>
-              <th style="text-align:right">Attempts</th>
-              <th style="text-align:right">Fed</th>
-              <th style="text-align:right">Sniped</th>
-              <th style="text-align:right">Total Spent</th>
-              <th>Rate</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="table-wrap">
+          <table id="item-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th class="td-right">Est. Unit Cost</th>
+                <th class="td-right">Attempts</th>
+                <th class="td-right">Fed</th>
+                <th class="td-right">Sniped</th>
+                <th class="td-right">Total Spent</th>
+                <th>Success Rate</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <div id="panel-timeline" class="panel">
-      <div class="chart-block-full">
-        <div class="chart-title">Daily Activity</div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Daily Activity</span>
+        </div>
         <div class="chart-wrap" style="height:220px">
-          <canvas id="dailyChart"></canvas>
+          <canvas id="dailyChart" role="img" aria-label="Stacked daily bar chart">Daily activity</canvas>
+        </div>
+        <div class="legend" style="margin-top:16px">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Fed</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Sniped</div>
         </div>
       </div>
-      <div class="chart-block-full">
-        <div class="chart-title">Cumulative Feeds</div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Cumulative Progress</span>
+        </div>
         <div class="chart-wrap" style="height:200px">
-          <canvas id="cumulChart"></canvas>
+          <canvas id="cumulChart" role="img" aria-label="Cumulative line chart">Cumulative feeds</canvas>
         </div>
       </div>
     </div>
 
     <div id="panel-log" class="panel">
-      <div class="table-block">
-        <div class="table-header">
-          <span>Feed Log</span>
-          <span id="log-count-label" style="color:var(--muted2)"></span>
+      <div class="card" style="padding:0; overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)">
+          <span class="card-title">Feed Log</span>
+          <span id="log-count-label" class="card-meta"></span>
         </div>
-        <div class="log-list" id="log-list"></div>
+        <div id="log-list" style="max-height:600px;overflow-y:auto"></div>
       </div>
     </div>
 
-  </div></main>
+  </div>
+</main>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── STATE ───────────────────────────────────────────
 let feedLog = [];
-let charts = {};
-let currentMonth = 'all'; // Filter state
-let availableMonths = []; // Populated dynamically based on data
-
-// ─── COLORS ──────────────────────────────────────────
+let charts  = {};
+let currentMonth = 'all';
+let availableMonths = [];
+const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const C = {
-  green: '#00e676', red: '#ff3d57', accent: '#00d4ff',
-  amber: '#ffb300', dim: '#1e2a38', muted: '#4a6275', text: '#e2e8f0',
+  green:  '#22d878',
+  red:    '#f0485a',
+  blue:   '#4f9cf9',
+  amber:  '#f5a623',
+  purple: '#a78bfa',
+  teal:   '#2dd4bf',
+  bg:     '#191d24',
+  border: 'rgba(255,255,255,.07)',
+  text2:  '#8b93a4',
 };
-const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-// ─── TOAST ───────────────────────────────────────────
+Chart.defaults.color = C.text2;
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+
 let toastTimer;
-function toast(msg, type='') {
+function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
-  el.className = 'toast show' + (type ? ' '+type : '');
+  el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.className = 'toast', 2800);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
-// ─── PRICE DB SIMULATION ─────────────────────────────
-// Generates a pseudo-random, but highly consistent price for any item string.
-// Replaces pulling strictly from an external API DB for the purpose of this UI build.
+// Pseudo-random deterministic price simulation
 function getCost(itemName) {
   let hash = 0;
   for (let i = 0; i < itemName.length; i++) {
     hash = itemName.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return (Math.abs(hash) % 98000) + 1200; // Prices range strictly between 1,200 and ~99,200
+  return (Math.abs(hash) % 98000) + 1200;
 }
 
-// ─── EXTENSION SYNC ──────────────────────────────────
+// Extension sync
 window.addEventListener('KadDataSync', e => {
   if (e.detail && e.detail.length > 0) {
     mergeData(e.detail);
-    toast(`↓ Imported ${e.detail.length} records from extension`);
+    toast(`Imported ${e.detail.length} records from extension`);
   } else {
-    toast('No data found in extension storage', 'error');
+    toast('No data found in extension storage');
   }
 });
 
 document.getElementById('import-sessions-btn').addEventListener('click', () => {
   toast('Requesting data from extension…');
-  setTimeout(() => {
-    if (feedLog.length === 0) toast('Extension may not be active. Use Load JSON or Demo.', 'error');
-  }, 2200);
+  setTimeout(() => { if (!feedLog.length) toast('Extension may not be active — try Load JSON or Demo'); }, 2200);
 });
 
-// ─── FILE I/O ─────────────────────────────────────────
 function handleFileLoad(e) {
   const file = e.target.files[0]; if (!file) return;
   const r = new FileReader();
   r.onload = ev => {
     try {
       const d = JSON.parse(ev.target.result);
-      if (Array.isArray(d)) { mergeData(d); toast(`↓ Loaded ${d.length} records from file`); } 
-      else toast('Invalid JSON format', 'error');
-    } catch { toast('Failed to parse JSON file', 'error'); }
+      if (Array.isArray(d)) { mergeData(d); toast(`Loaded ${d.length} records`); }
+      else toast('Invalid format');
+    } catch { toast('Could not parse file'); }
   };
-  r.readAsText(file);
-  e.target.value = '';
+  r.readAsText(file); e.target.value = '';
 }
 
 function exportData() {
-  const blob = new Blob([JSON.stringify(feedLog, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `kad_log_${new Date().toISOString().slice(0,10)}.json`;
-  a.click(); toast('↑ Exported');
+  const b = new Blob([JSON.stringify(feedLog, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(b);
+  a.download = `kad_log_${new Date().toISOString().slice(0,10)}.json`; a.click();
+  toast('Exported!');
 }
 
-// ─── FILTERING LOGIC ──────────────────────────────────
+function clearData() {
+  if (!confirm('Clear ALL internal feeding data? (This cannot be undone)')) return;
+  feedLog = []; currentMonth = 'all'; destroyCharts();
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('filter-bar').classList.add('hidden');
+  document.getElementById('import-screen').classList.remove('hidden');
+  document.getElementById('export-btn').style.display = 'none';
+  document.getElementById('streak-badge').classList.add('hidden');
+  document.getElementById('pulse-dot').style.display = 'none';
+  document.getElementById('status-text').textContent = 'No data';
+  document.getElementById('status-text').style.color = 'var(--text3)';
+  toast('All data cleared');
+}
+
+// Filter Logic
 function populateMonths() {
-  const monthSet = new Set(feedLog.map(e => e.timestamp.slice(0, 7))); // YYYY-MM
-  availableMonths = Array.from(monthSet).sort((a, b) => b.localeCompare(a)); // Newest first
+  const monthSet = new Set(feedLog.map(e => e.timestamp.slice(0, 7)));
+  availableMonths = Array.from(monthSet).sort((a, b) => b.localeCompare(a));
   
   const select = document.getElementById('month-select');
   select.innerHTML = `<option value="all">ALL TIME</option>` + 
@@ -531,35 +521,28 @@ function setMonth(val) {
 function changeMonth(dir) {
   if (availableMonths.length === 0) return;
   if (currentMonth === 'all') {
-    // If navigating from "All Time", start at the most recent (-1 conceptually starts at 0, 1 at last)
     setMonth(availableMonths[dir > 0 ? availableMonths.length - 1 : 0]);
     return;
   }
   let idx = availableMonths.indexOf(currentMonth);
   idx += dir;
-  
-  if (idx >= 0 && idx < availableMonths.length) {
-    setMonth(availableMonths[idx]);
-  } else {
-    setMonth('all'); // Bounds hit, wrap to All Time
-  }
+  if (idx >= 0 && idx < availableMonths.length) setMonth(availableMonths[idx]);
+  else setMonth('all');
 }
 
 function resetFilters() {
   if(currentMonth !== 'all') {
     setMonth('all');
     toast('View filters reset');
-  } else {
-    toast('View already reset');
-  }
+  } else toast('View already reset');
 }
 
 function updateFilterStatus() {
   const lbl = document.getElementById('filter-status');
   if (currentMonth === 'all') {
-    lbl.innerHTML = 'FILTER: <span style="color:var(--muted)">OFF</span>';
+    lbl.innerHTML = 'Filter: <span style="color:var(--text3)">Off</span>';
   } else {
-    lbl.innerHTML = `FILTER: <span style="color:var(--accent)">${currentMonth}</span>`;
+    lbl.innerHTML = `Filter: <span style="color:var(--blue)">${currentMonth}</span>`;
   }
 }
 
@@ -568,432 +551,344 @@ function getFilteredData() {
   return feedLog.filter(e => e.timestamp.startsWith(currentMonth));
 }
 
-// ─── DATA MANAGEMENT ──────────────────────────────────
-function mergeData(newEntries) {
-  const existing = new Set(feedLog.map(e => e.timestamp + '|' + e.item));
-  const added = newEntries.filter(e => !existing.has(e.timestamp + '|' + e.item));
-  feedLog = [...feedLog, ...added];
+function mergeData(entries) {
+  const ex = new Set(feedLog.map(e => e.timestamp + '|' + e.item));
+  feedLog = [...feedLog, ...entries.filter(e => !ex.has(e.timestamp + '|' + e.item))];
   feedLog.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
   populateMonths();
   
-  // Show UI elements
-  document.getElementById('import-zone').classList.add('hidden');
+  document.getElementById('import-screen').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('filter-bar').classList.remove('hidden');
   document.getElementById('export-btn').style.display = '';
-  document.getElementById('hdr-count').classList.remove('hidden');
-  document.getElementById('status-dot').className = 'dot';
-  document.getElementById('status-text').textContent = 'LIVE';
+  document.getElementById('pulse-dot').style.display = '';
   
   renderWidgets();
 }
 
-function clearData() {
-  if (!confirm('Clear ALL internal feeding data? (This cannot be undone)')) return;
-  feedLog = [];
-  currentMonth = 'all';
-  destroyCharts();
-  
-  document.getElementById('dashboard').classList.add('hidden');
-  document.getElementById('filter-bar').classList.add('hidden');
-  document.getElementById('import-zone').classList.remove('hidden');
-  document.getElementById('export-btn').style.display = 'none';
-  document.getElementById('streak-badge').classList.add('hidden');
-  document.getElementById('hdr-count').classList.add('hidden');
-  document.getElementById('status-dot').className = 'dot off';
-  document.getElementById('status-text').textContent = 'NO DATA';
-  document.getElementById('record-count').textContent = '0';
-  toast('All data cleared');
-}
-
-// ─── DEMO DATA ────────────────────────────────────────
 function loadDemoData() {
   const items = [
     'Honey Blossom Extract','Tigersquash Juice','Cheeseburger','Ummagine',
     'Faerie Pancakes','Blueberry Crepes','Puntec Fruit','Smelly Dung Pizza',
-    'Purple Grapes','Borovan','Tombola Fruit','Cheese Pizza',
-    'Thornberry Jam','Kebab','Dried Fish','Jelly Lollypop',
-    'Toast with Jam','Gummy Grundo Candy','Brain Muffin','Kacheek Soufflé',
-    'Meerca Pie','Carrot and Pea Omelette'
+    'Purple Grapes','Borovan','Tombola Fruit','Cheese Pizza','Thornberry Jam',
+    'Kebab','Dried Fish','Jelly Lollypop','Toast with Jam','Brain Muffin',
+    'Kacheek Soufflé','Meerca Pie','Carrot and Pea Omelette','Gummy Grundo Candy'
   ];
-  const now = new Date();
-  const demo = [];
-  
+  const now = new Date(), demo = [];
   for (let d = 59; d >= 0; d--) {
     const base = new Date(now); base.setDate(base.getDate() - d);
-    const count = Math.floor(Math.random() * 20) + 2;
-    for (let i = 0; i < count; i++) {
-      const h = Math.floor(Math.random() * 24);
-      const m = Math.floor(Math.random() * 60);
+    const n = Math.floor(Math.random() * 20) + 2;
+    for (let i = 0; i < n; i++) {
       const ts = new Date(base);
-      ts.setHours(h, m, Math.floor(Math.random()*60), 0);
-      const item = items[Math.floor(Math.random() * items.length)];
-      demo.push({
-        item,
-        status: Math.random() < 0.38 ? 'success' : 'sniped',
-        timestamp: ts.toISOString()
-      });
+      ts.setHours(Math.floor(Math.random()*24), Math.floor(Math.random()*60), Math.floor(Math.random()*60), 0);
+      demo.push({ item: items[Math.floor(Math.random()*items.length)], status: Math.random() < .38 ? 'success' : 'sniped', timestamp: ts.toISOString() });
     }
   }
-  mergeData(demo);
-  toast(`Demo loaded — ${demo.length} records over 60 days`);
+  mergeData(demo); toast(`Demo loaded — ${demo.length} records over 60 days`);
 }
 
-// ─── TABS ─────────────────────────────────────────────
 function switchTab(name, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('panel-' + name).classList.add('active');
   
-  // Rebuild charts/tables based on the active tab context
-  if (name === 'items') { renderItemsChart(); renderItemTable(); }
-  if (name === 'timeline') { renderDailyChart(); renderCumulChart(); }
+  const data = getFilteredData();
+  if (name === 'items') { renderItemsChart(data); renderItemTable(data); }
+  if (name === 'timeline') { renderDaily(data); renderCumul(data); }
 }
 
-// ─── RENDER CYCLE ─────────────────────────────────────
+function destroyCharts() {
+  Object.values(charts).forEach(c => { try { c.destroy(); } catch {} });
+  charts = {};
+}
+
+function gridLines() { return { color: 'rgba(255,255,255,.05)', drawBorder: false }; }
+function tickStyle(sz=11) { return { color: C.text2, font: { size: sz } }; }
+
 function renderWidgets() {
   const data = getFilteredData();
-  document.getElementById('record-count').textContent = data.length.toLocaleString();
+  document.getElementById('status-text').textContent = data.length.toLocaleString() + ' records';
+  document.getElementById('status-text').style.color = 'var(--text2)';
   
   destroyCharts();
-  renderStats(data);
-  renderStreak();
+  renderStats(data); renderStreak();
+  renderPie(data); renderDow(data); renderHour(data);
   
-  renderPieChart(data);
-  renderDowChart(data);
-  renderHourChart(data);
-  
-  // Conditionally refresh secondary tabs to save draw cycles if they aren't visible
   const activeTab = document.querySelector('.tab.active')?.textContent?.toLowerCase()?.trim();
-  if (activeTab.includes('items')) { renderItemsChart(data); renderItemTable(data); }
-  if (activeTab === 'timeline') { renderDailyChart(data); renderCumulChart(data); }
+  if (activeTab && activeTab.includes('items')) { renderItemsChart(data); renderItemTable(data); }
+  if (activeTab === 'timeline') { renderDaily(data); renderCumul(data); }
   if (activeTab === 'feed log') { renderLog(data); }
-  
-  // Force background generation once
+
+  renderItemsChart(data); renderItemTable(data);
+  renderDaily(data); renderCumul(data);
   renderLog(data);
-  renderItemsChart(data); 
-  renderItemTable(data);
-  renderDailyChart(data);
-  renderCumulChart(data);
 }
 
-// ─── STATS ────────────────────────────────────────────
 function renderStats(data) {
-  const total = data.length;
+  const total   = data.length;
   const successList = data.filter(e => e.status === 'success');
-  const snipedList = data.filter(e => e.status === 'sniped');
-  
+  const snipedList  = data.filter(e => e.status === 'sniped');
   const success = successList.length;
-  const sniped = snipedList.length;
-  const rate = total > 0 ? Math.round(success / total * 100) : 0;
-  const unique = new Set(data.map(e => e.item)).size;
-  const days = new Set(data.map(e => e.timestamp.slice(0,10))).size;
-  const perDay = days > 0 ? (total / days).toFixed(1) : '—';
-  
+  const sniped  = snipedList.length;
+  const rate    = total > 0 ? Math.round(success / total * 100) : 0;
+  const unique  = new Set(data.map(e => e.item)).size;
+  const days    = new Set(data.map(e => e.timestamp.slice(0,10))).size;
+  const perDay  = days > 0 ? (total / days).toFixed(1) : '—';
+
+  const hrs = Array(24).fill(0);
+  data.forEach(e => hrs[new Date(e.timestamp).getHours()]++);
+  const bestH = hrs.indexOf(Math.max(...hrs));
+  const bestHLabel = bestH === 0 ? '12am' : bestH < 12 ? bestH+'am' : bestH === 12 ? '12pm' : (bestH-12)+'pm';
+
   const valFed = successList.reduce((acc, curr) => acc + getCost(curr.item), 0);
   const valSniped = snipedList.reduce((acc, curr) => acc + getCost(curr.item), 0);
 
   document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card c-accent"><div class="stat-label">Attempts</div><div class="stat-num">${total.toLocaleString()}</div></div>
-    <div class="stat-card c-green"><div class="stat-label">Kads Fed</div><div class="stat-num">${success.toLocaleString()}</div></div>
-    <div class="stat-card c-red"><div class="stat-label">Sniped</div><div class="stat-num">${sniped.toLocaleString()}</div></div>
-    <div class="stat-card c-amber"><div class="stat-label">Success Rate</div><div class="stat-num">${rate}%</div></div>
-    <div class="stat-card"><div class="stat-label">Feeds / Day</div><div class="stat-num">${perDay}</div></div>
+    <div class="stat-card c-blue">
+      <div class="stat-label">Attempts</div>
+      <div class="stat-num">${total.toLocaleString()}</div>
+    </div>
+    <div class="stat-card c-green">
+      <div class="stat-label">Kads Fed</div>
+      <div class="stat-num">${success.toLocaleString()}</div>
+    </div>
+    <div class="stat-card c-red">
+      <div class="stat-label">Sniped</div>
+      <div class="stat-num">${sniped.toLocaleString()}</div>
+    </div>
+    <div class="stat-card c-amber">
+      <div class="stat-label">Success Rate</div>
+      <div class="stat-num">${rate}%</div>
+    </div>
+    <div class="stat-card c-purple">
+      <div class="stat-label">Best Hour</div>
+      <div class="stat-num">${bestHLabel}</div>
+      <div class="stat-sub">NST</div>
+    </div>
   `;
   
   document.getElementById('stats-grid-lower').innerHTML = `
-    <div class="stat-card c-green"><div class="stat-label">Total Value Fed</div><div class="stat-num">${valFed.toLocaleString()} <span style="font-size: 0.7rem; color:var(--muted)">NP</span></div></div>
-    <div class="stat-card c-red"><div class="stat-label">Total Value Missed</div><div class="stat-num">${valSniped.toLocaleString()} <span style="font-size: 0.7rem; color:var(--muted)">NP</span></div></div>
-    <div class="stat-card"><div class="stat-label">Unique Items</div><div class="stat-num">${unique}</div></div>
-    <div class="stat-card"><div class="stat-label">Active Days</div><div class="stat-num">${days}</div></div>
+    <div class="stat-card c-green">
+      <div class="stat-label">Total Value Fed</div>
+      <div class="stat-num">${valFed.toLocaleString()} <span style="font-size:0.9rem; color:var(--text3)">NP</span></div>
+    </div>
+    <div class="stat-card c-red">
+      <div class="stat-label">Total Value Missed</div>
+      <div class="stat-num">${valSniped.toLocaleString()} <span style="font-size:0.9rem; color:var(--text3)">NP</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Unique Items</div>
+      <div class="stat-num">${unique}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Active Days</div>
+      <div class="stat-num">${days}</div>
+      <div class="stat-sub">${perDay}/day avg</div>
+    </div>
   `;
 }
 
-// ─── STREAK ───────────────────────────────────────────
 function renderStreak() {
   const daySet = new Set(feedLog.filter(e => e.status === 'success').map(e => e.timestamp.slice(0,10)));
-  let streak = 0;
-  const d = new Date();
-  while (true) {
-    const key = d.toISOString().slice(0,10);
-    if (!daySet.has(key)) break;
-    streak++;
-    d.setDate(d.getDate() - 1);
-  }
+  let streak = 0; const d = new Date();
+  while (daySet.has(d.toISOString().slice(0,10))) { streak++; d.setDate(d.getDate()-1); }
   const badge = document.getElementById('streak-badge');
   document.getElementById('streak-val').textContent = streak;
   badge.classList.toggle('hidden', streak === 0 || currentMonth !== 'all');
 }
 
-// ─── CHART HELPERS ────────────────────────────────────
-function destroyCharts() {
-  Object.values(charts).forEach(c => { try { c.destroy(); } catch {} });
-  charts = {};
-}
-const chartDefaults = {
-  responsive: true, maintainAspectRatio: false, animation: { duration: 400 },
-  plugins: { legend: { display: false } },
-};
-function axisStyle(label = true) {
-  return {
-    grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
-    ticks: { color: '#4a6275', font: { family: 'IBM Plex Mono', size: 10 }, ...(label ? {} : { display: false }) },
-    border: { color: 'transparent' }
-  };
-}
-
-// ─── PIE CHART ────────────────────────────────────────
-function renderPieChart(data) {
+function renderPie(data) {
   if(!data.length) return;
   const s = data.filter(e => e.status === 'success').length;
   const n = data.filter(e => e.status === 'sniped').length;
-  
+  document.getElementById('pie-meta').textContent = Math.round(s/(s+n)*100) + '% fed';
   charts.pie = new Chart(document.getElementById('pieChart'), {
     type: 'doughnut',
     data: {
       labels: ['Fed', 'Sniped'],
-      datasets: [{
-        data: [s, n],
-        backgroundColor: [C.green + 'cc', C.red + 'cc'],
-        borderColor: '#080b0f', borderWidth: 3, hoverOffset: 6
-      }]
+      datasets: [{ data: [s, n], backgroundColor: [C.green, C.red], borderColor: C.bg, borderWidth: 4, hoverOffset: 6 }]
     },
     options: {
-      ...chartDefaults, cutout: '65%',
+      responsive: true, maintainAspectRatio: false, cutout: '68%',
       plugins: {
-        legend: {
-          display: true, position: 'bottom',
-          labels: {
-            color: '#6b8499', font: { family: 'IBM Plex Mono', size: 10 },
-            boxWidth: 10, padding: 16,
-            generateLabels: chart => chart.data.labels.map((label, i) => ({
-              text: `${label} ${chart.data.datasets[0].data[i].toLocaleString()}`,
-              fillStyle: chart.data.datasets[0].backgroundColor[i],
-              hidden: false, index: i
-            }))
-          }
-        },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw.toLocaleString()} (${Math.round(ctx.raw / (s + n) * 100)}%)` } }
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw.toLocaleString()} (${Math.round(ctx.raw/(s+n)*100)}%)` } }
       }
     }
   });
 }
 
-// ─── DOW CHART ────────────────────────────────────────
-function renderDowChart(data) {
+function renderDow(data) {
   if(!data.length) return;
   const counts = Array(7).fill(0);
   data.forEach(e => counts[new Date(e.timestamp).getDay()]++);
   const max = Math.max(...counts);
-  
   charts.dow = new Chart(document.getElementById('dowChart'), {
     type: 'bar',
     data: {
       labels: DAYS,
       datasets: [{
         data: counts,
-        backgroundColor: counts.map(v => v === max ? C.accent + 'cc' : C.dim),
-        borderColor: counts.map(v => v === max ? C.accent : '#253344'),
-        borderWidth: 1, borderRadius: 0, borderSkipped: false,
+        backgroundColor: counts.map(v => v === max ? C.blue + 'cc' : 'rgba(255,255,255,.07)'),
+        borderRadius: 6, borderSkipped: false
       }]
     },
-    options: { ...chartDefaults, scales: { x: axisStyle(), y: axisStyle() } }
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: tickStyle(), border: { display: false } },
+        y: { grid: gridLines(), ticks: tickStyle(), border: { display: false } }
+      }
+    }
   });
 }
 
-// ─── HOUR CHART ───────────────────────────────────────
-function renderHourChart(data) {
+function renderHour(data) {
   if(!data.length) return;
   const counts = Array(24).fill(0);
   data.forEach(e => counts[new Date(e.timestamp).getHours()]++);
   const max = Math.max(...counts);
-  const labels = counts.map((_, i) => i === 0 ? '12a' : i < 12 ? i+'a' : i === 12 ? '12p' : (i-12)+'p');
-  
+  const labels = counts.map((_,i) => i===0?'12a':i<12?i+'a':i===12?'12p':(i-12)+'p');
   charts.hour = new Chart(document.getElementById('hourChart'), {
     type: 'bar',
     data: {
       labels,
       datasets: [{
         data: counts,
-        backgroundColor: counts.map(v => v === max ? C.accent + 'cc' : '#1e2a38'),
-        borderColor: counts.map(v => v === max ? C.accent : '#253344'),
-        borderWidth: 1, borderRadius: 0, borderSkipped: false,
+        backgroundColor: counts.map(v => v === max ? C.amber + 'cc' : 'rgba(255,255,255,.06)'),
+        borderRadius: 4, borderSkipped: false
       }]
     },
     options: {
-      ...chartDefaults,
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
       scales: {
-        x: {
-          ...axisStyle(),
-          ticks: { color: '#4a6275', font: { family: 'IBM Plex Mono', size: 9 }, autoSkip: false, maxRotation: 0 },
-          border: { color: 'transparent' }, grid: { color: 'rgba(255,255,255,.04)' }
-        },
-        y: axisStyle()
+        x: { grid: { display: false }, ticks: { color: C.text2, font: { size: 9 }, autoSkip: false, maxRotation: 0 }, border: { display: false } },
+        y: { grid: gridLines(), ticks: tickStyle(), border: { display: false } }
       }
     }
   });
 }
 
-// ─── TOP ITEMS CHART ──────────────────────────────────
 function renderItemsChart(data) {
-  if(!data || !data.length) data = getFilteredData();
+  if(!data.length) return;
   const counts = {};
-  data.forEach(e => counts[e.item] = (counts[e.item] || 0) + 1);
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 15);
-  
-  const h = Math.max(300, sorted.length * 32 + 60);
+  data.forEach(e => counts[e.item] = (counts[e.item]||0)+1);
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,15);
+  const h = Math.max(280, sorted.length * 34 + 40);
   document.getElementById('topItemsWrap').style.height = h + 'px';
-  
   charts.topItems = new Chart(document.getElementById('topItemsChart'), {
     type: 'bar',
     data: {
       labels: sorted.map(([k]) => k),
-      datasets: [{
-        data: sorted.map(([, v]) => v),
-        backgroundColor: C.accent + '44', borderColor: C.accent + '88',
-        borderWidth: 1, borderRadius: 0, borderSkipped: false,
-      }]
+      datasets: [{ data: sorted.map(([,v]) => v), backgroundColor: C.teal + '88', borderColor: C.teal, borderWidth: 1, borderRadius: 4, borderSkipped: false }]
     },
     options: {
-      ...chartDefaults, indexAxis: 'y',
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
       scales: {
-        x: axisStyle(),
-        y: { grid: { display: false }, ticks: { color: '#6b8499', font: { family: 'IBM Plex Sans', size: 11 } }, border: { color: 'transparent' } }
+        x: { grid: gridLines(), ticks: tickStyle(), border: { display: false } },
+        y: { grid: { display: false }, ticks: { color: C.text2, font: { size: 11 } }, border: { display: false } }
       }
     }
   });
 }
 
-// ─── ITEM TABLE ───────────────────────────────────────
 function renderItemTable(dataset) {
-  if(!dataset) dataset = getFilteredData();
   const data = {};
-  
   dataset.forEach(e => {
-    if (!data[e.item]) data[e.item] = { success: 0, sniped: 0, cost: getCost(e.item) };
+    if (!data[e.item]) data[e.item] = {success:0,sniped:0,cost:getCost(e.item)};
     data[e.item][e.status]++;
   });
-  
   const rows = Object.entries(data)
-    .map(([item, { success, sniped, cost }]) => ({
-      item, cost,
-      totalSpent: success * cost,
-      total: success + sniped,
-      success, sniped,
-      rate: Math.round(success / (success + sniped) * 100)
-    }))
-    .sort((a, b) => b.total - a.total); // Sort by attempts high to low
+    .map(([item,{success,sniped,cost}]) => ({ item, cost, totalSpent: success*cost, total: success+sniped, success, sniped, rate: Math.round(success/(success+sniped)*100) }))
+    .sort((a,b) => b.total - a.total);
     
-  document.getElementById('item-count').textContent = rows.length + ' items';
-  const tbody = document.querySelector('#item-table tbody');
-  
-  tbody.innerHTML = rows.map(r => `
+  document.getElementById('item-count').textContent = rows.length + ' unique items';
+  document.querySelector('#item-table tbody').innerHTML = rows.map(r => `
     <tr>
-      <td class="td-item">${r.item}</td>
-      <td class="td-num">${r.cost.toLocaleString()} NP</td>
-      <td class="td-num">${r.total}</td>
-      <td class="td-num"><span class="badge badge-success">${r.success}</span></td>
-      <td class="td-num"><span class="badge badge-fail">${r.sniped}</span></td>
-      <td class="td-num" style="color:var(--text); font-weight:500;">${r.totalSpent.toLocaleString()} NP</td>
+      <td class="td-name">${r.item}</td>
+      <td class="td-right" style="color:var(--text3)">${r.cost.toLocaleString()} NP</td>
+      <td class="td-right">${r.total}</td>
+      <td class="td-right"><span class="badge badge-green">${r.success}</span></td>
+      <td class="td-right"><span class="badge badge-red">${r.sniped}</span></td>
+      <td class="td-right" style="color:var(--text); font-weight:500">${r.totalSpent.toLocaleString()} NP</td>
       <td>
-        <div class="rate-cell">
-          <div class="rate-track">
-            <div class="rate-fill" style="width:${r.rate}%; background:${r.rate >= 50 ? C.green : C.red}"></div>
-          </div>
-          <span class="rate-num">${r.rate}%</span>
+        <div class="rate-row">
+          <div class="rate-track"><div class="rate-fill" style="width:${r.rate}%;background:${r.rate>=50?C.green:C.red}"></div></div>
+          <span class="rate-pct">${r.rate}%</span>
         </div>
       </td>
     </tr>
   `).join('');
 }
 
-// ─── DAILY CHART ──────────────────────────────────────
-function renderDailyChart(dataset) {
-  if(!dataset) dataset = getFilteredData();
-  if(!dataset.length) return;
+function renderDaily(data) {
+  if(!data.length) return;
   const daily = {};
-  
-  dataset.forEach(e => {
-    const day = e.timestamp.slice(0,10);
-    if (!daily[day]) daily[day] = { success: 0, sniped: 0 };
-    daily[day][e.status]++;
-  });
+  data.forEach(e => { const d = e.timestamp.slice(0,10); if (!daily[d]) daily[d]={success:0,sniped:0}; daily[d][e.status]++; });
   const labels = Object.keys(daily).sort();
-  
   charts.daily = new Chart(document.getElementById('dailyChart'), {
     type: 'bar',
     data: {
       labels,
       datasets: [
-        { label: 'Fed', data: labels.map(d => daily[d].success), backgroundColor: C.green + 'aa', stack: 'a', borderRadius: 0, borderSkipped: false },
-        { label: 'Sniped', data: labels.map(d => daily[d].sniped), backgroundColor: C.red + '55', stack: 'a', borderSkipped: false }
+        { label: 'Fed',    data: labels.map(d => daily[d].success), backgroundColor: C.green + 'cc', stack: 'a', borderRadius: { topLeft:4,topRight:4 }, borderSkipped: false },
+        { label: 'Sniped', data: labels.map(d => daily[d].sniped),  backgroundColor: C.red   + '66', stack: 'a', borderSkipped: false }
       ]
     },
     options: {
-      ...chartDefaults,
-      plugins: { legend: { display: true, position: 'bottom', labels: { color: '#6b8499', font: { family: 'IBM Plex Mono', size: 10 }, boxWidth: 10, padding: 12 } } },
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
       scales: {
-        x: { stacked: true, grid: { display: false }, ticks: { color: '#4a6275', font: { family: 'IBM Plex Mono', size: 9 }, autoSkip: true, maxTicksLimit: 12, maxRotation: 45 }, border: { color: 'transparent' } },
-        y: { stacked: true, ...axisStyle() }
+        x: { stacked: true, grid: { display: false }, ticks: { color: C.text2, font: { size: 9 }, autoSkip: true, maxTicksLimit: 14, maxRotation: 45 }, border: { display: false } },
+        y: { stacked: true, grid: gridLines(), ticks: tickStyle(), border: { display: false } }
       }
     }
   });
 }
 
-// ─── CUMULATIVE CHART ─────────────────────────────────
-function renderCumulChart(dataset) {
-  if(!dataset) dataset = getFilteredData();
-  if(!dataset.length) return;
-  
-  const sorted = [...dataset].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-  let s = 0, sn = 0;
-  
-  const cS = sorted.map(e => { if (e.status === 'success') s++; return s; });
-  const cSn = sorted.map(e => { if (e.status === 'sniped') sn++; return sn; });
-  const labels = sorted.map(e => e.timestamp.slice(0,10));
-  
+function renderCumul(data) {
+  if(!data.length) return;
+  const sorted = [...data].sort((a,b) => new Date(a.timestamp)-new Date(b.timestamp));
+  let s=0,sn=0;
   charts.cumul = new Chart(document.getElementById('cumulChart'), {
     type: 'line',
     data: {
-      labels,
+      labels: sorted.map(e => e.timestamp.slice(0,10)),
       datasets: [
-        { label: 'Kads Fed', data: cS, borderColor: C.green, backgroundColor: C.green + '18', fill: true, tension: .3, pointRadius: 0, borderWidth: 1.5 },
-        { label: 'Sniped', data: cSn, borderColor: C.red, backgroundColor: C.red + '10', fill: true, tension: .3, pointRadius: 0, borderWidth: 1.5 }
+        { label:'Fed',    data: sorted.map(e => { if(e.status==='success') s++;  return s;  }), borderColor:C.green, backgroundColor:C.green+'18', fill:true, tension:.35, pointRadius:0, borderWidth:2 },
+        { label:'Sniped', data: sorted.map(e => { if(e.status==='sniped')  sn++; return sn; }), borderColor:C.red,   backgroundColor:C.red  +'10', fill:true, tension:.35, pointRadius:0, borderWidth:1.5 }
       ]
     },
     options: {
-      ...chartDefaults,
-      plugins: { legend: { display: true, position: 'bottom', labels: { color: '#6b8499', font: { family: 'IBM Plex Mono', size: 10 }, boxWidth: 10, padding: 12 } } },
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { color: C.text2, font: { size: 11 }, boxWidth: 10, padding: 14 } }
+      },
       scales: {
-        x: { grid: { display: false }, ticks: { color: '#4a6275', font: { family: 'IBM Plex Mono', size: 9 }, autoSkip: true, maxTicksLimit: 10, maxRotation: 45 }, border: { color: 'transparent' } },
-        y: axisStyle()
+        x: { grid: { display: false }, ticks: { color: C.text2, font: { size: 9 }, autoSkip: true, maxTicksLimit: 10, maxRotation: 45 }, border: { display: false } },
+        y: { grid: gridLines(), ticks: tickStyle(), border: { display: false } }
       }
     }
   });
 }
 
-// ─── LOG ──────────────────────────────────────────────
-function renderLog(dataset) {
-  if(!dataset) dataset = getFilteredData();
-  const sorted = [...dataset].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 300);
-  
-  document.getElementById('log-count-label').textContent = 
-    dataset.length.toLocaleString() + ' in view — showing ' + Math.min(300, dataset.length).toLocaleString();
-    
+function renderLog(data) {
+  const sorted = [...data].sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp)).slice(0,300);
+  document.getElementById('log-count-label').textContent = data.length.toLocaleString() + ' in view, showing ' + Math.min(300,data.length);
   document.getElementById('log-list').innerHTML = sorted.map(e => {
     const d = new Date(e.timestamp);
-    const ts = d.toLocaleString('en-US', { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+    const ts = d.toLocaleString('en-US',{month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit'});
     const price = getCost(e.item).toLocaleString();
-    
     return `<div class="log-entry">
-      <span class="log-ts">${ts}</span>
+      <div><div class="log-name">${e.item}</div><div class="log-ts">${ts}</div></div>
+      <div class="log-price">${price} NP</div>
       <span class="log-dot ${e.status}"></span>
-      <span class="log-item-name">${e.item}</span>
-      <span class="log-price">${price} NP</span>
-      <span class="log-status">
-        <span class="badge ${e.status === 'success' ? 'badge-success' : 'badge-fail'}">${e.status === 'success' ? 'FED' : 'SNIPED'}</span>
-      </span>
+      <span></span>
+      <div class="log-status"><span class="badge ${e.status==='success'?'badge-green':'badge-red'}">${e.status==='success'?'Fed':'Sniped'}</span></div>
     </div>`;
   }).join('');
 }
