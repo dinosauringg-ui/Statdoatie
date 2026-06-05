@@ -417,6 +417,8 @@ let charts  = {};
 let currentMonth = 'all';
 let availableMonths = [];
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+// ─── THEME & COLORS ──────────────────────────────────
 const C = {
   green:  '#22d878',
   red:    '#f0485a',
@@ -426,38 +428,69 @@ const C = {
   teal:   '#2dd4bf',
   bg:     '#191d24',
   border: 'rgba(255,255,255,.07)',
+  text:   '#f0f2f5',
   text2:  '#8b93a4',
 };
 
 Chart.defaults.color = C.text2;
 Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(25, 29, 36, 0.95)';
+Chart.defaults.plugins.tooltip.titleColor = C.text;
+Chart.defaults.plugins.tooltip.bodyColor = C.text2;
+Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
+Chart.defaults.plugins.tooltip.borderWidth = 1;
+Chart.defaults.plugins.tooltip.padding = 12;
+Chart.defaults.plugins.tooltip.cornerRadius = 8;
+Chart.defaults.plugins.tooltip.displayColors = true;
+
+// Custom plugin to draw text in the center of the Doughnut chart
+const centerTextPlugin = {
+  id: 'centerText',
+  beforeDraw: function(chart) {
+    if (chart.config.type !== 'doughnut') return;
+    const width = chart.width, height = chart.height, ctx = chart.ctx;
+    ctx.restore();
+    
+    // Calculate success rate from data
+    const data = chart.config.data.datasets[0].data;
+    const total = data[0] + data[1];
+    const pct = total > 0 ? Math.round((data[0] / total) * 100) : 0;
+
+    const fontSize = (height / 100).toFixed(2);
+    ctx.font = `600 ${fontSize}em "Outfit", sans-serif`;
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = C.text;
+
+    const text = pct + "%", textX = Math.round((width - ctx.measureText(text).width) / 2), textY = height / 2;
+    ctx.fillText(text, textX, textY);
+    
+    ctx.font = `400 ${fontSize * 0.4}em "DM Sans", sans-serif`;
+    ctx.fillStyle = C.text2;
+    const sub = "WIN RATE", subX = Math.round((width - ctx.measureText(sub).width) / 2), subY = height / 2 + (height * 0.12);
+    ctx.fillText(sub, subX, subY);
+    ctx.save();
+  }
+};
+Chart.register(centerTextPlugin);
 
 let toastTimer;
 function toast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
+  el.textContent = msg; el.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
-// Pseudo-random deterministic price simulation
 function getCost(itemName) {
   let hash = 0;
-  for (let i = 0; i < itemName.length; i++) {
-    hash = itemName.charCodeAt(i) + ((hash << 5) - hash);
-  }
+  for (let i = 0; i < itemName.length; i++) { hash = itemName.charCodeAt(i) + ((hash << 5) - hash); }
   return (Math.abs(hash) % 98000) + 1200;
 }
 
-// Extension sync
+// ─── DATA SYNC & I/O ─────────────────────────────────
 window.addEventListener('KadDataSync', e => {
-  if (e.detail && e.detail.length > 0) {
-    mergeData(e.detail);
-    toast(`Imported ${e.detail.length} records from extension`);
-  } else {
-    toast('No data found in extension storage');
-  }
+  if (e.detail && e.detail.length > 0) { mergeData(e.detail); toast(`Imported ${e.detail.length} records`); } 
+  else { toast('No data found in extension storage'); }
 });
 
 document.getElementById('import-sessions-btn').addEventListener('click', () => {
@@ -471,8 +504,7 @@ function handleFileLoad(e) {
   r.onload = ev => {
     try {
       const d = JSON.parse(ev.target.result);
-      if (Array.isArray(d)) { mergeData(d); toast(`Loaded ${d.length} records`); }
-      else toast('Invalid format');
+      if (Array.isArray(d)) { mergeData(d); toast(`Loaded ${d.length} records`); } else toast('Invalid format');
     } catch { toast('Could not parse file'); }
   };
   r.readAsText(file); e.target.value = '';
@@ -481,8 +513,7 @@ function handleFileLoad(e) {
 function exportData() {
   const b = new Blob([JSON.stringify(feedLog, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b);
-  a.download = `kad_log_${new Date().toISOString().slice(0,10)}.json`; a.click();
-  toast('Exported!');
+  a.download = `kad_log_${new Date().toISOString().slice(0,10)}.json`; a.click(); toast('Exported!');
 }
 
 function clearData() {
@@ -499,79 +530,51 @@ function clearData() {
   toast('All data cleared');
 }
 
-// Filter Logic
+// ─── FILTER LOGIC ────────────────────────────────────
 function populateMonths() {
   const monthSet = new Set(feedLog.map(e => e.timestamp.slice(0, 7)));
   availableMonths = Array.from(monthSet).sort((a, b) => b.localeCompare(a));
-  
   const select = document.getElementById('month-select');
-  select.innerHTML = `<option value="all">ALL TIME</option>` + 
-    availableMonths.map(m => `<option value="${m}">${m}</option>`).join('');
-  select.value = currentMonth;
-  updateFilterStatus();
+  select.innerHTML = `<option value="all">ALL TIME</option>` + availableMonths.map(m => `<option value="${m}">${m}</option>`).join('');
+  select.value = currentMonth; updateFilterStatus();
 }
 
-function setMonth(val) {
-  currentMonth = val;
-  document.getElementById('month-select').value = val;
-  updateFilterStatus();
-  renderWidgets();
-}
+function setMonth(val) { currentMonth = val; document.getElementById('month-select').value = val; updateFilterStatus(); renderWidgets(); }
 
 function changeMonth(dir) {
   if (availableMonths.length === 0) return;
-  if (currentMonth === 'all') {
-    setMonth(availableMonths[dir > 0 ? availableMonths.length - 1 : 0]);
-    return;
-  }
-  let idx = availableMonths.indexOf(currentMonth);
-  idx += dir;
-  if (idx >= 0 && idx < availableMonths.length) setMonth(availableMonths[idx]);
-  else setMonth('all');
+  if (currentMonth === 'all') { setMonth(availableMonths[dir > 0 ? availableMonths.length - 1 : 0]); return; }
+  let idx = availableMonths.indexOf(currentMonth) + dir;
+  if (idx >= 0 && idx < availableMonths.length) setMonth(availableMonths[idx]); else setMonth('all');
 }
 
-function resetFilters() {
-  if(currentMonth !== 'all') {
-    setMonth('all');
-    toast('View filters reset');
-  } else toast('View already reset');
-}
+function resetFilters() { if(currentMonth !== 'all') { setMonth('all'); toast('View filters reset'); } else toast('View already reset'); }
 
 function updateFilterStatus() {
   const lbl = document.getElementById('filter-status');
-  if (currentMonth === 'all') {
-    lbl.innerHTML = 'Filter: <span style="color:var(--text3)">Off</span>';
-  } else {
-    lbl.innerHTML = `Filter: <span style="color:var(--blue)">${currentMonth}</span>`;
-  }
+  if (currentMonth === 'all') lbl.innerHTML = 'Filter: <span style="color:var(--text3)">Off</span>';
+  else lbl.innerHTML = `Filter: <span style="color:var(--blue)">${currentMonth}</span>`;
 }
 
-function getFilteredData() {
-  if (currentMonth === 'all') return feedLog;
-  return feedLog.filter(e => e.timestamp.startsWith(currentMonth));
-}
+function getFilteredData() { return currentMonth === 'all' ? feedLog : feedLog.filter(e => e.timestamp.startsWith(currentMonth)); }
 
 function mergeData(entries) {
   const ex = new Set(feedLog.map(e => e.timestamp + '|' + e.item));
   feedLog = [...feedLog, ...entries.filter(e => !ex.has(e.timestamp + '|' + e.item))];
   feedLog.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
   populateMonths();
-  
   document.getElementById('import-screen').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('filter-bar').classList.remove('hidden');
   document.getElementById('export-btn').style.display = '';
   document.getElementById('pulse-dot').style.display = '';
-  
   renderWidgets();
 }
 
 function loadDemoData() {
   const items = [
-    'Honey Blossom Extract','Tigersquash Juice','Cheeseburger','Ummagine',
-    'Faerie Pancakes','Blueberry Crepes','Puntec Fruit','Smelly Dung Pizza',
-    'Purple Grapes','Borovan','Tombola Fruit','Cheese Pizza','Thornberry Jam',
-    'Kebab','Dried Fish','Jelly Lollypop','Toast with Jam','Brain Muffin',
+    'Honey Blossom Extract','Tigersquash Juice','Cheeseburger','Ummagine','Faerie Pancakes','Blueberry Crepes','Puntec Fruit','Smelly Dung Pizza',
+    'Purple Grapes','Borovan','Tombola Fruit','Cheese Pizza','Thornberry Jam','Kebab','Dried Fish','Jelly Lollypop','Toast with Jam','Brain Muffin',
     'Kacheek Soufflé','Meerca Pie','Carrot and Pea Omelette','Gummy Grundo Candy'
   ];
   const now = new Date(), demo = [];
@@ -579,8 +582,7 @@ function loadDemoData() {
     const base = new Date(now); base.setDate(base.getDate() - d);
     const n = Math.floor(Math.random() * 20) + 2;
     for (let i = 0; i < n; i++) {
-      const ts = new Date(base);
-      ts.setHours(Math.floor(Math.random()*24), Math.floor(Math.random()*60), Math.floor(Math.random()*60), 0);
+      const ts = new Date(base); ts.setHours(Math.floor(Math.random()*24), Math.floor(Math.random()*60), Math.floor(Math.random()*60), 0);
       demo.push({ item: items[Math.floor(Math.random()*items.length)], status: Math.random() < .38 ? 'success' : 'sniped', timestamp: ts.toISOString() });
     }
   }
@@ -590,22 +592,21 @@ function loadDemoData() {
 function switchTab(name, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('panel-' + name).classList.add('active');
-  
-  const data = getFilteredData();
-  if (name === 'items') { renderItemsChart(data); renderItemTable(data); }
-  if (name === 'timeline') { renderDaily(data); renderCumul(data); }
+  btn.classList.add('active'); document.getElementById('panel-' + name).classList.add('active');
 }
 
-function destroyCharts() {
-  Object.values(charts).forEach(c => { try { c.destroy(); } catch {} });
-  charts = {};
-}
-
-function gridLines() { return { color: 'rgba(255,255,255,.05)', drawBorder: false }; }
+// ─── CHART HELPERS ───────────────────────────────────
+function destroyCharts() { Object.values(charts).forEach(c => { try { c.destroy(); } catch {} }); charts = {}; }
+function gridLines() { return { color: 'rgba(255,255,255,.04)', drawBorder: false, borderDash: [4, 4] }; }
 function tickStyle(sz=11) { return { color: C.text2, font: { size: sz } }; }
 
+// Generator for custom rich tooltips
+function buildRichTooltip(datasetLabel, value, total, ctx) {
+  const pct = total > 0 ? Math.round((value / total) * 100) : 0;
+  return `${datasetLabel}: ${value.toLocaleString()} (${pct}%)`;
+}
+
+// ─── RENDERING ───────────────────────────────────────
 function renderWidgets() {
   const data = getFilteredData();
   document.getElementById('status-text').textContent = data.length.toLocaleString() + ' records';
@@ -614,27 +615,19 @@ function renderWidgets() {
   destroyCharts();
   renderStats(data); renderStreak();
   renderPie(data); renderDow(data); renderHour(data);
-  
-  const activeTab = document.querySelector('.tab.active')?.textContent?.toLowerCase()?.trim();
-  if (activeTab && activeTab.includes('items')) { renderItemsChart(data); renderItemTable(data); }
-  if (activeTab === 'timeline') { renderDaily(data); renderCumul(data); }
-  if (activeTab === 'feed log') { renderLog(data); }
-
   renderItemsChart(data); renderItemTable(data);
-  renderDaily(data); renderCumul(data);
-  renderLog(data);
+  renderDaily(data); renderCumul(data); renderLog(data);
 }
 
 function renderStats(data) {
-  const total   = data.length;
+  const total = data.length;
   const successList = data.filter(e => e.status === 'success');
-  const snipedList  = data.filter(e => e.status === 'sniped');
-  const success = successList.length;
-  const sniped  = snipedList.length;
-  const rate    = total > 0 ? Math.round(success / total * 100) : 0;
-  const unique  = new Set(data.map(e => e.item)).size;
-  const days    = new Set(data.map(e => e.timestamp.slice(0,10))).size;
-  const perDay  = days > 0 ? (total / days).toFixed(1) : '—';
+  const snipedList = data.filter(e => e.status === 'sniped');
+  const success = successList.length, sniped = snipedList.length;
+  const rate = total > 0 ? Math.round(success / total * 100) : 0;
+  const unique = new Set(data.map(e => e.item)).size;
+  const days = new Set(data.map(e => e.timestamp.slice(0,10))).size;
+  const perDay = days > 0 ? (total / days).toFixed(1) : '—';
 
   const hrs = Array(24).fill(0);
   data.forEach(e => hrs[new Date(e.timestamp).getHours()]++);
@@ -645,47 +638,17 @@ function renderStats(data) {
   const valSniped = snipedList.reduce((acc, curr) => acc + getCost(curr.item), 0);
 
   document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card c-blue">
-      <div class="stat-label">Attempts</div>
-      <div class="stat-num">${total.toLocaleString()}</div>
-    </div>
-    <div class="stat-card c-green">
-      <div class="stat-label">Kads Fed</div>
-      <div class="stat-num">${success.toLocaleString()}</div>
-    </div>
-    <div class="stat-card c-red">
-      <div class="stat-label">Sniped</div>
-      <div class="stat-num">${sniped.toLocaleString()}</div>
-    </div>
-    <div class="stat-card c-amber">
-      <div class="stat-label">Success Rate</div>
-      <div class="stat-num">${rate}%</div>
-    </div>
-    <div class="stat-card c-purple">
-      <div class="stat-label">Best Hour</div>
-      <div class="stat-num">${bestHLabel}</div>
-      <div class="stat-sub">NST</div>
-    </div>
+    <div class="stat-card c-blue"><div class="stat-label">Attempts</div><div class="stat-num">${total.toLocaleString()}</div></div>
+    <div class="stat-card c-green"><div class="stat-label">Kads Fed</div><div class="stat-num">${success.toLocaleString()}</div></div>
+    <div class="stat-card c-red"><div class="stat-label">Sniped</div><div class="stat-num">${sniped.toLocaleString()}</div></div>
+    <div class="stat-card c-amber"><div class="stat-label">Success Rate</div><div class="stat-num">${rate}%</div></div>
+    <div class="stat-card c-purple"><div class="stat-label">Peak Hour</div><div class="stat-num">${bestHLabel}</div><div class="stat-sub">NST</div></div>
   `;
-  
   document.getElementById('stats-grid-lower').innerHTML = `
-    <div class="stat-card c-green">
-      <div class="stat-label">Total Value Fed</div>
-      <div class="stat-num">${valFed.toLocaleString()} <span style="font-size:0.9rem; color:var(--text3)">NP</span></div>
-    </div>
-    <div class="stat-card c-red">
-      <div class="stat-label">Total Value Missed</div>
-      <div class="stat-num">${valSniped.toLocaleString()} <span style="font-size:0.9rem; color:var(--text3)">NP</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Unique Items</div>
-      <div class="stat-num">${unique}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Active Days</div>
-      <div class="stat-num">${days}</div>
-      <div class="stat-sub">${perDay}/day avg</div>
-    </div>
+    <div class="stat-card c-green"><div class="stat-label">Value Secured</div><div class="stat-num">${(valFed/1000).toFixed(1)}k <span style="font-size:0.9rem; color:var(--text3)">NP</span></div></div>
+    <div class="stat-card c-red"><div class="stat-label">Value Missed</div><div class="stat-num">${(valSniped/1000).toFixed(1)}k <span style="font-size:0.9rem; color:var(--text3)">NP</span></div></div>
+    <div class="stat-card"><div class="stat-label">Unique Items</div><div class="stat-num">${unique}</div></div>
+    <div class="stat-card"><div class="stat-label">Active Days</div><div class="stat-num">${days}</div><div class="stat-sub">${perDay}/day avg</div></div>
   `;
 }
 
@@ -702,7 +665,8 @@ function renderPie(data) {
   if(!data.length) return;
   const s = data.filter(e => e.status === 'success').length;
   const n = data.filter(e => e.status === 'sniped').length;
-  document.getElementById('pie-meta').textContent = Math.round(s/(s+n)*100) + '% fed';
+  document.getElementById('pie-meta').textContent = data.length.toLocaleString() + ' Total';
+  
   charts.pie = new Chart(document.getElementById('pieChart'), {
     type: 'doughnut',
     data: {
@@ -710,10 +674,14 @@ function renderPie(data) {
       datasets: [{ data: [s, n], backgroundColor: [C.green, C.red], borderColor: C.bg, borderWidth: 4, hoverOffset: 6 }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false, cutout: '68%',
+      responsive: true, maintainAspectRatio: false, cutout: '75%', // Thinner ring looks more modern
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw.toLocaleString()} (${Math.round(ctx.raw/(s+n)*100)}%)` } }
+        tooltip: {
+          callbacks: {
+            label: ctx => buildRichTooltip(ctx.label, ctx.raw, s+n, ctx)
+          }
+        }
       }
     }
   });
@@ -721,25 +689,38 @@ function renderPie(data) {
 
 function renderDow(data) {
   if(!data.length) return;
-  const counts = Array(7).fill(0);
-  data.forEach(e => counts[new Date(e.timestamp).getDay()]++);
-  const max = Math.max(...counts);
+  const successCounts = Array(7).fill(0), snipedCounts = Array(7).fill(0);
+  data.forEach(e => {
+    const day = new Date(e.timestamp).getDay();
+    if (e.status === 'success') successCounts[day]++; else snipedCounts[day]++;
+  });
+
   charts.dow = new Chart(document.getElementById('dowChart'), {
     type: 'bar',
     data: {
       labels: DAYS,
-      datasets: [{
-        data: counts,
-        backgroundColor: counts.map(v => v === max ? C.blue + 'cc' : 'rgba(255,255,255,.07)'),
-        borderRadius: 6, borderSkipped: false
-      }]
+      datasets: [
+        { label: 'Fed', data: successCounts, backgroundColor: C.green + 'dd', stack: 'a', borderRadius: { topLeft:4,topRight:4 } },
+        { label: 'Sniped', data: snipedCounts, backgroundColor: C.red + 'dd', stack: 'a', borderRadius: { topLeft:4,topRight:4 } }
+      ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index', intersect: false,
+          callbacks: {
+            label: ctx => {
+              const total = successCounts[ctx.dataIndex] + snipedCounts[ctx.dataIndex];
+              return buildRichTooltip(ctx.dataset.label, ctx.raw, total, ctx);
+            }
+          }
+        }
+      },
       scales: {
-        x: { grid: { display: false }, ticks: tickStyle(), border: { display: false } },
-        y: { grid: gridLines(), ticks: tickStyle(), border: { display: false } }
+        x: { stacked: true, grid: { display: false }, ticks: tickStyle(), border: { display: false } },
+        y: { stacked: true, grid: gridLines(), ticks: tickStyle(), border: { display: false } }
       }
     }
   });
@@ -747,26 +728,39 @@ function renderDow(data) {
 
 function renderHour(data) {
   if(!data.length) return;
-  const counts = Array(24).fill(0);
-  data.forEach(e => counts[new Date(e.timestamp).getHours()]++);
-  const max = Math.max(...counts);
-  const labels = counts.map((_,i) => i===0?'12a':i<12?i+'a':i===12?'12p':(i-12)+'p');
+  const successCounts = Array(24).fill(0), snipedCounts = Array(24).fill(0);
+  data.forEach(e => {
+    const hr = new Date(e.timestamp).getHours();
+    if (e.status === 'success') successCounts[hr]++; else snipedCounts[hr]++;
+  });
+  const labels = successCounts.map((_,i) => i===0?'12a':i<12?i+'a':i===12?'12p':(i-12)+'p');
+
   charts.hour = new Chart(document.getElementById('hourChart'), {
     type: 'bar',
     data: {
       labels,
-      datasets: [{
-        data: counts,
-        backgroundColor: counts.map(v => v === max ? C.amber + 'cc' : 'rgba(255,255,255,.06)'),
-        borderRadius: 4, borderSkipped: false
-      }]
+      datasets: [
+        { label: 'Fed', data: successCounts, backgroundColor: C.green + 'dd', stack: 'a', borderRadius: { topLeft:2,topRight:2 } },
+        { label: 'Sniped', data: snipedCounts, backgroundColor: C.red + 'dd', stack: 'a', borderRadius: { topLeft:2,topRight:2 } }
+      ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index', intersect: false,
+          callbacks: {
+            label: ctx => {
+              const total = successCounts[ctx.dataIndex] + snipedCounts[ctx.dataIndex];
+              return buildRichTooltip(ctx.dataset.label, ctx.raw, total, ctx);
+            }
+          }
+        }
+      },
       scales: {
-        x: { grid: { display: false }, ticks: { color: C.text2, font: { size: 9 }, autoSkip: false, maxRotation: 0 }, border: { display: false } },
-        y: { grid: gridLines(), ticks: tickStyle(), border: { display: false } }
+        x: { stacked: true, grid: { display: false }, ticks: { color: C.text2, font: { size: 9 }, autoSkip: false, maxRotation: 0 }, border: { display: false } },
+        y: { stacked: true, grid: gridLines(), ticks: tickStyle(), border: { display: false } }
       }
     }
   });
@@ -775,22 +769,46 @@ function renderHour(data) {
 function renderItemsChart(data) {
   if(!data.length) return;
   const counts = {};
-  data.forEach(e => counts[e.item] = (counts[e.item]||0)+1);
-  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,15);
+  data.forEach(e => {
+    if(!counts[e.item]) counts[e.item] = { total: 0, success: 0, sniped: 0, cost: getCost(e.item) };
+    counts[e.item].total++;
+    counts[e.item][e.status]++;
+  });
+  const sorted = Object.entries(counts).sort((a,b) => b[1].total - a[1].total).slice(0,15);
+  
   const h = Math.max(280, sorted.length * 34 + 40);
   document.getElementById('topItemsWrap').style.height = h + 'px';
+  
   charts.topItems = new Chart(document.getElementById('topItemsChart'), {
     type: 'bar',
     data: {
       labels: sorted.map(([k]) => k),
-      datasets: [{ data: sorted.map(([,v]) => v), backgroundColor: C.teal + '88', borderColor: C.teal, borderWidth: 1, borderRadius: 4, borderSkipped: false }]
+      datasets: [
+        { label: 'Fed', data: sorted.map(([,v]) => v.success), backgroundColor: C.green + 'aa', stack: 'a' },
+        { label: 'Sniped', data: sorted.map(([,v]) => v.sniped), backgroundColor: C.red + 'aa', stack: 'a', borderRadius: { topRight:4, bottomRight:4 } }
+      ]
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index', intersect: false,
+          callbacks: {
+            afterTitle: ctx => {
+              const itemData = sorted[ctx[0].dataIndex][1];
+              return `Value: ${(itemData.cost * itemData.total).toLocaleString()} NP (${itemData.cost.toLocaleString()} ea)`;
+            },
+            label: ctx => {
+              const itemData = sorted[ctx.dataIndex][1];
+              return buildRichTooltip(ctx.dataset.label, ctx.raw, itemData.total, ctx);
+            }
+          }
+        }
+      },
       scales: {
-        x: { grid: gridLines(), ticks: tickStyle(), border: { display: false } },
-        y: { grid: { display: false }, ticks: { color: C.text2, font: { size: 11 } }, border: { display: false } }
+        x: { stacked: true, grid: gridLines(), ticks: tickStyle(), border: { display: false } },
+        y: { stacked: true, grid: { display: false }, ticks: { color: C.text2, font: { size: 11 } }, border: { display: false } }
       }
     }
   });
@@ -810,11 +828,11 @@ function renderItemTable(dataset) {
   document.querySelector('#item-table tbody').innerHTML = rows.map(r => `
     <tr>
       <td class="td-name">${r.item}</td>
-      <td class="td-right" style="color:var(--text3)">${r.cost.toLocaleString()} NP</td>
+      <td class="td-right" style="color:var(--text3); font-family:monospace;">${r.cost.toLocaleString()}</td>
       <td class="td-right">${r.total}</td>
       <td class="td-right"><span class="badge badge-green">${r.success}</span></td>
       <td class="td-right"><span class="badge badge-red">${r.sniped}</span></td>
-      <td class="td-right" style="color:var(--text); font-weight:500">${r.totalSpent.toLocaleString()} NP</td>
+      <td class="td-right" style="color:var(--text); font-weight:500; font-family:monospace;">${r.totalSpent.toLocaleString()}</td>
       <td>
         <div class="rate-row">
           <div class="rate-track"><div class="rate-fill" style="width:${r.rate}%;background:${r.rate>=50?C.green:C.red}"></div></div>
@@ -828,20 +846,33 @@ function renderItemTable(dataset) {
 function renderDaily(data) {
   if(!data.length) return;
   const daily = {};
-  data.forEach(e => { const d = e.timestamp.slice(0,10); if (!daily[d]) daily[d]={success:0,sniped:0}; daily[d][e.status]++; });
+  data.forEach(e => { const d = e.timestamp.slice(0,10); if (!daily[d]) daily[d]={success:0,sniped:0,cost:0}; daily[d][e.status]++; daily[d].cost += getCost(e.item); });
   const labels = Object.keys(daily).sort();
+  
   charts.daily = new Chart(document.getElementById('dailyChart'), {
     type: 'bar',
     data: {
       labels,
       datasets: [
-        { label: 'Fed',    data: labels.map(d => daily[d].success), backgroundColor: C.green + 'cc', stack: 'a', borderRadius: { topLeft:4,topRight:4 }, borderSkipped: false },
-        { label: 'Sniped', data: labels.map(d => daily[d].sniped),  backgroundColor: C.red   + '66', stack: 'a', borderSkipped: false }
+        { label: 'Fed', data: labels.map(d => daily[d].success), backgroundColor: C.green + 'cc', stack: 'a', borderRadius: { topLeft:4,topRight:4 } },
+        { label: 'Sniped', data: labels.map(d => daily[d].sniped), backgroundColor: C.red + 'cc', stack: 'a', borderRadius: { topLeft:4,topRight:4 } }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index', intersect: false,
+          callbacks: {
+            afterTitle: ctx => `NP Volume: ${daily[labels[ctx[0].dataIndex]].cost.toLocaleString()}`,
+            label: ctx => {
+              const d = daily[labels[ctx.dataIndex]];
+              return buildRichTooltip(ctx.dataset.label, ctx.raw, d.success + d.sniped, ctx);
+            }
+          }
+        }
+      },
       scales: {
         x: { stacked: true, grid: { display: false }, ticks: { color: C.text2, font: { size: 9 }, autoSkip: true, maxTicksLimit: 14, maxRotation: 45 }, border: { display: false } },
         y: { stacked: true, grid: gridLines(), ticks: tickStyle(), border: { display: false } }
@@ -854,19 +885,28 @@ function renderCumul(data) {
   if(!data.length) return;
   const sorted = [...data].sort((a,b) => new Date(a.timestamp)-new Date(b.timestamp));
   let s=0,sn=0;
+  
+  // Create gradient contexts
+  const ctx = document.getElementById('cumulChart').getContext('2d');
+  const gradientGreen = ctx.createLinearGradient(0, 0, 0, 200);
+  gradientGreen.addColorStop(0, C.green + '33'); gradientGreen.addColorStop(1, 'transparent');
+  const gradientRed = ctx.createLinearGradient(0, 0, 0, 200);
+  gradientRed.addColorStop(0, C.red + '22'); gradientRed.addColorStop(1, 'transparent');
+
   charts.cumul = new Chart(document.getElementById('cumulChart'), {
     type: 'line',
     data: {
       labels: sorted.map(e => e.timestamp.slice(0,10)),
       datasets: [
-        { label:'Fed',    data: sorted.map(e => { if(e.status==='success') s++;  return s;  }), borderColor:C.green, backgroundColor:C.green+'18', fill:true, tension:.35, pointRadius:0, borderWidth:2 },
-        { label:'Sniped', data: sorted.map(e => { if(e.status==='sniped')  sn++; return sn; }), borderColor:C.red,   backgroundColor:C.red  +'10', fill:true, tension:.35, pointRadius:0, borderWidth:1.5 }
+        { label:'Total Fed', data: sorted.map(e => { if(e.status==='success') s++; return s; }), borderColor:C.green, backgroundColor: gradientGreen, fill:true, tension:.35, pointRadius:0, pointHitRadius: 10, borderWidth:2 },
+        { label:'Total Sniped', data: sorted.map(e => { if(e.status==='sniped') sn++; return sn; }), borderColor:C.red, backgroundColor: gradientRed, fill:true, tension:.35, pointRadius:0, pointHitRadius: 10, borderWidth:1.5 }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { display: true, position: 'bottom', labels: { color: C.text2, font: { size: 11 }, boxWidth: 10, padding: 14 } }
+        legend: { display: true, position: 'bottom', labels: { color: C.text2, font: { size: 11 }, boxWidth: 10, padding: 14 } },
+        tooltip: { mode: 'index', intersect: false }
       },
       scales: {
         x: { grid: { display: false }, ticks: { color: C.text2, font: { size: 9 }, autoSkip: true, maxTicksLimit: 10, maxRotation: 45 }, border: { display: false } },
@@ -885,7 +925,7 @@ function renderLog(data) {
     const price = getCost(e.item).toLocaleString();
     return `<div class="log-entry">
       <div><div class="log-name">${e.item}</div><div class="log-ts">${ts}</div></div>
-      <div class="log-price">${price} NP</div>
+      <div class="log-price" style="font-family:monospace;">${price} NP</div>
       <span class="log-dot ${e.status}"></span>
       <span></span>
       <div class="log-status"><span class="badge ${e.status==='success'?'badge-green':'badge-red'}">${e.status==='success'?'Fed':'Sniped'}</span></div>
@@ -893,5 +933,6 @@ function renderLog(data) {
   }).join('');
 }
 </script>
+
 </body>
 </html>
