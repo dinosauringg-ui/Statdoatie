@@ -743,7 +743,7 @@ function renderStats(data) {
       <div class="stat-num">${s.toLocaleString()}</div>
     </div>
     <div class="stat-card c-amber"><div class="stat-label">Win Rate</div><div class="stat-num">${rate}%</div></div>
-    <div class="stat-card c-blue"><div class="stat-label">NP Value Secured</div><div class="stat-num">${(vF/1000).toFixed(1)}k</div></div>
+    <div class="stat-card c-blue"><div class="stat-label">Total Fed Value</div><div class="stat-num">${(vF/1000).toFixed(1)}k</div></div>
   `;
   
   const vS = data.filter(e=>e.status==='sniped').reduce((a, c) => a + getCost(c.item), 0);
