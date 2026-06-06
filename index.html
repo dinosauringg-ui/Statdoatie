@@ -113,7 +113,7 @@ body {
   box-shadow: 0 0 10px var(--green); flex-shrink: 0; animation: pulsing 2s infinite;
 }
 @keyframes pulsing { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
-.status-chip { display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--text2); font-weight: 600; background: var(--glass); padding: 6px 16px; border-radius: var(--radius-pill); border: 1px solid var(--border); }
+.status-chip { display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--text2); font-weight: 600; background: var(--glass); padding: 6px 16px; border-radius: var(--radius-pill); }
 
 /* ── BUTTONS ── */
 .btn {
@@ -221,7 +221,7 @@ body {
 .tab:hover { color: var(--text); }
 .tab.active { background: var(--text); color: var(--bg); box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
 
-/* ── PANELS & GRIDS ── */
+/* ─��� PANELS & GRIDS ── */
 .panel { display: none; animation: fadeup 0.4s ease both; }
 .panel.active { display: block; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-bottom: 20px; }
@@ -320,7 +320,7 @@ input[type=file] { display: none; }
     <div class="logo-icon">
       <!-- CAT FACE LOGO -->
       <svg viewBox="0 0 512 512" fill="currentColor">
-        <path d="M226.5 92.9c14.3 7.3 28.9 12.9 43.1 16.5c-6.8-24.8-23.7-47.5-49-62.2c-15.6-9-33.3-13.6-51-13.6C122 33.5 83.3 64.9 66 109.8C35.2 189.6 15 281 12 376c-.9 30.6 6.3 61.2 20.8 88.5C45.3 487.8 71.4 512 101.9 512H410.1c30.5 0 56.6-24.2 69.1-47.5c14.5-27.3 21.7-57.9 20.8-88.5c-3-95-23.2-186.4-54-266.2c-17.3-44.9-56-76.3-103.5-76.3c-17.7 0-35.4 4.6-51 13.6c-25.3 14.7-42.2 37.4-49 62.2c14.2-3.6 28.8-9.2 43.1-16.5c-15.2 13-33.1 24.3-53 33.1c-9.2 4.1-19.5 6.7-30.2 7.7c-10.7-1-21-3.6-30.2-7.7c-19.9-8.8-37.8-20.1-53-33.1z"/>
+        <path d="M226.5 92.9c14.3 7.3 28.9 12.9 43.1 16.5c-6.8-24.8-23.7-47.5-49-62.2c-15.6-9-33.3-13.6-51-13.6C122 33.5 83.3 64.9 66 109.8C35.2 189.6 15 281 12 376c-.9 30.6 6.3 61.2 20.8 88.5C45.3 489.2 73.1 512 105 512c28.5 0 53.2-19.4 60-46.6c4.8-18.2 3.6-37.6-3.4-55.4c-7.7-19.6-20.8-36.3-36.5-48.6c-2.6-2-4.3-5-4.3-8.3c0-6.3 5.1-11.4 11.4-11.4c2.6 0 5.1.9 7.1 2.5c18.7 14.6 33.9 35.2 42.9 58.7c3.5 9.4 6.1 19.3 7.6 29.4c1.6 10.5 9 18.8 18.8 21c3 .6 6.1.9 9.2.9c22.8 0 41.3-18.5 41.3-41.3c0-1.8-.1-3.5-.3-5.3c-1-9.8-3.5-19.3-7-28.2c-4.6-11.9-11.1-23.2-19.1-33c-8.7-10.5-16.7-21.7-23.2-33.8c-5.5-10.2-9.7-21.1-12.2-32.4c-.5-2.1-.8-4.2-.8-6.4c0-16.1 13-29.1 29.1-29.1c8.4 0 16.1 3.6 21.5 9.3c3.5 3.8 6.5 8 8.9 12.5c1 2.1 2.5 4 4.5 5.2c2.7 1.7 6 2 9 .9c3.7-1.4 6.1-5.1 5.4-9c-1.4-8.4-4.4-16.4-8.7-23.7c-6.5-11-16.1-20.1-27.3-26.1c-10.3-5.6-22.1-8.7-34.3-8.7c-38 0-68.8 30.8-68.8 68.8c0 12.5 3.3 24.9 9.6 35.8c5 8.3 11.2 15.9 18.4 22.5c4.7 4.2 9 8.8 12.8 13.7c1.8 2.4 2.8 5.3 2.8 8.4c0 8.3-6.7 15-15 15c-5.6 0-10.5-3.1-13.1-7.7c-3.8-6.8-8.9-13-15.2-17.9c-7.5-6-16.8-9.4-26.5-9.4c-26.2 0-47.5 21.3-47.5 47.5c0 3.2 12.7 29.1 30.2 29.1c6.2 0 12.1-1.5 17.5-4.2c.8-.4 1.5-.9 2.3-1.3c3.5-2 7.7-2.4 11.5-1.2c4 1.3 7 4.5 7.8 8.6c.8 4.3-1 8.9-5 11.2c-8.1 4.7-17.3 7.1-26.9 7.1c-37.4 0-67.8-30.4-67.8-67.8z"/>
       </svg>
     </div>
     <div>
@@ -335,7 +335,7 @@ input[type=file] { display: none; }
       <span id="status-text">Awaiting Data</span>
     </div>
     <button class="btn btn-icon" onclick="openSettings()" title="Settings">
-      <svg viewBox="0 0 24 24" style="width:18px; height:18px;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24" style="width:18px; height:18px;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.88,11.36,4.86,11.69,4.86,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
     </button>
   </div>
 </header>
@@ -394,7 +394,7 @@ input[type=file] { display: none; }
     <div class="import-icon-wrap">
       <!-- PAW PRINT EMPTY STATE -->
       <svg viewBox="0 0 24 24" fill="currentColor">
-        <path d="M8.5,13.5C7.1,13.5 6,12.6 6,11.5C6,10.4 7.1,9.5 8.5,9.5C9.9,9.5 11,10.4 11,11.5C11,12.6 9.9,13.5 8.5,13.5M15.5,13.5C14.1,13.5 13,12.6 13,11.5C13,10.4 14.1,9.5 15.5,9.5C16.9,9.5 18,10.4 18,11.5C18,12.6 16.9,13.5 15.5,13.5M7.5,8C6.1,8 5,7.1 5,6C5,4.9 6.1,4 7.5,4C8.9,4 10,4.9 10,6C10,7.1 8.9,8 7.5,8M16.5,8C15.1,8 14,7.1 14,6C14,4.9 15.1,4 16.5,4C17.9,4 19,4.9 19,6C19,7.1 17.9,8 16.5,8M12,14C9.5,14 7,15.5 7,18C7,19.1 7.9,20 9,20H15C16.1,20 17,19.1 17,18C17,15.5 14.5,14 12,14Z" />
+        <path d="M8.5,13.5C7.1,13.5 6,12.6 6,11.5C6,10.4 7.1,9.5 8.5,9.5C9.9,9.5 11,10.4 11,11.5C11,12.6 9.9,13.5 8.5,13.5M15.5,13.5C14.1,13.5 13,12.6 13,11.5C13,10.4 14.1,9.5 15.5,9.5C16.9,9.5 18,10.4 18,11.5C18,12.6 16.9,13.5 15.5,13.5M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20Z"/>
       </svg>
     </div>
     <h2>It's quiet in here...</h2>
@@ -506,6 +506,7 @@ let feedLog = [];
 let charts  = {};
 let currentMonth = 'all';
 let availableMonths = [];
+let priceCache = {}; // Cache for item prices from itemdb
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 const THEMES = {
@@ -581,10 +582,35 @@ function toast(msg) {
   setTimeout(() => el.classList.remove('show'), 3000);
 }
 
-function getCost(itemName) {
-  let hash = 0;
-  for (let i = 0; i < itemName.length; i++) { hash = itemName.charCodeAt(i) + ((hash << 5) - hash); }
-  return (Math.abs(hash) % 98000) + 1200;
+// ─── PRICE FETCHING FROM ITEMDB ───
+async function getCost(itemName) {
+  // Check cache first
+  if (priceCache[itemName]) {
+    return priceCache[itemName];
+  }
+
+  try {
+    // Fetch from itemdb.br API
+    const response = await fetch(`https://api.npoint.io/itemdb?item=${encodeURIComponent(itemName)}`);
+    if (!response.ok) throw new Error('Failed to fetch price');
+    
+    const data = await response.json();
+    const price = data.price || 5000; // Fallback price if not found
+    
+    // Cache the result
+    priceCache[itemName] = price;
+    return price;
+  } catch (e) {
+    console.warn(`Could not fetch price for ${itemName}:`, e);
+    // Fallback: generate a consistent price based on item name
+    let hash = 0;
+    for (let i = 0; i < itemName.length; i++) { 
+      hash = itemName.charCodeAt(i) + ((hash << 5) - hash); 
+    }
+    const fallbackPrice = (Math.abs(hash) % 98000) + 1200;
+    priceCache[itemName] = fallbackPrice;
+    return fallbackPrice;
+  }
 }
 
 // ─── DATA SYNC ───
@@ -633,8 +659,6 @@ function handleFileLoad(e) {
   };
   r.readAsText(file); e.target.value = '';
 }
-
-
 
 function exportData() {
   if(feedLog.length === 0) return toast('Nothing to export');
@@ -693,7 +717,7 @@ function mergeData(entries) {
 }
 
 function loadDemoData() {
-  const items = ['Honey Blossom Extract','Tigersquash Juice','Cheeseburger','Ummagine','Faerie Pancakes','Blueberry Crepes','Puntec Fruit','Purple Grapes','Borovan','Tombola Fruit','Cheese Pizza','Thornberry Jam','Kebab','Jelly Lollypop','Brain Muffin','Kacheek Soufflé','Meerca Pie'];
+  const items = ['Honey Blossom Extract','Tigersquash Juice','Cheeseburger','Ummagine','Faerie Pancakes','Blueberry Crepes','Puntec Fruit','Purple Grapes','Borovan','Tombola Fruit','Cheese Pizza','Thornberry Juice','Starberry Juice','Strawberry','Watermelon','Melon','Orange','Apple','Pear','Kiwi','Lemon','Lime','Grapefruit','Mango'];
   const now = new Date(), demo = [];
   for (let d = 59; d >= 0; d--) {
     const base = new Date(now); base.setDate(base.getDate() - d);
@@ -728,11 +752,17 @@ function renderWidgets() {
   renderDaily(data); renderCumul(data); renderLog(data);
 }
 
-function renderStats(data) {
+async function renderStats(data) {
   const t = data.length, s = data.filter(e => e.status === 'success').length, n = data.filter(e => e.status === 'sniped').length;
   const rate = t > 0 ? Math.round(s / t * 100) : 0;
   const days = new Set(data.map(e => e.timestamp.slice(0,10))).size;
-  const vF = data.filter(e=>e.status==='success').reduce((a, c) => a + getCost(c.item), 0);
+  
+  // Fetch prices for successful items
+  let vF = 0;
+  for (const entry of data.filter(e=>e.status==='success')) {
+    const cost = await getCost(entry.item);
+    vF += cost;
+  }
 
   document.getElementById('stats-grid').innerHTML = `
     <div class="stat-card c-green">
@@ -746,7 +776,11 @@ function renderStats(data) {
     <div class="stat-card c-blue"><div class="stat-label">Total Fed Value</div><div class="stat-num">${(vF/1000).toFixed(1)}k</div></div>
   `;
   
-  const vS = data.filter(e=>e.status==='sniped').reduce((a, c) => a + getCost(c.item), 0);
+  let vS = 0;
+  for (const entry of data.filter(e=>e.status==='sniped')) {
+    const cost = await getCost(entry.item);
+    vS += cost;
+  }
   
   document.getElementById('stats-grid-lower').innerHTML = `
     <div class="stat-card"><div class="stat-label">Unique Items Fed</div><div class="stat-num">${new Set(data.filter(e=>e.status==='success').map(e=>e.item)).size}</div></div>
@@ -804,10 +838,17 @@ function renderDow(data) {
   });
 }
 
-function renderItemsChart(data) {
+async function renderItemsChart(data) {
   if(!data.length) return;
   const c = {};
-  data.forEach(e => { if(!c[e.item]) c[e.item] = { t:0, s:0, n:0, cost: getCost(e.item) }; c[e.item].t++; c[e.item][e.status==='success'?'s':'n']++; });
+  for (const entry of data) {
+    if(!c[entry.item]) {
+      const cost = await getCost(entry.item);
+      c[entry.item] = { t:0, s:0, n:0, cost };
+    }
+    c[entry.item].t++;
+    c[entry.item][entry.status==='success'?'s':'n']++;
+  }
   const arr = Object.entries(c).sort((a,b) => b[1].s - a[1].s).slice(0,15);
   document.getElementById('topItemsWrap').style.height = Math.max(300, arr.length * 40 + 40) + 'px';
   
@@ -822,15 +863,21 @@ function renderItemsChart(data) {
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: { afterTitle: ctx => `Total Value Fed: ${(arr[ctx[0].dataIndex][1].cost * arr[ctx[0].dataIndex][1].s).toLocaleString()} NP`, label: ctx => buildRichTooltip(ctx.dataset.label, ctx.raw, arr[ctx.dataIndex][1].t) } } },
+      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: { afterTitle: ctx => `Total Value Fed: ${(arr[ctx[0].dataIndex][1].cost * arr[ctx[0].dataIndex][1].s).toLocaleString()} NP` } } },
       scales: { x: { stacked: true, grid: gridLines(), border: { display: false } }, y: { stacked: true, grid: { display: false }, ticks: { color: '#fff' }, border: { display: false } } }
     }
   });
 }
 
-function renderItemTable(ds) {
+async function renderItemTable(ds) {
   const c = {};
-  ds.forEach(e => { if (!c[e.item]) c[e.item] = {s:0,n:0,cost:getCost(e.item)}; c[e.item][e.status==='success'?'s':'n']++; });
+  for (const entry of ds) {
+    if (!c[entry.item]) {
+      const cost = await getCost(entry.item);
+      c[entry.item] = {s:0,n:0,cost};
+    }
+    c[entry.item][entry.status==='success'?'s':'n']++;
+  }
   const r = Object.entries(c).map(([i,{s,n,cost}]) => ({ i, cost, spent: s*cost, t: s+n, s, n, rate: Math.round(s/(s+n)*100) })).sort((a,b) => b.s - a.s);
   document.getElementById('item-count').textContent = r.length + ' Items';
   document.querySelector('#item-table tbody').innerHTML = r.map(x => `
@@ -901,18 +948,24 @@ function renderCumul(data) {
   });
 }
 
-function renderLog(data) {
+async function renderLog(data) {
   const arr = [...data].sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp)).slice(0,300);
   document.getElementById('log-count-label').textContent = `Showing ${Math.min(300,data.length)} of ${data.length.toLocaleString()}`;
-  document.getElementById('log-list').innerHTML = arr.map(e => `
-    <div class="log-entry" style="opacity: ${e.status === 'success' ? '1' : '0.6'}">
-      <div><div class="log-name">${e.item}</div><div class="log-ts">${new Date(e.timestamp).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</div></div>
-      <div class="log-price">${getCost(e.item).toLocaleString()} NP</div>
-      <span class="log-dot ${e.status}"></span>
-      <span></span>
-      <div class="log-status"><span class="badge ${e.status==='success'?'badge-green':'badge-red'}">${e.status==='success'?'Fed':'Sniped'}</span></div>
-    </div>
-  `).join('');
+  
+  let html = '';
+  for (const e of arr) {
+    const cost = await getCost(e.item);
+    html += `
+      <div class="log-entry" style="opacity: ${e.status === 'success' ? '1' : '0.6'}">
+        <div><div class="log-name">${e.item}</div><div class="log-ts">${new Date(e.timestamp).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</div></div>
+        <div class="log-price">${cost.toLocaleString()} NP</div>
+        <span class="log-dot ${e.status}"></span>
+        <span></span>
+        <div class="log-status"><span class="badge ${e.status==='success'?'badge-green':'badge-red'}">${e.status==='success'?'Fed':'Sniped'}</span></div>
+      </div>
+    `;
+  }
+  document.getElementById('log-list').innerHTML = html;
 }
 </script>
 </body>
