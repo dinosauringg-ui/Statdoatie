@@ -588,30 +588,28 @@ function getCost(itemName) {
 }
 
 // ─── DATA SYNC ───
-let extensionResponded = false; // Add a heartbeat checker
+let extensionResponded = false;
 
-window.addEventListener('message', e => {
-  if (e.data && e.data.type === 'KadDataSync') {
-    extensionResponded = true; // The extension is alive!
-    
-    const records = e.data.detail;
-    if (records && records.length > 0) { 
-      mergeData(records); 
-      toast(`✨ Imported ${records.length} records`); 
-    } else { 
-      toast('No data found in extension'); 
-    }
+document.addEventListener('KadData_ExtToPage', e => {
+  extensionResponded = true; // The extension replied
+  
+  const records = e.detail;
+  if (records && records.length > 0) { 
+    mergeData(records); 
+    toast(`✨ Imported ${records.length} records`); 
+  } else { 
+    toast('No data found in extension'); 
   }
 });
 
 function triggerExtensionSync() {
-  extensionResponded = false; // Reset the heartbeat
+  extensionResponded = false;
   toast('Requesting data from extension...');
   
-  // Ask the extension for data
-  window.postMessage({ type: 'REQUEST_KAD_DATA' }, '*');
+  // Shout out to the extension
+  document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
   
-  // Wait 2 seconds. If no heartbeat, THEN assume it's dead.
+  // Wait 2 seconds, check if we heard back
   setTimeout(() => { 
     if (!extensionResponded) {
       toast('No active extension detected'); 
@@ -635,6 +633,7 @@ function handleFileLoad(e) {
   };
   r.readAsText(file); e.target.value = '';
 }
+
 
 
 function exportData() {
