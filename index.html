@@ -164,7 +164,7 @@ body {
 }
 .import-screen h2 { font-family: var(--display); font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
 .import-screen p { font-size: 1rem; color: var(--text2); max-width: 450px; line-height: 1.6; margin-bottom: 32px; }
-.import-icon-wrap { width: 72px; height: 72px; margin-bottom: 20px; opacity: 0.8; }
+.import-icon-wrap { width: 64px; height: 64px; margin-bottom: 20px; opacity: 0.8; }
 .import-icon-wrap svg { width: 100%; height: 100%; fill: var(--text); }
 .import-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
@@ -199,7 +199,6 @@ body {
 .c-green { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.2); }
 .c-green .stat-num { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
 
-/* De-emphasize snipes visually */
 .c-red { background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.05); }
 .c-red .stat-num { color: var(--text3); text-shadow: none; }
 
@@ -259,7 +258,7 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 
 /* ── LOG ── */
 .log-entry {
-  display: grid; grid-template-columns: 40px 1fr 100px 30px auto 100px;
+  display: grid; grid-template-columns: 1fr 100px 30px auto 100px;
   align-items: center; gap: 16px; padding: 12px 20px;
   background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 8px;
   transition: background .2s, transform .2s;
@@ -300,7 +299,7 @@ input[type=file] { display: none; }
   .stat-num { font-size: 2.2rem; }
   .tabs { flex-wrap: wrap; justify-content: center; width: 100%; }
   .tab { width: 48%; text-align: center; margin-bottom: 4px; }
-  .log-entry { grid-template-columns: 36px 1fr 80px; padding: 12px; gap: 12px; }
+  .log-entry { grid-template-columns: 1fr 80px; padding: 12px; gap: 12px; }
   .log-price, .log-ts, .log-dot { display: none; }
 }
 @media (max-width: 480px) {
@@ -589,16 +588,27 @@ function getCost(itemName) {
 }
 
 // ─── DATA SYNC ───
-window.addEventListener('KadDataSync', e => {
-  if (e.detail && e.detail.length > 0) { mergeData(e.detail); toast(`Imported ${e.detail.length} records`); } 
-  else { toast('No data found in extension'); }
+window.addEventListener('message', e => {
+  if (e.data && e.data.type === 'KadDataSync') {
+    const records = e.data.detail;
+    if (records && records.length > 0) { 
+      mergeData(records); 
+      toast(`✨ Imported ${records.length} records`); 
+    } else { 
+      toast('No data found in extension'); 
+    }
+  }
 });
 
 function triggerExtensionSync() {
   toast('Requesting data from extension...');
-  setTimeout(() => { if (!feedLog.length) toast('No active extension detected'); }, 2000);
-  closeSettings();
+  window.postMessage({ type: 'REQUEST_KAD_DATA' }, '*');
+  setTimeout(() => { 
+    if (!feedLog.length) toast('No active extension detected'); 
+  }, 2000);
+  try { closeSettings(); } catch(e){}
 }
+
 document.getElementById('modal-import-ext').addEventListener('click', triggerExtensionSync);
 document.getElementById('empty-import-btn').addEventListener('click', triggerExtensionSync);
 
