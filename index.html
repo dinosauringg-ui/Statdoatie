@@ -364,6 +364,7 @@ input[type=file] { display: none; }
   </div>
 </header>
 
+<!-- PRICE STATUS BAR -->
 <div id="price-status-bar" class="price-status-bar hidden">
   <span id="price-status-icon"></span>
   <span id="price-status-text"></span>
@@ -381,6 +382,7 @@ input[type=file] { display: none; }
   <button class="btn" onclick="resetFilters()">Reset View</button>
 </div>
 
+<!-- SETTINGS MODAL -->
 <div id="settings-modal" class="modal-overlay hidden">
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 24px;">
@@ -442,6 +444,7 @@ input[type=file] { display: none; }
       <button class="tab" onclick="switchTab('log',this)">Feed Log</button>
     </div>
 
+    <!-- OVERVIEW -->
     <div id="panel-overview" class="panel active">
       <div class="grid-2">
         <div class="card">
@@ -464,6 +467,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- ITEMS -->
     <div id="panel-items" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Most Requested Items</span></div>
@@ -493,6 +497,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- TIMELINE -->
     <div id="panel-timeline" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Daily Feeds</span></div>
@@ -504,6 +509,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- LOG -->
     <div id="panel-log" class="panel">
       <div class="card">
         <div class="card-header" style="margin-bottom:16px;">
@@ -646,11 +652,13 @@ let extensionResponded = false;
 
 document.addEventListener('KadData_ExtToPage', e => {
   extensionResponded = true;
-  const { records, prices } = e.detail;
+  // Safely parse the stringified payload
+  const payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail;
+  const { records, prices } = payload;
 
   if (records && records.length > 0) {
     Object.assign(itemdbCache, prices);
-    try { sessionStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(e) {}
+    try { sessionStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
 
     mergeData(records);
     toast(`✨ Imported ${records.length} records`);
@@ -667,7 +675,7 @@ function triggerExtensionSync() {
   try { closeSettings(); } catch(e) {}
 }
 
-// --- NEW: Manual Price Fetching Logic ---
+// --- UPDATED: Manual Price Fetching Logic ---
 function fetchMissingPrices() {
   const allItems = [...new Set(feedLog.map(e => e.item))];
   
@@ -682,16 +690,18 @@ function fetchMissingPrices() {
   }
 
   toast(`Requesting prices for ${missingItems.length} items from extension...`);
-  document.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: missingItems }));
+  // Stringify the array before passing the boundary
+  document.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: JSON.stringify(missingItems) }));
 }
 
 document.addEventListener('KadData_ReceivePrices', e => {
-  const newPrices = e.detail;
+  // Parse the safe string coming back from the extension
+  const newPrices = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail;
   const count = Object.keys(newPrices).filter(k => newPrices[k].price != null).length;
 
   if (count > 0) {
     Object.assign(itemdbCache, newPrices);
-    try { sessionStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(e) {}
+    try { sessionStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
     
     renderWidgets();
     toast(`✨ Successfully synced ${count} missing prices`);
@@ -799,7 +809,6 @@ function gridLines() { return { color: 'rgba(255,255,255,.05)', drawBorder: fals
 function buildRichTooltip(l, v, t) { const pct = t > 0 ? Math.round((v/t)*100) : 0; return `${l}: ${v.toLocaleString()} (${pct}%)`; }
 
 // ─── RENDER PIPELINE ───
-// All rendering is async; prices are batch-fetched once before any widget draws.
 async function renderWidgets() {
   const data = getFilteredData();
   document.getElementById('status-text').textContent = `${data.length.toLocaleString()} Tracked`;
