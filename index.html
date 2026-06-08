@@ -364,7 +364,6 @@ input[type=file] { display: none; }
   </div>
 </header>
 
-<!-- PRICE STATUS BAR -->
 <div id="price-status-bar" class="price-status-bar hidden">
   <span id="price-status-icon"></span>
   <span id="price-status-text"></span>
@@ -382,7 +381,6 @@ input[type=file] { display: none; }
   <button class="btn" onclick="resetFilters()">Reset View</button>
 </div>
 
-<!-- SETTINGS MODAL -->
 <div id="settings-modal" class="modal-overlay hidden">
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 24px;">
@@ -409,6 +407,7 @@ input[type=file] { display: none; }
           <button class="btn" onclick="document.getElementById('file-input').click(); closeSettings();" style="justify-content:center;">Load JSON</button>
           <button class="btn" id="modal-export-btn" onclick="exportData(); closeSettings();" style="justify-content:center;">Export JSON</button>
         </div>
+        <button class="btn" onclick="fetchMissingPrices(); closeSettings();" style="justify-content:center; color:var(--blue); border-color:rgba(59, 130, 246, 0.3);">Sync Missing Prices</button>
         <button class="btn" onclick="clearData(); closeSettings();" style="justify-content:center; color:var(--red); border-color:var(--red-muted);">Wipe Dashboard Data</button>
       </div>
     </div>
@@ -443,7 +442,6 @@ input[type=file] { display: none; }
       <button class="tab" onclick="switchTab('log',this)">Feed Log</button>
     </div>
 
-    <!-- OVERVIEW -->
     <div id="panel-overview" class="panel active">
       <div class="grid-2">
         <div class="card">
@@ -466,7 +464,6 @@ input[type=file] { display: none; }
       </div>
     </div>
 
-    <!-- ITEMS -->
     <div id="panel-items" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Most Requested Items</span></div>
@@ -496,7 +493,6 @@ input[type=file] { display: none; }
       </div>
     </div>
 
-    <!-- TIMELINE -->
     <div id="panel-timeline" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Daily Feeds</span></div>
@@ -508,7 +504,6 @@ input[type=file] { display: none; }
       </div>
     </div>
 
-    <!-- LOG -->
     <div id="panel-log" class="panel">
       <div class="card">
         <div class="card-header" style="margin-bottom:16px;">
@@ -532,13 +527,9 @@ let availableMonths = [];
 
 // ─── ITEMDB PRICE CACHE ───
 // Structure: { itemName: { price: number|null, inflated: boolean, image: string|null } }
-// null price means itemdb had no data for that item
 let itemdbCache = {};
-// Set of names currently being fetched (to avoid duplicate requests)
-let fetchingNames = new Set();
 
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const ITEMDB_BATCH_URL = 'https://itemdb.com.br/api/v1/items/many';
 
 const THEMES = {
   default:    { bg: '#0d0f14', green: '#22c55e', red: '#ef4444', blue: '#3b82f6', amber: '#f59e0b', purple: '#8b5cf6', teal: '#14b8a6' },
@@ -638,67 +629,7 @@ function setPriceStatus(state, text) {
   }
 }
 
-// ─── ITEMDB BATCH PRICE FETCH ───
-// Fetches prices for all item names not already in cache.
-// Returns a promise that resolves when the fetch is done.
-async function ensurePrices(names) {
-  const needed = [...new Set(names)].filter(n => !(n in itemdbCache) && !fetchingNames.has(n));
-  if (needed.length === 0) return;
-
-  needed.forEach(n => fetchingNames.add(n));
-  setPriceStatus('loading', `Fetching prices for ${needed.length} item${needed.length !== 1 ? 's' : ''} from itemdb…`);
-
-  try {
-    const resp = await fetch(ITEMDB_BATCH_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: needed })
-    });
-
-    if (!resp.ok) throw new Error(`itemdb returned ${resp.status}`);
-    const data = await resp.json();
-
-    // Response is keyed by item name
-    let found = 0, missing = 0;
-    for (const name of needed) {
-      const entry = data[name];
-      if (entry) {
-        itemdbCache[name] = {
-          price:    entry.price?.value ?? null,
-          inflated: entry.price?.inflated ?? false,
-          image:    entry.image ?? null
-        };
-        if (entry.price?.value != null) found++; else missing++;
-      } else {
-        // itemdb doesn't know this item
-        itemdbCache[name] = { price: null, inflated: false, image: null };
-        missing++;
-      }
-      fetchingNames.delete(name);
-    }
-
-    // Persist to sessionStorage
-    try { sessionStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(e) {}
-
-    if (missing > 0 && found > 0) {
-      setPriceStatus('warn', `Prices loaded — ${missing} item${missing !== 1 ? 's' : ''} not found in itemdb`);
-    } else if (missing > 0) {
-      setPriceStatus('warn', `${missing} item${missing !== 1 ? 's' : ''} not found in itemdb (no price data)`);
-    } else {
-      setPriceStatus('ok', `Prices loaded from itemdb ✓`);
-    }
-  } catch (e) {
-    console.error('itemdb fetch failed:', e);
-    // Mark all as null so we don't retry endlessly this session
-    for (const name of needed) {
-      if (!(name in itemdbCache)) itemdbCache[name] = { price: null, inflated: false, image: null };
-      fetchingNames.delete(name);
-    }
-    setPriceStatus('warn', 'Could not reach itemdb — prices unavailable');
-  }
-}
-
-// Returns cached price info, or null if not in cache (shouldn't happen after ensurePrices)
+// Returns cached price info, or null if not in cache
 function getCached(name) {
   return itemdbCache[name] ?? { price: null, inflated: false, image: null };
 }
@@ -715,8 +646,12 @@ let extensionResponded = false;
 
 document.addEventListener('KadData_ExtToPage', e => {
   extensionResponded = true;
-  const records = e.detail;
+  const { records, prices } = e.detail;
+
   if (records && records.length > 0) {
+    Object.assign(itemdbCache, prices);
+    try { sessionStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(e) {}
+
     mergeData(records);
     toast(`✨ Imported ${records.length} records`);
   } else {
@@ -731,6 +666,39 @@ function triggerExtensionSync() {
   setTimeout(() => { if (!extensionResponded) toast('No active extension detected'); }, 2000);
   try { closeSettings(); } catch(e) {}
 }
+
+// --- NEW: Manual Price Fetching Logic ---
+function fetchMissingPrices() {
+  const allItems = [...new Set(feedLog.map(e => e.item))];
+  
+  const missingItems = allItems.filter(item => {
+    const cached = itemdbCache[item];
+    return !cached || cached.price == null;
+  });
+
+  if (missingItems.length === 0) {
+    toast('No missing prices to fetch! Everything is up to date.');
+    return;
+  }
+
+  toast(`Requesting prices for ${missingItems.length} items from extension...`);
+  document.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: missingItems }));
+}
+
+document.addEventListener('KadData_ReceivePrices', e => {
+  const newPrices = e.detail;
+  const count = Object.keys(newPrices).filter(k => newPrices[k].price != null).length;
+
+  if (count > 0) {
+    Object.assign(itemdbCache, newPrices);
+    try { sessionStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(e) {}
+    
+    renderWidgets();
+    toast(`✨ Successfully synced ${count} missing prices`);
+  } else {
+    toast('No new prices found on itemdb.');
+  }
+});
 
 document.getElementById('modal-import-ext').addEventListener('click', triggerExtensionSync);
 document.getElementById('empty-import-btn').addEventListener('click', triggerExtensionSync);
@@ -835,12 +803,6 @@ function buildRichTooltip(l, v, t) { const pct = t > 0 ? Math.round((v/t)*100) :
 async function renderWidgets() {
   const data = getFilteredData();
   document.getElementById('status-text').textContent = `${data.length.toLocaleString()} Tracked`;
-
-  // Collect all unique item names in the current view
-  const allNames = [...new Set(data.map(e => e.item))];
-
-  // Fetch any missing prices before rendering price-dependent widgets
-  await ensurePrices(allNames);
 
   destroyCharts();
   renderStreak();
