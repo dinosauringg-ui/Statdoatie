@@ -28,6 +28,14 @@
   --amber:     #f59e0b;
   --purple:    #8b5cf6;
   --teal:      #14b8a6;
+
+  /* Theme-dependent structural vars */
+  --table-row: rgba(0,0,0,0.2);
+  --table-row-hover: rgba(255,255,255,0.05);
+  --log-bg: rgba(0,0,0,0.2);
+  --log-hover: rgba(255,255,255,0.05);
+  --badge-red-bg: rgba(255,255,255,0.05);
+  --c-red-bg: rgba(255,255,255,0.02);
   
   --display:   'Outfit', sans-serif;
   --body:      'DM Sans', sans-serif;
@@ -36,7 +44,7 @@
   --radius-pill: 100px;
 }
 
-/* ── THEMES ── */
+/* ── DARK THEMES ── */
 body.theme-kadoatery {
   --bg: #1f1621; --glass: rgba(42, 26, 41, 0.4); --glass-hover: rgba(56, 36, 55, 0.6);
   --green: #34d399; --green-glow: rgba(52, 211, 153, 0.4); --red: #fb7185;
@@ -58,17 +66,65 @@ body.theme-jelly {
   --blue: #f97316; --amber: #fbbf24; --purple: #eab308; --teal: #ec4899;
 }
 
+/* ── LIGHT THEMES ── */
+body.theme-faerieland {
+  --bg: #fdf4ff;
+  --glass: rgba(255, 255, 255, 0.6);
+  --glass-hover: rgba(255, 255, 255, 0.8);
+  --border: rgba(216, 180, 254, 0.4);
+  --border-strong: rgba(216, 180, 254, 0.8);
+  --text: #4a044e;
+  --text2: #701a75;
+  --text3: #a21caf;
+  --green: #10b981;
+  --green-glow: rgba(16, 185, 129, 0.3);
+  --red: #e11d48;
+  --blue: #8b5cf6;
+  --amber: #d97706;
+  --purple: #d946ef;
+  --teal: #06b6d4;
+  --table-row: rgba(255, 255, 255, 0.6);
+  --table-row-hover: rgba(255, 255, 255, 0.9);
+  --log-bg: rgba(255, 255, 255, 0.6);
+  --log-hover: rgba(255, 255, 255, 0.9);
+  --badge-red-bg: rgba(225, 29, 72, 0.1);
+  --c-red-bg: rgba(225, 29, 72, 0.05);
+}
+body.theme-altador {
+  --bg: #f8fafc;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-hover: rgba(255, 255, 255, 0.95);
+  --border: rgba(203, 213, 225, 0.6);
+  --border-strong: rgba(148, 163, 184, 0.6);
+  --text: #0f172a;
+  --text2: #334155;
+  --text3: #64748b;
+  --green: #059669;
+  --green-glow: rgba(5, 150, 105, 0.2);
+  --red: #e11d48;
+  --blue: #2563eb;
+  --amber: #d97706;
+  --purple: #7c3aed;
+  --teal: #0d9488;
+  --table-row: rgba(0, 0, 0, 0.03);
+  --table-row-hover: rgba(0, 0, 0, 0.06);
+  --log-bg: rgba(0, 0, 0, 0.03);
+  --log-hover: rgba(0, 0, 0, 0.06);
+  --badge-red-bg: rgba(225, 29, 72, 0.1);
+  --c-red-bg: rgba(225, 29, 72, 0.05);
+}
+
 html { font-size: 15px; }
 body {
   background-color: var(--bg); color: var(--text);
   font-family: var(--body); min-height: 100vh;
   -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative;
-  transition: background-color 0.5s ease;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
 
 /* ── BACKGROUND BLOBS ── */
 .bg-blobs {
@@ -88,7 +144,7 @@ body {
 /* ── HEADER ── */
 .header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 36px; height: 72px; background: rgba(13, 15, 20, 0.6);
+  padding: 0 36px; height: 72px; background: var(--glass);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
 }
@@ -99,7 +155,7 @@ body {
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
 }
 .logo-icon svg { width: 22px; height: 22px; fill: white; }
-.logo-text { font-family: var(--display); font-weight: 800; font-size: 1.25rem; letter-spacing: -.02em; }
+.logo-text { font-family: var(--display); font-weight: 800; font-size: 1.25rem; letter-spacing: -.02em; cursor: pointer; user-select: none; }
 .logo-sub { font-size: .75rem; color: var(--text2); font-weight: 500; }
 .header-right { display: flex; align-items: center; gap: 10px; }
 
@@ -125,8 +181,8 @@ body {
 }
 .btn:hover { background: var(--glass-hover); border-color: var(--border-strong); transform: translateY(-1px); }
 .btn-icon { padding: 0; width: 40px; justify-content: center; font-size: 1.2rem; }
-.btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
-.btn-primary:hover { background: #e2e8f0; border-color: transparent; box-shadow: 0 6px 20px rgba(255,255,255,0.3); }
+.btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
 /* ── MODAL SETTINGS ── */
 .modal-overlay {
@@ -138,12 +194,12 @@ body {
 .modal-overlay.hidden { opacity: 0; pointer-events: none; }
 .modal-card { width: 100%; max-width: 450px; margin: 20px; padding: 32px; position: relative; }
 .theme-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-.theme-btn.active { background: var(--text); color: var(--bg); border-color: transparent; box-shadow: 0 4px 10px rgba(255,255,255,0.2); }
+.theme-btn.active { background: var(--text); color: var(--bg); border-color: transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
 /* ── FILTER BAR ── */
 .filter-bar {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 36px; background: rgba(13, 15, 20, 0.4); backdrop-filter: blur(10px);
+  padding: 16px 36px; background: var(--glass); backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
 .filter-controls { display: flex; align-items: center; gap: 16px; }
@@ -151,24 +207,7 @@ body {
   background: transparent; border: none; color: var(--text);
   font-family: var(--display); font-size: 1.1rem; font-weight: 700; outline: none; cursor: pointer; text-transform: uppercase;
 }
-.month-select option { background: #0d0f14; color: #ffffff; }
-
-/* ── PRICE FETCH STATUS ── */
-.price-status-bar {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 36px; font-size: .75rem; color: var(--text3); font-weight: 500;
-  background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border);
-  transition: opacity 0.4s ease;
-}
-.price-status-bar.hidden { display: none; }
-.price-spinner {
-  width: 12px; height: 12px; border: 2px solid var(--border-strong);
-  border-top-color: var(--blue); border-radius: 50%;
-  animation: spin 0.8s linear infinite; flex-shrink: 0;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.price-status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-.price-status-dot.warn { background: var(--amber); }
+.month-select option { background: var(--bg); color: var(--text); }
 
 /* ── MAIN ── */
 .main { padding: 40px 36px; max-width: 1400px; margin: 0 auto; }
@@ -189,7 +228,7 @@ body {
 .card {
   background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 28px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  padding: 28px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
 .card-title { font-family: var(--display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
@@ -202,11 +241,9 @@ body {
 }
 .stat-card {
   background: var(--glass); backdrop-filter: blur(20px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: 1px solid var(--border); border-radius: var(--radius);
   padding: 24px; display: flex; flex-direction: column;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transition: transform 0.2s, background 0.2s;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.2s, background 0.2s;
 }
 .stat-card:hover { transform: translateY(-4px); background: var(--glass-hover); border-color: var(--border-strong); }
 .stat-label { font-size: .75rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
@@ -214,9 +251,9 @@ body {
 .stat-sub { font-size: .8rem; color: var(--text3); font-weight: 500; }
 .stat-num.loading { opacity: 0.4; font-size: 1.5rem; }
 
-.c-green { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.2); }
+.c-green { background: var(--green-glow); border-color: var(--green); }
 .c-green .stat-num { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
-.c-red { background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.05); }
+.c-red { background: var(--c-red-bg); border-color: var(--badge-red-bg); }
 .c-red .stat-num { color: var(--text3); text-shadow: none; }
 .c-blue { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
 .c-blue .stat-num { color: var(--blue); }
@@ -225,7 +262,7 @@ body {
 
 /* ── TABS ── */
 .tabs {
-  display: flex; gap: 8px; margin: 32px 0; background: rgba(0,0,0,0.3);
+  display: flex; gap: 8px; margin: 32px 0; background: var(--table-row);
   padding: 8px; border-radius: var(--radius-pill); width: fit-content;
   border: 1px solid var(--border); backdrop-filter: blur(10px);
 }
@@ -235,7 +272,7 @@ body {
   background: transparent; color: var(--text2); cursor: pointer; transition: all .2s;
 }
 .tab:hover { color: var(--text); }
-.tab.active { background: var(--text); color: var(--bg); box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
+.tab.active { background: var(--text); color: var(--bg); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 
 /* ── PANELS & GRIDS ── */
 .panel { display: none; animation: fadeup 0.4s ease both; }
@@ -253,14 +290,14 @@ body {
 .table-wrap { overflow-x: auto; margin: -10px; padding: 10px; }
 table { width: 100%; border-collapse: separate; border-spacing: 0 8px; min-width: 800px; }
 thead th { text-align: left; font-size: .75rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--text3); padding: 0 16px 8px; }
-tbody tr { background: rgba(0,0,0,0.2); transition: transform 0.1s, background 0.1s; }
+tbody tr { background: var(--table-row); transition: transform 0.1s, background 0.1s; }
 tbody tr td:first-child { border-radius: 12px 0 0 12px; }
 tbody tr td:last-child { border-radius: 0 12px 12px 0; }
-tbody tr:hover { background: rgba(255,255,255,0.05); transform: scale(1.01); }
+tbody tr:hover { background: var(--table-row-hover); transform: scale(1.01); }
 tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1px solid transparent; }
 .td-name { color: var(--text); font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 12px; }
-.item-img { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.4); object-fit: cover; }
-.item-img-placeholder { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.05); flex-shrink: 0; }
+.item-img { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.1); object-fit: cover; }
+.item-img-placeholder { width: 36px; height: 36px; border-radius: 8px; background: var(--table-row-hover); flex-shrink: 0; }
 .td-right { text-align: right; }
 
 /* ── PRICE CELL ── */
@@ -272,10 +309,10 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 /* ── BADGES & BARS ── */
 .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; font-size: .8rem; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
 .badge-green { background: var(--green-glow); color: var(--green); }
-.badge-red   { background: rgba(255,255,255,0.05); color: var(--text3); }
+.badge-red   { background: var(--badge-red-bg); color: var(--text3); }
 
 .rate-row { display: flex; align-items: center; gap: 12px; min-width: 140px; }
-.rate-track { flex: 1; height: 8px; background: rgba(0,0,0,0.4); border-radius: 10px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
+.rate-track { flex: 1; height: 8px; background: var(--table-row); border-radius: 10px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
 .rate-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); background: var(--green); }
 .rate-pct { font-family: var(--display); font-size: .9rem; font-weight: 700; color: var(--text); min-width: 36px; text-align: right; }
 
@@ -283,10 +320,10 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 .log-entry {
   display: grid; grid-template-columns: 1fr 100px 30px auto 100px;
   align-items: center; gap: 16px; padding: 12px 20px;
-  background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 8px;
+  background: var(--log-bg); border-radius: 12px; margin-bottom: 8px;
   transition: background .2s, transform .2s;
 }
-.log-entry:hover { background: rgba(255,255,255,0.05); transform: translateX(4px); }
+.log-entry:hover { background: var(--log-hover); transform: translateX(4px); }
 .log-name { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
 .log-ts { font-size: .8rem; color: var(--text3); font-weight: 500; }
 .log-price { font-family: 'DM Sans', monospace; font-size: .85rem; color: var(--text2); text-align: right; font-weight: 600; }
@@ -317,7 +354,6 @@ input[type=file] { display: none; }
   .header { padding: 16px; height: auto; flex-wrap: wrap; }
   .header-right { margin-top: 16px; width: 100%; justify-content: space-between; flex-wrap: wrap; }
   .filter-bar { padding: 16px; flex-wrap: wrap; gap: 16px; }
-  .price-status-bar { padding: 8px 16px; }
   .main { padding: 20px 16px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .stat-card { padding: 20px 16px; }
@@ -343,12 +379,13 @@ input[type=file] { display: none; }
 <header class="header">
   <div class="logo">
     <div class="logo-icon">
-      <svg viewBox="0 0 512 512" fill="currentColor">
-        <path d="M226.5 92.9c14.3 7.3 28.9 12.9 43.1 16.5c-6.8-24.8-23.7-47.5-49-62.2c-15.6-9-33.3-13.6-51-13.6C122 33.5 83.3 64.9 66 109.8C35.2 189.6 15 281 12 376c-.9 30.6 6.3 61.2 20.8 88.5C45.3 489.2 73.1 512 105 512c28.5 0 53.2-19.4 60-46.6c4.8-18.2 3.6-37.6-3.4-55.4c-7.7-19.6-20.8-36.3-36.5-48.6c-2.6-2-4.3-5-4.3-8.3c0-6.3 5.1-11.4 11.4-11.4c2.6 0 5.1.9 7.1 2.5c18.7 14.6 33.9 35.2 42.9 58.7c3.5 9.4 6.1 19.3 7.6 29.4c1.6 10.5 9 18.8 18.8 21c3 .6 6.1.9 9.2.9c22.8 0 41.3-18.5 41.3-41.3c0-1.8-.1-3.5-.3-5.3c-1-9.8-3.5-19.3-7-28.2c-4.6-11.9-11.1-23.2-19.1-33c-8.7-10.5-16.7-21.7-23.2-33.8c-5.5-10.2-9.7-21.1-12.2-32.4c-.5-2.1-.8-4.2-.8-6.4c0-16.1 13-29.1 29.1-29.1c8.4 0 16.1 3.6 21.5 9.3c3.5 3.8 6.5 8 8.9 12.5c1 2.1 2.5 4 4.5 5.2c2.7 1.7 6 2 9 .9c3.7-1.4 6.1-5.1 5.4-9c-1.4-8.4-4.4-16.4-8.7-23.7c-6.5-11-16.1-20.1-27.3-26.1c-10.3-5.6-22.1-8.7-34.3-8.7c-38 0-68.8 30.8-68.8 68.8c0 12.5 3.3 24.9 9.6 35.8c5 8.3 11.2 15.9 18.4 22.5c4.7 4.2 9 8.8 12.8 13.7c1.8 2.4 2.8 5.3 2.8 8.4c0 8.3-6.7 15-15 15c-5.6 0-10.5-3.1-13.1-7.7c-3.8-6.8-8.9-13-15.2-17.9c-7.5-6-16.8-9.4-26.5-9.4c-26.2 0-47.5 21.3-47.5 47.5c0 3.2 12.7 29.1 30.2 29.1c6.2 0 12.1-1.5 17.5-4.2c.8-.4 1.5-.9 2.3-1.3c3.5-2 7.7-2.4 11.5-1.2c4 1.3 7 4.5 7.8 8.6c.8 4.3-1 8.9-5 11.2c-8.1 4.7-17.3 7.1-26.9 7.1c-37.4 0-67.8-30.4-67.8-67.8z"/>
+      <!-- NEW STYLIZED 'S' LOGO -->
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M14.5 4c-3.5 0-5.5 1.5-5.5 4 0 3.5 8 3.5 8 7 0 2.5-2.5 4-6 4-2.5 0-4.5-1-5.5-2.5l2.5-2c.5 1 2 2 3 2 1.5 0 2.5-.5 2.5-1.5 0-2.5-8-2.5-8-7 0-4 3.5-6.5 8.5-6.5 3 0 5 1.5 6.5 3l-2.5 2C17 5 16 4 14.5 4z" />
       </svg>
     </div>
     <div>
-      <div class="logo-text">Statdoatie</div>
+      <div class="logo-text" id="logo-text" title="Double-click to manually enter a price">Statdoatie</div>
       <div class="logo-sub">Tracker</div>
     </div>
   </div>
@@ -363,12 +400,6 @@ input[type=file] { display: none; }
     </button>
   </div>
 </header>
-
-<!-- PRICE STATUS BAR -->
-<div id="price-status-bar" class="price-status-bar hidden">
-  <span id="price-status-icon"></span>
-  <span id="price-status-text"></span>
-</div>
 
 <div class="filter-bar hidden" id="filter-bar">
   <div class="filter-controls">
@@ -397,6 +428,8 @@ input[type=file] { display: none; }
         <button class="btn theme-btn" data-theme="darkfaerie" onclick="setTheme('darkfaerie')">Dark Faerie</button>
         <button class="btn theme-btn" data-theme="virtupets" onclick="setTheme('virtupets')">Virtupets</button>
         <button class="btn theme-btn" data-theme="jelly" onclick="setTheme('jelly')">Jelly World*</button>
+        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland (Light)</button>
+        <button class="btn theme-btn" data-theme="altador" onclick="setTheme('altador')">Altador (Light)</button>
       </div>
       <div style="font-size:0.75rem; color:var(--text3); margin-top:8px; font-style:italic;">* Doesn't exist.</div>
     </div>
@@ -530,23 +563,21 @@ let feedLog = [];
 let charts  = {};
 let currentMonth = 'all';
 let availableMonths = [];
-
-// ─── ITEMDB PRICE CACHE ───
-// Structure: { itemName: { price: number|null, inflated: boolean, image: string|null } }
 let itemdbCache = {};
 
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 const THEMES = {
-  default:    { bg: '#0d0f14', green: '#22c55e', red: '#ef4444', blue: '#3b82f6', amber: '#f59e0b', purple: '#8b5cf6', teal: '#14b8a6' },
-  kadoatery:  { bg: '#1f1621', green: '#34d399', red: '#fb7185', blue: '#60a5fa', amber: '#fbbf24', purple: '#f472b6', teal: '#38bdf8' },
-  darkfaerie: { bg: '#120914', green: '#84cc16', red: '#e11d48', blue: '#7e22ce', amber: '#d946ef', purple: '#c026d3', teal: '#4d7c0f' },
-  virtupets:  { bg: '#050a05', green: '#10b981', red: '#ef4444', blue: '#059669', amber: '#fbbf24', purple: '#047857', teal: '#064e3b' },
-  jelly:      { bg: '#1a0b0b', green: '#a3e635', red: '#f43f5e', blue: '#f97316', amber: '#fbbf24', purple: '#eab308', teal: '#ec4899' }
+  default:    { empty: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.2)' },
+  kadoatery:  { empty: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.2)' },
+  darkfaerie: { empty: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.2)' },
+  virtupets:  { empty: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.2)' },
+  jelly:      { empty: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.2)' },
+  faerieland: { empty: 'rgba(0,0,0,0.05)', line: 'rgba(0,0,0,0.15)' },
+  altador:    { empty: 'rgba(0,0,0,0.05)', line: 'rgba(0,0,0,0.15)' }
 };
 
 let currentThemeKey = localStorage.getItem('statdoatie_theme') || 'default';
-let C = THEMES[currentThemeKey];
 
 // ─── INIT ───
 document.addEventListener('DOMContentLoaded', () => {
@@ -563,7 +594,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (e) { console.error("Failed to parse local storage", e); }
   }
-  // Restore cached prices from sessionStorage (survives page focus loss but not full reload)
   try {
     const sc = sessionStorage.getItem('statdoatie_prices');
     if (sc) itemdbCache = JSON.parse(sc);
@@ -579,22 +609,27 @@ function applyThemeDOM(key) {
   document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
   const activeBtn = document.querySelector(`.theme-btn[data-theme="${key}"]`);
   if (activeBtn) activeBtn.classList.add('active');
+
+  const isLight = key === 'faerieland' || key === 'altador';
+  Chart.defaults.color = isLight ? '#64748b' : '#a0aec0';
+  Chart.defaults.plugins.tooltip.backgroundColor = isLight ? 'rgba(255,255,255,0.95)' : 'rgba(13, 15, 20, 0.9)';
+  Chart.defaults.plugins.tooltip.titleColor = isLight ? '#0f172a' : '#ffffff';
+  Chart.defaults.plugins.tooltip.bodyColor = isLight ? '#334155' : '#ffffff';
 }
 
 function setTheme(key) {
   if (!THEMES[key]) return;
   currentThemeKey = key;
-  C = THEMES[key];
   localStorage.setItem('statdoatie_theme', key);
   applyThemeDOM(key);
   if (feedLog.length > 0) renderWidgets();
 }
 
+function getCssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
 // ─── CHART DEFAULTS ───
-Chart.defaults.color = '#a0aec0';
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.font.size = 12;
-Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(13, 15, 20, 0.9)';
 Chart.defaults.plugins.tooltip.titleFont = { family: "'Outfit', sans-serif", size: 14, weight: 'bold' };
 Chart.defaults.plugins.tooltip.bodyFont = { family: "'DM Sans', sans-serif", size: 13 };
 Chart.defaults.plugins.tooltip.padding = 16;
@@ -616,50 +651,41 @@ function showDashboard() {
   document.getElementById('pulse-dot').style.display = '';
 }
 
-function setPriceStatus(state, text) {
-  const bar = document.getElementById('price-status-bar');
-  const iconEl = document.getElementById('price-status-icon');
-  const textEl = document.getElementById('price-status-text');
-
-  if (state === 'hidden') { bar.classList.add('hidden'); return; }
-  bar.classList.remove('hidden');
-  textEl.textContent = text;
-
-  if (state === 'loading') {
-    iconEl.innerHTML = '<div class="price-spinner"></div>';
-  } else if (state === 'ok') {
-    iconEl.innerHTML = '<div class="price-status-dot"></div>';
-    setTimeout(() => setPriceStatus('hidden'), 4000);
-  } else if (state === 'warn') {
-    iconEl.innerHTML = '<div class="price-status-dot warn"></div>';
-  }
-}
-
-// Returns cached price info, or null if not in cache
 function getCached(name) {
   return itemdbCache[name] ?? { price: null, inflated: false, image: null };
 }
 
-function fmtPrice(name) {
-  const { price, inflated } = getCached(name);
-  if (price == null) return { html: '<span class="price-cell no-data">—</span>', value: 0 };
-  const cls = inflated ? 'price-cell inflated' : 'price-cell';
-  return { html: `<span class="${cls}">${price.toLocaleString()} NP</span>`, value: price };
-}
+// ─── HIDDEN MANUAL PRICE OVERRIDE ───
+document.getElementById('logo-text').addEventListener('dblclick', () => {
+  const input = prompt("🛠️ Manual Price Entry\nEnter the item name and price separated by a pipe (|).\n\nExample: Blue Draik Egg|150000");
+  if(input && input.includes('|')) {
+      const parts = input.split('|');
+      const name = parts[0].trim();
+      const priceStr = parts[1].replace(/,/g, '').trim();
+      const p = parseInt(priceStr, 10);
+
+      if(name && !isNaN(p)) {
+          itemdbCache[name] = { price: p, inflated: false, image: getCached(name).image }; 
+          try { sessionStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
+          renderWidgets();
+          toast(`✅ Overwrote price for ${name} to ${p.toLocaleString()} NP`);
+      } else {
+          toast('⚠️ Invalid format. Try: Item Name|10000');
+      }
+  }
+});
 
 // ─── DATA SYNC ───
 let extensionResponded = false;
 
 document.addEventListener('KadData_ExtToPage', e => {
   extensionResponded = true;
-  // Safely parse the stringified payload
   const payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail;
   const { records, prices } = payload;
 
   if (records && records.length > 0) {
     Object.assign(itemdbCache, prices);
     try { sessionStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
-
     mergeData(records);
     toast(`✨ Imported ${records.length} records`);
   } else {
@@ -675,10 +701,8 @@ function triggerExtensionSync() {
   try { closeSettings(); } catch(e) {}
 }
 
-// --- UPDATED: Manual Price Fetching Logic ---
 function fetchMissingPrices() {
   const allItems = [...new Set(feedLog.map(e => e.item))];
-  
   const missingItems = allItems.filter(item => {
     const cached = itemdbCache[item];
     return !cached || cached.price == null;
@@ -690,19 +714,16 @@ function fetchMissingPrices() {
   }
 
   toast(`Requesting prices for ${missingItems.length} items from extension...`);
-  // Stringify the array before passing the boundary
   document.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: JSON.stringify(missingItems) }));
 }
 
 document.addEventListener('KadData_ReceivePrices', e => {
-  // Parse the safe string coming back from the extension
   const newPrices = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail;
   const count = Object.keys(newPrices).filter(k => newPrices[k].price != null).length;
 
   if (count > 0) {
     Object.assign(itemdbCache, newPrices);
     try { sessionStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
-    
     renderWidgets();
     toast(`✨ Successfully synced ${count} missing prices`);
   } else {
@@ -745,7 +766,6 @@ function clearData() {
   document.getElementById('streak-badge').classList.add('hidden');
   document.getElementById('pulse-dot').style.display = 'none';
   document.getElementById('status-text').textContent = 'Awaiting Data';
-  setPriceStatus('hidden');
   toast('Dashboard reset');
 }
 
@@ -805,7 +825,7 @@ function switchTab(name, btn) {
 
 // ─── CHARTS ───
 function destroyCharts() { Object.values(charts).forEach(c => { try { c.destroy(); } catch {} }); charts = {}; }
-function gridLines() { return { color: 'rgba(255,255,255,.05)', drawBorder: false, borderDash: [5, 5] }; }
+function gridLines() { return { color: currentThemeKey === 'faerieland' || currentThemeKey === 'altador' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,.05)', drawBorder: false, borderDash: [5, 5] }; }
 function buildRichTooltip(l, v, t) { const pct = t > 0 ? Math.round((v/t)*100) : 0; return `${l}: ${v.toLocaleString()} (${pct}%)`; }
 
 // ─── RENDER PIPELINE ───
@@ -879,7 +899,7 @@ function renderPie(data) {
 
   charts.pie = new Chart(document.getElementById('pieChart'), {
     type: 'doughnut',
-    data: { labels: ['Fed', 'Sniped'], datasets: [{ data: [s, n], backgroundColor: [C.green, 'rgba(255,255,255,0.05)'], borderWidth: 0 }] },
+    data: { labels: ['Fed', 'Sniped'], datasets: [{ data: [s, n], backgroundColor: [getCssVar('--green'), THEMES[currentThemeKey].empty], borderWidth: 0 }] },
     options: {
       responsive: true, maintainAspectRatio: false, cutout: '82%', borderRadius: 20, spacing: 6,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => buildRichTooltip(ctx.label, ctx.raw, s+n) } } }
@@ -897,8 +917,8 @@ function renderDow(data) {
     data: {
       labels: DAYS,
       datasets: [
-        { label: 'Fed', data: sC, backgroundColor: C.green, stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: nC, backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed', data: sC, backgroundColor: getCssVar('--green'), stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: nC, backgroundColor: THEMES[currentThemeKey].empty, stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -925,8 +945,8 @@ function renderItemsChart(data) {
     data: {
       labels: arr.map(([k]) => k),
       datasets: [
-        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: C.teal, stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: getCssVar('--teal'), stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: THEMES[currentThemeKey].empty, stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -946,7 +966,10 @@ function renderItemsChart(data) {
           }
         }
       },
-      scales: { x: { stacked: true, grid: gridLines(), border: { display: false } }, y: { stacked: true, grid: { display: false }, ticks: { color: '#fff' }, border: { display: false } } }
+      scales: { 
+        x: { stacked: true, grid: gridLines(), border: { display: false } }, 
+        y: { stacked: true, grid: { display: false }, ticks: { color: getCssVar('--text') }, border: { display: false } } 
+      }
     }
   });
 }
@@ -971,7 +994,7 @@ function renderItemTable(ds) {
       ? `<span class="price-cell${x.inflated ? ' inflated' : ''}">${x.price.toLocaleString()}</span>`
       : `<span class="price-cell no-data">—</span>`;
     const spentHtml = x.spent != null
-      ? `<span style="color:#fff; font-weight:700; font-family:monospace;">${x.spent.toLocaleString()}</span>`
+      ? `<span style="color:var(--text); font-weight:700; font-family:monospace;">${x.spent.toLocaleString()}</span>`
       : `<span style="color:var(--text3); font-style:italic;">—</span>`;
     const imgHtml = x.image
       ? `<img class="item-img" src="${x.image}" alt="" loading="lazy" onerror="this.style.display='none'">`
@@ -1002,8 +1025,8 @@ function renderDaily(data) {
     data: {
       labels: lbls,
       datasets: [
-        { label: 'Fed',    data: lbls.map(d => dObj[d].s), backgroundColor: C.blue,  stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: 'rgba(255,255,255,0.05)', stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed',    data: lbls.map(d => dObj[d].s), backgroundColor: getCssVar('--blue'),  stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: THEMES[currentThemeKey].empty, stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -1024,21 +1047,30 @@ function renderCumul(data) {
     const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
     return `rgba(${r},${g},${b},${alpha})`;
   };
+  
+  // Dynamically grab the green value from the current theme to build the gradient
+  const rawGreen = getCssVar('--green');
   const gGreen = ctx.createLinearGradient(0, 0, 0, 300);
-  gGreen.addColorStop(0, hex2rgba(C.green, 0.4)); gGreen.addColorStop(1, 'transparent');
+  
+  if (rawGreen.startsWith('#')) {
+      gGreen.addColorStop(0, hex2rgba(rawGreen, 0.4)); 
+  } else {
+      gGreen.addColorStop(0, 'rgba(34, 197, 94, 0.4)'); // fallback
+  }
+  gGreen.addColorStop(1, 'transparent');
 
   charts.cumul = new Chart(document.getElementById('cumulChart'), {
     type: 'line',
     data: {
       labels: arr.map(e => e.timestamp.slice(0,10)),
       datasets: [
-        { label:'Total Fed',    data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor: C.green, backgroundColor: gGreen, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
-        { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }),  borderColor:'rgba(255,255,255,0.2)', fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
+        { label:'Total Fed',    data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor: getCssVar('--green'), backgroundColor: gGreen, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
+        { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }),  borderColor: THEMES[currentThemeKey].line, fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { display: true, labels: { color: '#fff', font: { family: "'Outfit', sans-serif", size: 14 } } } },
+      plugins: { legend: { display: true, labels: { color: getCssVar('--text'), font: { family: "'Outfit', sans-serif", size: 14 } } } },
       scales: { x: { grid: { display: false }, border: { display: false } }, y: { grid: gridLines(), border: { display: false } } }
     }
   });
