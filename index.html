@@ -112,7 +112,7 @@ body.theme-faerieland {
   --glass-hover: rgba(255, 255, 255, 0.8);
   --border: rgba(216, 180, 254, 0.4);
   --border-strong: rgba(216, 180, 254, 0.8);
-  --text: #4a044e; --text2: #701a75; --text3: #86198f; /* Darkened for contrast */
+  --text: #4a044e; --text2: #701a75; --text3: #86198f; 
   --green: #059669; --green-glow: rgba(16, 185, 129, 0.1);
   --red: #e11d48; --blue: #8b5cf6; --amber: #d97706; --purple: #d946ef; --teal: #06b6d4;
   --table-row: rgba(255, 255, 255, 0.6);
@@ -135,7 +135,7 @@ body.theme-classic {
   --glass-hover: #dddddd;
   --border: #000000;
   --border-strong: #000099;
-  --text: #000000; --text2: #333333; --text3: #444444; /* Darkened for contrast */
+  --text: #000000; --text2: #333333; --text3: #444444; 
   --green: #008000; --green-glow: transparent;
   --red: #FF0000; --blue: #000099; --amber: #FF9900; --purple: #660099; --teal: #006666;
   --header-bg: #ffffcc; 
@@ -157,7 +157,6 @@ body.theme-classic {
   --c-red-bg: #ffeeee;
 }
 
-/* ── FORCE REMOVE TEXT SHADOWS ON LIGHT THEMES FOR READABILITY ── */
 body.theme-faerieland .stat-num, 
 body.theme-classic .stat-num {
   text-shadow: none !important;
@@ -288,9 +287,9 @@ body {
 .card-title { font-family: var(--theme-font-display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
 .card-meta { font-size: .8rem; color: var(--text3); font-weight: 500; }
 
-/* ── STAT CARDS ── */
+/* ── EXPANDABLE STAT CARDS ── */
 .stats-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px; margin-bottom: 32px;
 }
 .stat-card {
@@ -298,21 +297,56 @@ body {
   border: var(--theme-card-border); border-radius: var(--theme-radius);
   padding: 24px; display: flex; flex-direction: column;
   box-shadow: var(--theme-shadow); transition: transform 0.2s, background 0.5s ease, border 0.5s ease;
+  position: relative;
 }
-.stat-card:hover { transform: translateY(-4px); background: var(--glass-hover); }
-.stat-label { font-size: .75rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+.expandable-card {
+  cursor: pointer;
+}
+.expandable-card:hover { 
+  transform: translateY(-4px); 
+  background: var(--glass-hover); 
+}
+.stat-label { 
+  font-size: .75rem; font-weight: 600; color: var(--text2); 
+  text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; 
+  display: flex; justify-content: space-between; align-items: center;
+}
 .stat-num { font-family: var(--theme-font-display); font-size: 2.8rem; font-weight: 800; line-height: 1; color: var(--text); margin-bottom: 6px; }
-.stat-sub { font-size: .8rem; color: var(--text3); font-weight: 500; }
-.stat-num.loading { opacity: 0.4; font-size: 1.5rem; }
 
+/* Expanded Content Area */
+.stat-expanded {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.85rem;
+  color: var(--text2);
+}
+.expandable-card.expanded .stat-expanded {
+  max-height: 150px;
+  opacity: 1;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.expandable-card.expanded .stat-label::after {
+  transform: rotate(180deg);
+}
+.stat-label::after {
+  content: '▼';
+  transition: transform 0.3s ease;
+  font-size: 0.6rem;
+}
+
+/* Card Accent Colors */
 .c-green { background: var(--green-glow); border-color: var(--green); }
 .c-green .stat-num { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
-.c-red { background: var(--c-red-bg); border-color: var(--badge-red-bg); }
-.c-red .stat-num { color: var(--text3); text-shadow: none; }
-.c-blue { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
-.c-blue .stat-num { color: var(--blue); }
 .c-amber { background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.2); }
 .c-amber .stat-num { color: var(--amber); text-shadow: 0 0 20px rgba(245, 158, 11, 0.3); }
+.c-blue { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
+.c-blue .stat-num { color: var(--blue); }
+.c-purple { background: rgba(139, 92, 246, 0.05); border-color: rgba(139, 92, 246, 0.2); }
+.c-purple .stat-num { color: var(--purple); }
 
 /* ── TABS ── */
 .tabs {
@@ -336,9 +370,6 @@ body {
 
 /* ── DOUGHNUT CENTER ── */
 .doughnut-wrapper { position: relative; display: flex; align-items: center; justify-content: center; height: 260px; }
-.doughnut-center { position: absolute; text-align: center; pointer-events: none; }
-.doughnut-pct { font-family: var(--theme-font-display); font-size: 3rem; font-weight: 800; color: var(--text); line-height: 1; }
-.doughnut-lbl { font-size: 0.8rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
 
 /* ── TABLE ── */
 .table-wrap { overflow-x: auto; margin: -10px; padding: 10px; }
@@ -470,6 +501,7 @@ input[type=file] { display: none; }
   <button class="btn" onclick="resetFilters()">Reset View</button>
 </div>
 
+<!-- ITEM CONTEXT MODAL -->
 <div id="item-modal" class="modal-overlay hidden">
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 16px;">
@@ -510,6 +542,7 @@ input[type=file] { display: none; }
   </div>
 </div>
 
+<!-- SETTINGS MODAL -->
 <div id="settings-modal" class="modal-overlay hidden">
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 24px;">
@@ -524,7 +557,7 @@ input[type=file] { display: none; }
         <button class="btn theme-btn" data-theme="virtupets" onclick="setTheme('virtupets')">Virtupets</button>
         <button class="btn theme-btn" data-theme="maraqua" onclick="setTheme('maraqua')">Maraqua</button>
         <button class="btn theme-btn" data-theme="shenkuu" onclick="setTheme('shenkuu')">Shenkuu</button>
-        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland (Light)</button>
+        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland</button>
         <button class="btn theme-btn" data-theme="classic" onclick="setTheme('classic')">Neopets Classic</button>
       </div>
     </div>
@@ -562,8 +595,8 @@ input[type=file] { display: none; }
   </div>
 
   <div id="dashboard" class="hidden">
+    <!-- NEW EXPANDABLE STATS GRID -->
     <div class="stats-grid" id="stats-grid"></div>
-    <div class="stats-grid" id="stats-grid-lower"></div>
 
     <div class="tabs">
       <button class="tab active" onclick="switchTab('overview',this)">Overview</button>
@@ -572,6 +605,7 @@ input[type=file] { display: none; }
       <button class="tab" onclick="switchTab('log',this)">Feed Log</button>
     </div>
 
+    <!-- OVERVIEW -->
     <div id="panel-overview" class="panel active">
       <div class="grid-2">
         <div class="card">
@@ -580,10 +614,6 @@ input[type=file] { display: none; }
             <span class="card-meta" id="pie-meta"></span>
           </div>
           <div class="doughnut-wrapper">
-            <div class="doughnut-center">
-              <div class="doughnut-pct" id="doughnut-pct">0%</div>
-              <div class="doughnut-lbl">Win Rate</div>
-            </div>
             <canvas id="pieChart"></canvas>
           </div>
         </div>
@@ -594,6 +624,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- ITEMS -->
     <div id="panel-items" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Most Requested Items</span></div>
@@ -623,6 +654,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- TIMELINE -->
     <div id="panel-timeline" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Daily Feeds</span></div>
@@ -634,6 +666,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- LOG -->
     <div id="panel-log" class="panel">
       <div class="card">
         <div class="card-header" style="margin-bottom:16px;">
@@ -687,7 +720,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) { console.error("Failed to parse local storage", e); }
   }
   
-  // SWITCHED TO PERMANENT LOCAL STORAGE
   try {
     const sc = localStorage.getItem('statdoatie_prices');
     if (sc) itemdbCache = JSON.parse(sc);
@@ -1011,31 +1043,69 @@ function renderStats(data) {
   const n = data.filter(e => e.status === 'sniped').length;
   const rate = t > 0 ? Math.round(s / t * 100) : 0;
   const days = new Set(data.map(e => e.timestamp.slice(0,10))).size;
+  const uniqueItems = new Set(data.filter(e=>e.status==='success').map(e=>e.item)).size;
+  const avgPerDay = days > 0 ? (s / days).toFixed(1) : 0;
 
   let vF = 0;
-  for (const entry of data.filter(e => e.status === 'success')) {
-    vF += getCached(entry.item).price ?? 0;
+  let maxItemCost = 0;
+  let maxItemName = 'None';
+  const c = {};
+  
+  for (const entry of data) {
+    if (entry.status === 'success') {
+      const p = getCached(entry.item).price ?? 0;
+      vF += p;
+      if (p > maxItemCost) { maxItemCost = p; maxItemName = entry.item; }
+      c[entry.item] = (c[entry.item] || 0) + 1;
+    }
   }
+  
+  let mostFedItem = 'None';
+  let mostFedCount = 0;
+  Object.entries(c).forEach(([k,v]) => {
+    if(v > mostFedCount) { mostFedCount = v; mostFedItem = k; }
+  });
 
   const hasAnyPrice = data.some(e => getCached(e.item).price != null);
   const fedValDisplay = hasAnyPrice ? `${(vF/1000).toFixed(1)}k` : '—';
+  const avgCost = s > 0 ? Math.round(vF / s) : 0;
 
   document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card c-green">
-      <div style="display:flex; justify-content:space-between; width:100%; align-items:center; margin-bottom:8px;">
-        <div class="stat-label" style="margin:0;">Kads Fed</div>
-        <div class="stat-label" style="margin:0; opacity:0.6;">Total: ${t}</div>
-      </div>
+    <div class="stat-card c-green expandable-card" onclick="this.classList.toggle('expanded')">
+      <div class="stat-label">Kads Fed</div>
       <div class="stat-num">${s.toLocaleString()}</div>
+      <div class="stat-expanded">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Total Attempts:</span> <strong>${t}</strong></div>
+        <div style="display:flex; justify-content:space-between;"><span>Most Fed:</span> <strong style="text-align:right;">${mostFedItem}<br>(${mostFedCount}x)</strong></div>
+      </div>
     </div>
-    <div class="stat-card c-amber"><div class="stat-label">Win Rate</div><div class="stat-num">${rate}%</div></div>
-    <div class="stat-card c-blue"><div class="stat-label">NP Spent (Fed)</div><div class="stat-num">${fedValDisplay}</div><div class="stat-sub">itemdb market prices</div></div>
-  `;
-
-  document.getElementById('stats-grid-lower').innerHTML = `
-    <div class="stat-card"><div class="stat-label">Unique Items Fed</div><div class="stat-num">${new Set(data.filter(e=>e.status==='success').map(e=>e.item)).size}</div></div>
-    <div class="stat-card"><div class="stat-label">Active Days</div><div class="stat-num">${days}</div></div>
-    <div class="stat-card c-red"><div class="stat-label">Missed Opportunities</div><div class="stat-num">${n.toLocaleString()}</div></div>
+    
+    <div class="stat-card c-amber expandable-card" onclick="this.classList.toggle('expanded')">
+      <div class="stat-label">Win Rate</div>
+      <div class="stat-num">${rate}%</div>
+      <div class="stat-expanded">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Total Sniped:</span> <strong style="color:var(--red);">${n}</strong></div>
+        <div style="display:flex; justify-content:space-between;"><span>Total Fed:</span> <strong style="color:var(--green);">${s}</strong></div>
+      </div>
+    </div>
+    
+    <div class="stat-card c-blue expandable-card" onclick="this.classList.toggle('expanded')">
+      <div class="stat-label">NP Spent</div>
+      <div class="stat-num">${fedValDisplay}</div>
+      <div class="stat-expanded">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Avg Cost/Kad:</span> <strong>${hasAnyPrice ? avgCost.toLocaleString() + ' NP' : '—'}</strong></div>
+        <div style="display:flex; justify-content:space-between;"><span>Max Cost:</span> <strong style="text-align:right;">${maxItemName}<br>${maxItemCost.toLocaleString()} NP</strong></div>
+      </div>
+    </div>
+    
+    <div class="stat-card c-purple expandable-card" onclick="this.classList.toggle('expanded')">
+      <div class="stat-label">Active Days</div>
+      <div class="stat-num">${days}</div>
+      <div class="stat-expanded">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Unique Items Fed:</span> <strong>${uniqueItems}</strong></div>
+        <div style="display:flex; justify-content:space-between;"><span>Avg Feeds/Day:</span> <strong>${avgPerDay}</strong></div>
+      </div>
+    </div>
   `;
 }
 
@@ -1052,17 +1122,36 @@ function renderPie(data) {
   if (!data.length) return;
   const s = data.filter(e => e.status === 'success').length;
   const n = data.filter(e => e.status === 'sniped').length;
-  const pct = data.length > 0 ? Math.round((s / data.length) * 100) : 0;
 
-  document.getElementById('doughnut-pct').textContent = pct + '%';
   document.getElementById('pie-meta').textContent = data.length.toLocaleString() + ' Total';
 
   charts.pie = new Chart(document.getElementById('pieChart'), {
     type: 'doughnut',
-    data: { labels: ['Fed', 'Sniped'], datasets: [{ data: [s, n], backgroundColor: [getCssVar('--green'), THEMES[currentThemeKey].empty], borderWidth: 0 }] },
+    data: { 
+      labels: ['Fed', 'Sniped'], 
+      datasets: [{ 
+        data: [s, n], 
+        backgroundColor: [getCssVar('--green'), getCssVar('--red')], 
+        borderWidth: 2,
+        borderColor: getCssVar('--bg')
+      }] 
+    },
     options: {
-      responsive: true, maintainAspectRatio: false, cutout: '82%', borderRadius: 20, spacing: 6,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => buildRichTooltip(ctx.label, ctx.raw, s+n) } } }
+      responsive: true, 
+      maintainAspectRatio: false, 
+      cutout: '60%', 
+      borderRadius: 5, 
+      spacing: 0,
+      plugins: { 
+        legend: { 
+          display: true,
+          position: 'right',
+          labels: { color: getCssVar('--text'), font: { family: getCssVar('--theme-font-body') } }
+        }, 
+        tooltip: { 
+          callbacks: { label: ctx => buildRichTooltip(ctx.label, ctx.raw, s+n) } 
+        } 
+      }
     }
   });
 }
@@ -1077,7 +1166,7 @@ function renderDow(data) {
     data: {
       labels: DAYS,
       datasets: [
-        { label: 'Fed', data: sC, backgroundColor: getCssVar('--green'), stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Fed', data: sC, backgroundColor: getCssVar('--blue'), stack: 'a', borderRadius: 10, borderSkipped: false },
         { label: 'Sniped', data: nC, backgroundColor: THEMES[currentThemeKey].empty, stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
@@ -1105,7 +1194,7 @@ function renderItemsChart(data) {
     data: {
       labels: arr.map(([k]) => k),
       datasets: [
-        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: getCssVar('--teal'), stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: getCssVar('--purple'), stack: 'a', borderRadius: 10, borderSkipped: false },
         { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: THEMES[currentThemeKey].empty, stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
@@ -1187,7 +1276,7 @@ function renderDaily(data) {
     data: {
       labels: lbls,
       datasets: [
-        { label: 'Fed',    data: lbls.map(d => dObj[d].s), backgroundColor: getCssVar('--blue'),  stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Fed',    data: lbls.map(d => dObj[d].s), backgroundColor: getCssVar('--teal'),  stack: 'a', borderRadius: 10, borderSkipped: false },
         { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: THEMES[currentThemeKey].empty, stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
@@ -1210,22 +1299,22 @@ function renderCumul(data) {
     return `rgba(${r},${g},${b},${alpha})`;
   };
   
-  const rawGreen = getCssVar('--green');
-  const gGreen = ctx.createLinearGradient(0, 0, 0, 300);
+  const rawAmber = getCssVar('--amber');
+  const gAmber = ctx.createLinearGradient(0, 0, 0, 300);
   
-  if (rawGreen.startsWith('#')) {
-      gGreen.addColorStop(0, hex2rgba(rawGreen, 0.4)); 
+  if (rawAmber.startsWith('#')) {
+      gAmber.addColorStop(0, hex2rgba(rawAmber, 0.4)); 
   } else {
-      gGreen.addColorStop(0, 'rgba(34, 197, 94, 0.4)'); 
+      gAmber.addColorStop(0, 'rgba(245, 158, 11, 0.4)'); 
   }
-  gGreen.addColorStop(1, 'transparent');
+  gAmber.addColorStop(1, 'transparent');
 
   charts.cumul = new Chart(document.getElementById('cumulChart'), {
     type: 'line',
     data: {
       labels: arr.map(e => e.timestamp.slice(0,10)),
       datasets: [
-        { label:'Total Fed',    data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor: getCssVar('--green'), backgroundColor: gGreen, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
+        { label:'Total Fed',    data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor: getCssVar('--amber'), backgroundColor: gAmber, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
         { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }),  borderColor: THEMES[currentThemeKey].line, fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
       ]
     },
