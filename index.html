@@ -53,7 +53,7 @@
   --badge-red-bg: rgba(255,255,255,0.05);
   --badge-red-text: var(--text3);
   --c-red-bg: rgba(255,255,255,0.02);
-  
+
   --chart-empty: rgba(255, 255, 255, 0.05);
   --chart-line: rgba(255, 255, 255, 0.15);
 }
@@ -310,6 +310,27 @@ body {
   .stat-card.wide { grid-column: 1 / -1; }
 }
 
+/* ── CROWN JEWEL LAYOUT FIX FOR MOBILE ── */
+.crown-jewel-content {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  width: 100%;
+}
+@media (max-width: 600px) {
+  .crown-jewel-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .crown-jewel-content > div:last-child {
+    text-align: left !important;
+  }
+  .crown-jewel-content .stat-label {
+    justify-content: flex-start !important;
+  }
+}
+
 .expandable-card { cursor: pointer; }
 .expandable-card:hover { transform: translateY(-4px); background: var(--glass-hover); }
 .stat-label { 
@@ -330,7 +351,7 @@ body {
 }
 .expandable-card.expanded .stat-label::after { transform: rotate(180deg); }
 .stat-label::after { content: '▼'; transition: transform 0.3s ease; font-size: 0.6rem; }
-.stat-card.wide .stat-label::after { display: none; } /* Hide arrow on the trophy banner */
+.stat-card.wide .stat-label::after { display: none; } 
 
 .c-green { background: var(--green-glow); border-color: var(--green); }
 .c-green .stat-num { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
@@ -454,7 +475,7 @@ input[type=file] { display: none; }
   .tab { width: 48%; text-align: center; margin-bottom: 4px; }
   .log-entry { grid-template-columns: 1fr 80px; padding: 12px; gap: 12px; }
   .log-price, .log-ts, .log-dot { display: none; }
-  .card-header-actions { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .card-header-actions { flex-direction: column; align-items: flex-start !important; gap: 12px; }
   .search-input { max-width: 100%; }
 }
 @media (max-width: 480px) {
@@ -627,10 +648,6 @@ input[type=file] { display: none; }
     </div>
 
     <div id="panel-items" class="panel">
-      <div class="card">
-        <div class="card-header"><span class="card-title">Most Requested Items</span></div>
-        <div class="chart-wrap" id="topItemsWrap"><canvas id="topItemsChart"></canvas></div>
-      </div>
       <div class="card" style="padding:0; overflow:hidden;">
         <div class="card-header card-header-actions" style="padding: 28px 28px 0; align-items:flex-end;">
           <div>
@@ -692,10 +709,9 @@ let availableMonths = [];
 let itemdbCache = {};
 let currentOpenItem = null;
 
-// Table State
 let dbSearchTerm = '';
-let dbSortKey = 's'; // Default sort by Fed
-let dbSortDir = -1;  // Descending
+let dbSortKey = 's'; 
+let dbSortDir = -1;  
 
 let absoluteMostExpensiveItem = '';
 
@@ -796,7 +812,7 @@ function getCached(name) {
   return itemdbCache[name] ?? { price: null, inflated: false, image: null };
 }
 
-// ─── TABLE SEARCH & SORT LOGIC ───
+// ─── TABLE SEARCH & SORT ───
 function handleDbSearch(val) {
   dbSearchTerm = val.toLowerCase();
   renderItemTable(getFilteredData());
@@ -804,10 +820,10 @@ function handleDbSearch(val) {
 
 function handleDbSort(key) {
   if (dbSortKey === key) {
-    dbSortDir *= -1; // toggle dir
+    dbSortDir *= -1; 
   } else {
     dbSortKey = key;
-    dbSortDir = -1; // default to descending on new key
+    dbSortDir = -1; 
   }
   renderItemTable(getFilteredData());
 }
@@ -1045,7 +1061,6 @@ function renderWidgets() {
   renderStats(data);
   renderPie(data);
   renderDow(data);
-  renderItemsChart(data);
   renderItemTable(data);
   renderDaily(data);
   renderCumul(data);
@@ -1122,7 +1137,7 @@ function renderStats(data) {
     </div>
 
     <div class="stat-card c-purple wide expandable-card item-clickable" data-name="${absoluteMostExpensiveItem.replace(/"/g, '&quot;')}" onclick="this.classList.toggle('expanded')">
-      <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+      <div class="crown-jewel-content">
         <div>
           <div class="stat-label">Crown Jewel (Most Expensive)</div>
           <div class="stat-num" style="font-size:2.2rem;">${absoluteMostExpensiveItem || 'None'}</div>
@@ -1229,51 +1244,6 @@ function renderDow(data) {
   });
 }
 
-function renderItemsChart(data) {
-  if (!data.length) return;
-  const c = {};
-  for (const entry of data) {
-    if (!c[entry.item]) c[entry.item] = { t:0, s:0, n:0 };
-    c[entry.item].t++;
-    c[entry.item][entry.status==='success'?'s':'n']++;
-  }
-  const arr = Object.entries(c).sort((a,b) => b[1].s - a[1].s).slice(0,15);
-  document.getElementById('topItemsWrap').style.height = Math.max(300, arr.length * 40 + 40) + 'px';
-
-  charts.topItems = new Chart(document.getElementById('topItemsChart'), {
-    type: 'bar',
-    data: {
-      labels: arr.map(([k]) => k),
-      datasets: [
-        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: getCssVar('--teal'), stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10, borderSkipped: false }
-      ]
-    },
-    options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          mode: 'index', intersect: false,
-          callbacks: {
-            afterTitle: ctx => {
-              const name = arr[ctx[0].dataIndex][0];
-              const { price } = getCached(name);
-              const fed = arr[ctx[0].dataIndex][1].s;
-              if (price == null) return 'Value Fed: unknown';
-              return `Value Fed: ${(price * fed).toLocaleString()} NP`;
-            }
-          }
-        }
-      },
-      scales: { 
-        x: { stacked: true, grid: gridLines(), border: { display: false } }, 
-        y: { stacked: true, grid: { display: false }, border: { display: false } } 
-      }
-    }
-  });
-}
-
 function renderItemTable(ds) {
   const c = {};
   for (const entry of ds) {
@@ -1281,20 +1251,17 @@ function renderItemTable(ds) {
     c[entry.item][entry.status==='success'?'s':'n']++;
   }
 
-  // Build the array
   const rawArray = Object.entries(c).map(([name, {s, n}]) => {
     const { price, inflated, image } = getCached(name);
     const spent = (price != null) ? price * s : null;
     return { name, price, inflated, image, spent, t: s+n, s, n, rate: Math.round(s/(s+n)*100) };
   });
 
-  // 1. FILTER
   let displayArray = rawArray;
   if (dbSearchTerm) {
       displayArray = rawArray.filter(x => x.name.toLowerCase().includes(dbSearchTerm));
   }
 
-  // 2. SORT
   displayArray.sort((a, b) => {
       let valA = a[dbSortKey];
       let valB = b[dbSortKey];
@@ -1414,7 +1381,6 @@ function renderLog(data) {
       
     const safeName = e.item.replace(/"/g, '&quot;');
 
-    // Parse date explicitly to PT
     const ptDateStr = new Date(e.timestamp).toLocaleString('en-US', {
       timeZone: 'America/Los_Angeles', 
       month: 'short', 
