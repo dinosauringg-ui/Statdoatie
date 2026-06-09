@@ -960,19 +960,18 @@ document.addEventListener('KadData_ExtToPage', e => {
 });
 
 function triggerExtensionSync() {
+  // Clear any ghost timers
   clearTimeout(syncTimeout);
   
-  if (document.documentElement.getAttribute('data-extension-installed') !== 'true') {
-    toast('No active extension detected. Make sure it is installed and enabled!');
-    return;
-  }
-  
-  toast('Requesting data from extension...');
-  document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
-  
+  // 1. Arm the error trap FIRST
   syncTimeout = setTimeout(() => { 
     toast('No active extension detected. Make sure it is installed and enabled!'); 
   }, 1500);
+  
+  toast('Requesting data from extension...');
+  
+  // 2. THEN fire the signal. The extension will instantly fire back and disarm the trap.
+  document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
   
   try { closeSettings(); } catch(e) {}
 }
