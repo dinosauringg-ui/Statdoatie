@@ -695,6 +695,14 @@ let currentThemeKey = localStorage.getItem('statdoatie_theme') || 'default';
 // ─── INIT ───
 document.addEventListener('DOMContentLoaded', () => {
   applyThemeDOM(currentThemeKey);
+  
+  // 1. Load the price cache FIRST
+  try {
+    const sc = localStorage.getItem('statdoatie_prices');
+    if (sc) itemdbCache = JSON.parse(sc);
+  } catch(e) {}
+
+  // 2. THEN load the feed logs and render the widgets
   const saved = localStorage.getItem('statdoatie_save');
   if (saved) {
     try {
@@ -703,14 +711,12 @@ document.addEventListener('DOMContentLoaded', () => {
         feedLog = parsed;
         populateMonths();
         showDashboard();
+        renderWidgets();
       }
     } catch (e) { console.error("Failed to parse local storage", e); }
   }
-  
-  try {
-    const sc = localStorage.getItem('statdoatie_prices');
-    if (sc) itemdbCache = JSON.parse(sc);
-  } catch(e) {}
+});
+
   
   // Render after initial DOM is ready
   setTimeout(() => { if (feedLog.length > 0) renderWidgets(); }, 50);
@@ -904,6 +910,7 @@ document.addEventListener('KadData_ReceivePrices', e => {
 
   if (count > 0) {
     Object.assign(itemdbCache, newPrices);
+    // Updated to localStorage
     try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
     renderWidgets();
     toast(`✨ Successfully synced ${count} missing prices`);
@@ -911,6 +918,7 @@ document.addEventListener('KadData_ReceivePrices', e => {
     toast('No new prices found on itemdb.');
   }
 });
+
 
 document.getElementById('modal-import-ext').addEventListener('click', triggerExtensionSync);
 document.getElementById('empty-import-btn').addEventListener('click', triggerExtensionSync);
