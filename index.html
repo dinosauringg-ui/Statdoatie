@@ -242,7 +242,7 @@ body {
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
-.header-btn-text { margin-left: 4px; }
+.import-feeds-btn { padding: 0 16px; white-space: nowrap; }
 
 /* ── MODALS ── */
 .modal-overlay {
@@ -454,8 +454,7 @@ input[type=file] { display: none; }
   .header { padding: 0 16px; height: 56px; flex-wrap: nowrap; }
   .header-right { margin-top: 0; width: auto; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
   
-  .header-btn-text { display: none; }
-  .header-sync-btn { padding: 0 !important; width: 32px; height: 32px; justify-content: center; }
+  .import-feeds-btn { padding: 0 10px; font-size: 0.75rem; }
 
   .logo-sub { display: none; }
   .logo-text { font-size: 1.1rem; }
@@ -523,9 +522,8 @@ input[type=file] { display: none; }
       <span id="status-text">Awaiting Data</span>
     </div>
     
-    <button class="btn btn-primary header-sync-btn" onclick="triggerExtensionSync()" title="Sync Extension Data" style="padding: 0 16px;">
-      <svg viewBox="0 0 24 24" style="width:16px; height:16px;" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6c0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6c0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
-      <span class="header-btn-text">Sync Data</span>
+    <button class="btn btn-primary import-feeds-btn" onclick="triggerExtensionSync()" title="Import Feeds">
+      Import Feeds
     </button>
 
     <button class="btn btn-icon" onclick="openSettings()" title="Settings">
@@ -925,7 +923,16 @@ function copyModalItemName() {
 }
 
 // ─── DATA SYNC ───
+let syncTimeout;
+
+document.addEventListener('KadData_ExtAck', () => {
+  clearTimeout(syncTimeout); 
+  toast('Extension connected! Checking for new items...');
+});
+
 document.addEventListener('KadData_ExtToPage', e => {
+  clearTimeout(syncTimeout); 
+  
   let payload;
   try { payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   
@@ -953,7 +960,8 @@ document.addEventListener('KadData_ExtToPage', e => {
 });
 
 function triggerExtensionSync() {
-  // NEW: Instantly checks for the Tampermonkey DOM stamp instead of waiting for a timeout
+  clearTimeout(syncTimeout);
+  
   if (document.documentElement.getAttribute('data-extension-installed') !== 'true') {
     toast('No active extension detected. Make sure it is installed and enabled!');
     return;
@@ -961,6 +969,11 @@ function triggerExtensionSync() {
   
   toast('Requesting data from extension...');
   document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
+  
+  syncTimeout = setTimeout(() => { 
+    toast('No active extension detected. Make sure it is installed and enabled!'); 
+  }, 1500);
+  
   try { closeSettings(); } catch(e) {}
 }
 
