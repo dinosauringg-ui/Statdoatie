@@ -306,11 +306,11 @@ body {
   box-shadow: var(--theme-shadow); transition: transform 0.2s, background 0.5s ease, border 0.5s ease;
   position: relative;
 }
-@media (min-width: 1000px) {
-  .stat-card.wide { grid-column: 1 / -1; }
-}
 
-/* ── CROWN JEWEL LAYOUT ── */
+/* Force wide cards to always span full width */
+.stat-card.wide { grid-column: 1 / -1; }
+
+/* Crown Jewel content layout */
 .crown-jewel-content {
   display: flex; 
   justify-content: space-between; 
@@ -473,13 +473,13 @@ input[type=file] { display: none; }
     align-items: center;
   }
   .crown-jewel-name { 
-    font-size: 1.3rem !important; 
+    font-size: 1.4rem !important; 
     white-space: normal; 
     word-wrap: break-word; 
-    line-height: 1.1; 
+    line-height: 1.2; 
   }
   .crown-jewel-content .stat-num { 
-    font-size: 1.4rem !important; 
+    font-size: 1.3rem !important; 
   }
   .crown-jewel-content .stat-label { 
     font-size: 0.6rem !important; 
@@ -1156,7 +1156,7 @@ function renderStats(data) {
       <div class="crown-jewel-content">
         <div style="flex: 1; min-width: 0; padding-right: 10px;">
           <div class="stat-label">Crown Jewel (Most Expensive)</div>
-          <div class="stat-num crown-jewel-name">${absoluteMostExpensiveItem || 'None'}</div>
+          <div class="stat-num crown-jewel-name" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${absoluteMostExpensiveItem || 'None'}</div>
         </div>
         <div style="text-align:right; flex-shrink: 0;">
           <div class="stat-label" style="justify-content:flex-end;">Value</div>
