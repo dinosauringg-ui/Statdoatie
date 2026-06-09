@@ -45,7 +45,7 @@
   --header-text: var(--text);
   --blob-opacity: 0.3;
 
-  /* Table, Log & Chart variables */
+  /* Table & Log variables */
   --table-row: rgba(0,0,0,0.2);
   --table-row-hover: rgba(255,255,255,0.05);
   --log-bg: rgba(0,0,0,0.2);
@@ -53,9 +53,10 @@
   --badge-red-bg: rgba(255,255,255,0.05);
   --badge-red-text: var(--text3);
   --c-red-bg: rgba(255,255,255,0.02);
-  
-  --chart-empty: rgba(255,255,255,0.05);
-  --chart-line: rgba(255,255,255,0.1);
+
+  /* FIXED: Added these to the root so dark themes don't crash the charts */
+  --chart-empty: rgba(255, 255, 255, 0.05);
+  --chart-line: rgba(255, 255, 255, 0.15);
 }
 
 /* ── DISTINCT DARK THEMES ── */
@@ -161,7 +162,7 @@ body.theme-classic {
   --badge-red-text: #cc0000;
   --c-red-bg: #ffeeee;
   --chart-empty: rgba(0,0,0,0.1);
-  --chart-line: rgba(0,0,0,0.15);
+  --chart-line: rgba(0,0,0,0.2);
 }
 
 body.theme-faerieland .stat-num, 
@@ -560,7 +561,7 @@ input[type=file] { display: none; }
         <button class="btn theme-btn" data-theme="virtupets" onclick="setTheme('virtupets')">Virtupets</button>
         <button class="btn theme-btn" data-theme="maraqua" onclick="setTheme('maraqua')">Maraqua</button>
         <button class="btn theme-btn" data-theme="shenkuu" onclick="setTheme('shenkuu')">Shenkuu</button>
-        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland (Light)</button>
+        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland</button>
         <button class="btn theme-btn" data-theme="classic" onclick="setTheme('classic')">Neopets Classic</button>
       </div>
     </div>
@@ -696,13 +697,13 @@ let currentThemeKey = localStorage.getItem('statdoatie_theme') || 'default';
 document.addEventListener('DOMContentLoaded', () => {
   applyThemeDOM(currentThemeKey);
   
-  // 1. Load the price cache FIRST
+  // Load prices first
   try {
     const sc = localStorage.getItem('statdoatie_prices');
     if (sc) itemdbCache = JSON.parse(sc);
   } catch(e) {}
 
-  // 2. THEN load the feed logs and render the widgets
+  // Then load data and render
   const saved = localStorage.getItem('statdoatie_save');
   if (saved) {
     try {
@@ -715,11 +716,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (e) { console.error("Failed to parse local storage", e); }
   }
-});
-
-  
-  // Render after initial DOM is ready
-  setTimeout(() => { if (feedLog.length > 0) renderWidgets(); }, 50);
 });
 
 // ─── THEME ───
@@ -742,7 +738,6 @@ function setTheme(key) {
   localStorage.setItem('statdoatie_theme', key);
   applyThemeDOM(key);
 
-  // Allow DOM to repaint CSS variables before updating charts
   setTimeout(() => {
       const isLight = key === 'faerieland' || key === 'classic';
       
@@ -910,7 +905,6 @@ document.addEventListener('KadData_ReceivePrices', e => {
 
   if (count > 0) {
     Object.assign(itemdbCache, newPrices);
-    // Updated to localStorage
     try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
     renderWidgets();
     toast(`✨ Successfully synced ${count} missing prices`);
@@ -918,7 +912,6 @@ document.addEventListener('KadData_ReceivePrices', e => {
     toast('No new prices found on itemdb.');
   }
 });
-
 
 document.getElementById('modal-import-ext').addEventListener('click', triggerExtensionSync);
 document.getElementById('empty-import-btn').addEventListener('click', triggerExtensionSync);
@@ -1119,9 +1112,7 @@ function renderPie(data) {
   if (!data.length) return;
   const s = data.filter(e => e.status === 'success').length;
   const n = data.filter(e => e.status === 'sniped').length;
-  const pct = data.length > 0 ? Math.round((s / data.length) * 100) : 0;
 
-  document.getElementById('doughnut-pct').textContent = pct + '%';
   document.getElementById('pie-meta').textContent = data.length.toLocaleString() + ' Total';
 
   charts.pie = new Chart(document.getElementById('pieChart'), {
@@ -1130,9 +1121,9 @@ function renderPie(data) {
       labels: ['Fed', 'Sniped'], 
       datasets: [{ 
         data: [s, n], 
-        backgroundColor: [getCssVar('--green'), getCssVar('--chart-empty')], 
+        backgroundColor: ['var(--green)', 'var(--chart-empty)'], 
         borderWidth: 2,
-        borderColor: getCssVar('--theme-card-bg')
+        borderColor: 'var(--theme-card-bg)'
       }] 
     },
     options: {
@@ -1164,8 +1155,8 @@ function renderDow(data) {
     data: {
       labels: DAYS,
       datasets: [
-        { label: 'Fed', data: sC, backgroundColor: getCssVar('--green'), stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: nC, backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed', data: sC, backgroundColor: 'var(--blue)', stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: nC, backgroundColor: 'var(--chart-empty)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -1192,8 +1183,8 @@ function renderItemsChart(data) {
     data: {
       labels: arr.map(([k]) => k),
       datasets: [
-        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: getCssVar('--teal'), stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: 'var(--teal)', stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: 'var(--chart-empty)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -1274,8 +1265,8 @@ function renderDaily(data) {
     data: {
       labels: lbls,
       datasets: [
-        { label: 'Fed',    data: lbls.map(d => dObj[d].s), backgroundColor: getCssVar('--blue'),  stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed',    data: lbls.map(d => dObj[d].s), backgroundColor: 'var(--teal)',  stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: 'var(--chart-empty)', stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -1298,7 +1289,7 @@ function renderCumul(data) {
     return `rgba(${r},${g},${b},${alpha})`;
   };
   
-  const rawAmber = getCssVar('--amber');
+  const rawAmber = getCssVar('--amber') || '#f59e0b';
   const gAmber = ctx.createLinearGradient(0, 0, 0, 300);
   
   if (rawAmber.startsWith('#')) {
@@ -1313,8 +1304,8 @@ function renderCumul(data) {
     data: {
       labels: arr.map(e => e.timestamp.slice(0,10)),
       datasets: [
-        { label:'Total Fed',    data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor: getCssVar('--amber'), backgroundColor: gAmber, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
-        { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }),  borderColor: getCssVar('--chart-line'), fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
+        { label:'Total Fed',    data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor: 'var(--amber)', backgroundColor: gAmber, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
+        { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }),  borderColor: 'var(--chart-line)', fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
       ]
     },
     options: {
