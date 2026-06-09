@@ -306,13 +306,12 @@ body {
   box-shadow: var(--theme-shadow); transition: transform 0.2s, background 0.5s ease, border 0.5s ease;
   position: relative;
 }
-.expandable-card {
-  cursor: pointer;
+@media (min-width: 1000px) {
+  .stat-card.wide { grid-column: 1 / -1; }
 }
-.expandable-card:hover { 
-  transform: translateY(-4px); 
-  background: var(--glass-hover); 
-}
+
+.expandable-card { cursor: pointer; }
+.expandable-card:hover { transform: translateY(-4px); background: var(--glass-hover); }
 .stat-label { 
   font-size: .75rem; font-weight: 600; color: var(--text2); 
   text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; 
@@ -321,28 +320,17 @@ body {
 .stat-num { font-family: var(--theme-font-display); font-size: 2.8rem; font-weight: 800; line-height: 1; color: var(--text); margin-bottom: 6px; }
 
 .stat-expanded {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
+  max-height: 0; opacity: 0; overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.85rem;
-  color: var(--text2);
+  font-size: 0.85rem; color: var(--text2);
 }
 .expandable-card.expanded .stat-expanded {
-  max-height: 150px;
-  opacity: 1;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
+  max-height: 150px; opacity: 1; margin-top: 16px;
+  padding-top: 16px; border-top: 1px solid var(--border);
 }
-.expandable-card.expanded .stat-label::after {
-  transform: rotate(180deg);
-}
-.stat-label::after {
-  content: '▼';
-  transition: transform 0.3s ease;
-  font-size: 0.6rem;
-}
+.expandable-card.expanded .stat-label::after { transform: rotate(180deg); }
+.stat-label::after { content: '▼'; transition: transform 0.3s ease; font-size: 0.6rem; }
+.stat-card.wide .stat-label::after { display: none; } /* Hide arrow on the trophy banner */
 
 .c-green { background: var(--green-glow); border-color: var(--green); }
 .c-green .stat-num { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
@@ -375,6 +363,16 @@ body {
 
 /* ── DOUGHNUT CENTER ── */
 .doughnut-wrapper { position: relative; display: flex; align-items: center; justify-content: center; height: 260px; }
+
+/* ── TABLE SEARCH & SORT ── */
+.search-input {
+  background: var(--table-row); border: 1px solid var(--border); color: var(--text);
+  padding: 8px 16px; border-radius: var(--btn-radius); font-family: var(--theme-font-body);
+  outline: none; width: 100%; max-width: 250px; font-size: 0.85rem;
+}
+.search-input:focus { border-color: var(--blue); }
+.th-sortable { cursor: pointer; user-select: none; transition: color 0.2s; }
+.th-sortable:hover { color: var(--text); }
 
 /* ── TABLE ── */
 .table-wrap { overflow-x: auto; margin: -10px; padding: 10px; }
@@ -456,6 +454,8 @@ input[type=file] { display: none; }
   .tab { width: 48%; text-align: center; margin-bottom: 4px; }
   .log-entry { grid-template-columns: 1fr 80px; padding: 12px; gap: 12px; }
   .log-price, .log-ts, .log-dot { display: none; }
+  .card-header-actions { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .search-input { max-width: 100%; }
 }
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
@@ -532,8 +532,9 @@ input[type=file] { display: none; }
     </div>
 
     <div style="display:flex; gap:8px; margin-bottom:24px;">
-      <a id="link-itemdb" href="#" target="_blank" class="btn" style="flex:1; justify-content:center;">Open in ItemDB</a>
-      <a id="link-sdb" href="#" target="_blank" class="btn" style="flex:1; justify-content:center;">Search in SDB</a>
+      <button class="btn btn-primary" onclick="copyModalItemName()" style="flex:1; justify-content:center;">Copy Name</button>
+      <a id="link-itemdb" href="#" target="_blank" class="btn" style="flex:1; justify-content:center;">ItemDB</a>
+      <a id="link-sdb" href="#" target="_blank" class="btn" style="flex:1; justify-content:center;">SDB Search</a>
     </div>
     
     <hr style="border:0; border-top:1px solid var(--border); margin: 20px 0;">
@@ -631,21 +632,24 @@ input[type=file] { display: none; }
         <div class="chart-wrap" id="topItemsWrap"><canvas id="topItemsChart"></canvas></div>
       </div>
       <div class="card" style="padding:0; overflow:hidden;">
-        <div class="card-header" style="padding: 28px 28px 0;">
-          <span class="card-title">Item Value DB</span>
-          <span class="card-meta" id="item-count"></span>
+        <div class="card-header card-header-actions" style="padding: 28px 28px 0; align-items:flex-end;">
+          <div>
+            <span class="card-title">Item Value DB</span>
+            <span class="card-meta" id="item-count" style="display:block; margin-top:4px;"></span>
+          </div>
+          <input type="text" class="search-input" id="db-search" placeholder="Search items..." oninput="handleDbSearch(this.value)">
         </div>
         <div class="table-wrap">
           <table id="item-table">
             <thead>
               <tr>
-                <th>Item</th>
-                <th class="td-right">itemdb Price</th>
-                <th class="td-right">Seen</th>
-                <th class="td-right">Fed</th>
-                <th class="td-right">Missed</th>
-                <th class="td-right">NP Spent</th>
-                <th>Win Rate</th>
+                <th class="th-sortable" onclick="handleDbSort('name')">Item ↕</th>
+                <th class="td-right th-sortable" onclick="handleDbSort('price')">itemdb Price ↕</th>
+                <th class="td-right th-sortable" onclick="handleDbSort('t')">Seen ↕</th>
+                <th class="td-right th-sortable" onclick="handleDbSort('s')">Fed ↕</th>
+                <th class="td-right th-sortable" onclick="handleDbSort('n')">Missed ↕</th>
+                <th class="td-right th-sortable" onclick="handleDbSort('spent')">NP Spent ↕</th>
+                <th class="th-sortable" onclick="handleDbSort('rate')">Win Rate ↕</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -688,6 +692,13 @@ let availableMonths = [];
 let itemdbCache = {};
 let currentOpenItem = null;
 
+// Table State
+let dbSearchTerm = '';
+let dbSortKey = 's'; // Default sort by Fed
+let dbSortDir = -1;  // Descending
+
+let absoluteMostExpensiveItem = '';
+
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 let currentThemeKey = localStorage.getItem('statdoatie_theme') || 'default';
@@ -715,7 +726,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// ─── TIMEZONE HELPER (Neopian Standard Time / Pacific Time) ───
+// ─── TIMEZONE HELPER ───
 function getNSTDateStr(isoString) {
   const ptDate = new Date(new Date(isoString).toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
   const y = ptDate.getFullYear();
@@ -767,16 +778,6 @@ function setTheme(key) {
   setTimeout(() => { if (feedLog.length > 0) renderWidgets(); }, 60);
 }
 
-// ─── CHART DEFAULTS ───
-Chart.defaults.font.family = "'DM Sans', sans-serif";
-Chart.defaults.font.size = 12;
-Chart.defaults.plugins.tooltip.titleFont = { family: "'Outfit', sans-serif", size: 14, weight: 'bold' };
-Chart.defaults.plugins.tooltip.bodyFont = { family: "'DM Sans', sans-serif", size: 13 };
-Chart.defaults.plugins.tooltip.padding = 16;
-Chart.defaults.plugins.tooltip.cornerRadius = 12;
-Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
-Chart.defaults.plugins.tooltip.borderWidth = 1;
-
 // ─── UTILS ───
 function toast(msg) {
   const el = document.getElementById('toast');
@@ -793,6 +794,22 @@ function showDashboard() {
 
 function getCached(name) {
   return itemdbCache[name] ?? { price: null, inflated: false, image: null };
+}
+
+// ─── TABLE SEARCH & SORT LOGIC ───
+function handleDbSearch(val) {
+  dbSearchTerm = val.toLowerCase();
+  renderItemTable(getFilteredData());
+}
+
+function handleDbSort(key) {
+  if (dbSortKey === key) {
+    dbSortDir *= -1; // toggle dir
+  } else {
+    dbSortKey = key;
+    dbSortDir = -1; // default to descending on new key
+  }
+  renderItemTable(getFilteredData());
 }
 
 // ─── ITEM CONTEXT MODAL ───
@@ -854,19 +871,19 @@ function saveManualPrice() {
   }
 }
 
+function copyModalItemName() {
+  if (!currentOpenItem) return;
+  navigator.clipboard.writeText(currentOpenItem);
+  toast(`📋 Copied: ${currentOpenItem}`);
+}
+
 // ─── DATA SYNC ───
 let extensionResponded = false;
 
 document.addEventListener('KadData_ExtToPage', e => {
   extensionResponded = true;
-  
   let payload;
-  try {
-    payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail;
-  } catch (err) {
-    console.error("Payload parse error:", err);
-    return;
-  }
+  try { payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   
   const records = Array.isArray(payload) ? payload : (payload.records || []);
   const prices = payload.prices || {};
@@ -908,12 +925,7 @@ function fetchMissingPrices() {
 
 document.addEventListener('KadData_ReceivePrices', e => {
   let newPrices;
-  try {
-    newPrices = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail;
-  } catch (err) { 
-    return; 
-  }
-  
+  try { newPrices = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   const count = Object.keys(newPrices).filter(k => newPrices[k].price != null).length;
 
   if (count > 0) {
@@ -1051,14 +1063,14 @@ function renderStats(data) {
 
   let vF = 0;
   let maxItemCost = 0;
-  let maxItemName = 'None';
+  absoluteMostExpensiveItem = '';
   const c = {};
   
   for (const entry of data) {
     if (entry.status === 'success') {
       const p = getCached(entry.item).price ?? 0;
       vF += p;
-      if (p > maxItemCost) { maxItemCost = p; maxItemName = entry.item; }
+      if (p > maxItemCost) { maxItemCost = p; absoluteMostExpensiveItem = entry.item; }
       c[entry.item] = (c[entry.item] || 0) + 1;
     }
   }
@@ -1097,16 +1109,28 @@ function renderStats(data) {
       <div class="stat-num">${fedValDisplay}</div>
       <div class="stat-expanded">
         <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Avg Cost/Kad:</span> <strong>${hasAnyPrice ? avgCost.toLocaleString() + ' NP' : '—'}</strong></div>
-        <div style="display:flex; justify-content:space-between;"><span>Max Cost:</span> <strong style="text-align:right;">${maxItemName}<br>${maxItemCost.toLocaleString()} NP</strong></div>
+        <div style="display:flex; justify-content:space-between;"><span>Unique Items:</span> <strong>${uniqueItems}</strong></div>
       </div>
     </div>
     
-    <div class="stat-card c-purple expandable-card" onclick="this.classList.toggle('expanded')">
+    <div class="stat-card c-red expandable-card" onclick="this.classList.toggle('expanded')">
       <div class="stat-label">Active Days</div>
-      <div class="stat-num">${days}</div>
+      <div class="stat-num" style="color:var(--text);">${days}</div>
       <div class="stat-expanded">
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Unique Items Fed:</span> <strong>${uniqueItems}</strong></div>
         <div style="display:flex; justify-content:space-between;"><span>Avg Feeds/Day:</span> <strong>${avgPerDay}</strong></div>
+      </div>
+    </div>
+
+    <div class="stat-card c-purple wide expandable-card item-clickable" data-name="${absoluteMostExpensiveItem.replace(/"/g, '&quot;')}" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+        <div>
+          <div class="stat-label">Crown Jewel (Most Expensive)</div>
+          <div class="stat-num" style="font-size:2.2rem;">${absoluteMostExpensiveItem || 'None'}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="stat-label" style="justify-content:flex-end;">Value</div>
+          <div class="stat-num" style="color:var(--text);">${maxItemCost > 0 ? maxItemCost.toLocaleString() + ' NP' : '—'}</div>
+        </div>
       </div>
     </div>
   `;
@@ -1116,7 +1140,6 @@ function renderStreak() {
   const daySet = new Set(feedLog.filter(e => e.status === 'success').map(e => getNSTDateStr(e.timestamp)));
   let streak = 0;
   
-  // Calculate Neopian Standard Time (Pacific Time) today
   let checkDate = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
   
   const fmt = (dt) => {
@@ -1258,15 +1281,37 @@ function renderItemTable(ds) {
     c[entry.item][entry.status==='success'?'s':'n']++;
   }
 
-  const r = Object.entries(c).map(([name, {s, n}]) => {
+  // Build the array
+  const rawArray = Object.entries(c).map(([name, {s, n}]) => {
     const { price, inflated, image } = getCached(name);
     const spent = (price != null) ? price * s : null;
     return { name, price, inflated, image, spent, t: s+n, s, n, rate: Math.round(s/(s+n)*100) };
-  }).sort((a, b) => b.s - a.s);
+  });
 
-  document.getElementById('item-count').textContent = r.length + ' Items';
+  // 1. FILTER
+  let displayArray = rawArray;
+  if (dbSearchTerm) {
+      displayArray = rawArray.filter(x => x.name.toLowerCase().includes(dbSearchTerm));
+  }
 
-  document.querySelector('#item-table tbody').innerHTML = r.map(x => {
+  // 2. SORT
+  displayArray.sort((a, b) => {
+      let valA = a[dbSortKey];
+      let valB = b[dbSortKey];
+      
+      if (valA == null) valA = -1;
+      if (valB == null) valB = -1;
+
+      if (typeof valA === 'string') {
+          return dbSortDir * valA.localeCompare(valB);
+      } else {
+          return dbSortDir * (valA - valB);
+      }
+  });
+
+  document.getElementById('item-count').textContent = displayArray.length + ' Items';
+
+  document.querySelector('#item-table tbody').innerHTML = displayArray.map(x => {
     const priceHtml = x.price != null
       ? `<span class="price-cell${x.inflated ? ' inflated' : ''}">${x.price.toLocaleString()}</span>`
       : `<span class="price-cell no-data">—</span>`;
@@ -1278,10 +1323,12 @@ function renderItemTable(ds) {
       : `<div class="item-img-placeholder"></div>`;
 
     const safeName = x.name.replace(/"/g, '&quot;');
+    const isCrownJewel = (x.name === absoluteMostExpensiveItem) && x.s > 0;
+    const crownHtml = isCrownJewel ? '<span style="margin-left:8px;" title="Most Expensive Feed!">👑</span>' : '';
 
     return `
       <tr>
-        <td class="td-name item-clickable" data-name="${safeName}">${imgHtml}<span class="item-underline">${x.name}</span></td>
+        <td class="td-name item-clickable" data-name="${safeName}">${imgHtml}<span class="item-underline">${x.name}</span>${crownHtml}</td>
         <td class="td-right">${priceHtml}</td>
         <td class="td-right">${x.t}</td>
         <td class="td-right"><span class="badge badge-green">${x.s}</span></td>
