@@ -307,10 +307,8 @@ body {
   position: relative;
 }
 
-/* Force wide cards to always span full width */
 .stat-card.wide { grid-column: 1 / -1; }
 
-/* Crown Jewel content layout */
 .crown-jewel-content {
   display: flex; 
   justify-content: space-between; 
@@ -615,6 +613,15 @@ input[type=file] { display: none; }
         <button class="btn" onclick="clearData(); closeSettings();" style="justify-content:center; color:var(--red); border-color:var(--red-muted);">Wipe Dashboard Data</button>
       </div>
     </div>
+    
+    <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
+    <div>
+      <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">RESOURCES</div>
+      <a href="https://greasyfork.org/en/scripts/581360-statdoatie-analytics-sync" target="_blank" class="btn" style="width: 100%; justify-content: center; background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; border: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
+        <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:currentColor; margin-right:8px;"><path d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"/></svg>
+        Get Tracker Extension
+      </a>
+    </div>
   </div>
 </div>
 
@@ -626,7 +633,7 @@ input[type=file] { display: none; }
       </svg>
     </div>
     <h2>It's quiet in here...</h2>
-    <p>Connect your Tampermonkey extension, drop in a JSON save file, or load up some dummy data to see the dashboard in action.</p>
+    <p>Connect your <a href="https://greasyfork.org/en/scripts/581360-statdoatie-analytics-sync" target="_blank" style="color:var(--blue); text-decoration:none; font-weight:700;">Tampermonkey extension</a>, drop in a JSON save file, or load up some dummy data to see the dashboard in action.</p>
     <div class="import-btns">
       <button class="btn btn-primary" id="empty-import-btn">Import Extension Data</button>
       <input type="file" id="file-input" accept=".json" onchange="handleFileLoad(event)">
@@ -912,8 +919,12 @@ function copyModalItemName() {
 // ─── DATA SYNC ───
 let extensionResponded = false;
 
-document.addEventListener('KadData_ExtToPage', e => {
+document.addEventListener('KadData_ExtAck', () => {
   extensionResponded = true;
+  toast('Extension connected! Checking for new items...');
+});
+
+document.addEventListener('KadData_ExtToPage', e => {
   let payload;
   try { payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   
@@ -923,8 +934,19 @@ document.addEventListener('KadData_ExtToPage', e => {
   if (records && records.length > 0) {
     Object.assign(itemdbCache, prices);
     try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
+    
+    // Only fetch prices for totally missing items (skip ones we previously checked and got null for)
+    const newNames = [...new Set(records.map(r => r.item))];
+    const totallyNewItems = newNames.filter(item => !(item in itemdbCache));
+    
     mergeData(records);
     toast(`✨ Imported ${records.length} records`);
+
+    if (totallyNewItems.length > 0) {
+      const estimatedSeconds = Math.ceil(totallyNewItems.length / 25) * 2;
+      toast(`Fetching prices for ${totallyNewItems.length} new items... (~${estimatedSeconds}s)`);
+      document.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: JSON.stringify(totallyNewItems) }));
+    }
   } else {
     toast('No data found in extension');
   }
@@ -934,7 +956,9 @@ function triggerExtensionSync() {
   extensionResponded = false;
   toast('Requesting data from extension...');
   document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
-  setTimeout(() => { if (!extensionResponded) toast('No active extension detected'); }, 2000);
+  setTimeout(() => { 
+    if (!extensionResponded) toast('No active extension detected. Make sure it is installed and enabled!'); 
+  }, 1500);
   try { closeSettings(); } catch(e) {}
 }
 
@@ -960,11 +984,12 @@ document.addEventListener('KadData_ReceivePrices', e => {
   try { newPrices = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   const count = Object.keys(newPrices).filter(k => newPrices[k].price != null).length;
 
+  Object.assign(itemdbCache, newPrices);
+  try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
+  renderWidgets();
+  
   if (count > 0) {
-    Object.assign(itemdbCache, newPrices);
-    try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
-    renderWidgets();
-    toast(`✨ Successfully synced ${count} missing prices`);
+    toast(`✨ Successfully synced ${count} new prices`);
   } else {
     toast('No new prices found on itemdb.');
   }
