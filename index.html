@@ -53,7 +53,7 @@
   --badge-red-bg: rgba(255,255,255,0.05);
   --badge-red-text: var(--text3);
   --c-red-bg: rgba(255,255,255,0.02);
-
+  
   --chart-empty: rgba(255, 255, 255, 0.05);
   --chart-line: rgba(255, 255, 255, 0.15);
 }
@@ -310,25 +310,15 @@ body {
   .stat-card.wide { grid-column: 1 / -1; }
 }
 
-/* ── CROWN JEWEL LAYOUT FIX FOR MOBILE ── */
+/* ── CROWN JEWEL LAYOUT ── */
 .crown-jewel-content {
   display: flex; 
   justify-content: space-between; 
   align-items: center; 
   width: 100%;
 }
-@media (max-width: 600px) {
-  .crown-jewel-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-  .crown-jewel-content > div:last-child {
-    text-align: left !important;
-  }
-  .crown-jewel-content .stat-label {
-    justify-content: flex-start !important;
-  }
+.crown-jewel-name { 
+  font-size: 2.2rem; 
 }
 
 .expandable-card { cursor: pointer; }
@@ -477,6 +467,32 @@ input[type=file] { display: none; }
   .log-price, .log-ts, .log-dot { display: none; }
   .card-header-actions { flex-direction: column; align-items: flex-start !important; gap: 12px; }
   .search-input { max-width: 100%; }
+}
+@media (max-width: 600px) {
+  .crown-jewel-content {
+    align-items: center;
+  }
+  .crown-jewel-name { 
+    font-size: 1.3rem !important; 
+    white-space: normal; 
+    word-wrap: break-word; 
+    line-height: 1.1; 
+  }
+  .crown-jewel-content .stat-num { 
+    font-size: 1.4rem !important; 
+  }
+  .crown-jewel-content .stat-label { 
+    font-size: 0.6rem !important; 
+    white-space: normal;
+  }
+  .crown-jewel-content > div:first-child { 
+    flex: 1; 
+    min-width: 0; 
+    padding-right: 12px; 
+  }
+  .crown-jewel-content > div:last-child {
+    flex-shrink: 0;
+  }
 }
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
@@ -1138,11 +1154,11 @@ function renderStats(data) {
 
     <div class="stat-card c-purple wide expandable-card item-clickable" data-name="${absoluteMostExpensiveItem.replace(/"/g, '&quot;')}" onclick="this.classList.toggle('expanded')">
       <div class="crown-jewel-content">
-        <div>
+        <div style="flex: 1; min-width: 0; padding-right: 10px;">
           <div class="stat-label">Crown Jewel (Most Expensive)</div>
-          <div class="stat-num" style="font-size:2.2rem;">${absoluteMostExpensiveItem || 'None'}</div>
+          <div class="stat-num crown-jewel-name">${absoluteMostExpensiveItem || 'None'}</div>
         </div>
-        <div style="text-align:right;">
+        <div style="text-align:right; flex-shrink: 0;">
           <div class="stat-label" style="justify-content:flex-end;">Value</div>
           <div class="stat-num" style="color:var(--text);">${maxItemCost > 0 ? maxItemCost.toLocaleString() + ' NP' : '—'}</div>
         </div>
@@ -1381,6 +1397,7 @@ function renderLog(data) {
       
     const safeName = e.item.replace(/"/g, '&quot;');
 
+    // Parse date explicitly to PT
     const ptDateStr = new Date(e.timestamp).toLocaleString('en-US', {
       timeZone: 'America/Los_Angeles', 
       month: 'short', 
