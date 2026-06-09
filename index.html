@@ -428,6 +428,7 @@ input[type=file] { display: none; }
 <header class="header">
   <div class="logo">
     <div class="logo-icon">
+      <!-- NEW STYLIZED 'S' LOGO -->
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M14.5 4c-3.5 0-5.5 1.5-5.5 4 0 3.5 8 3.5 8 7 0 2.5-2.5 4-6 4-2.5 0-4.5-1-5.5-2.5l2.5-2c.5 1 2 2 3 2 1.5 0 2.5-.5 2.5-1.5 0-2.5-8-2.5-8-7 0-4 3.5-6.5 8.5-6.5 3 0 5 1.5 6.5 3l-2.5 2C17 5 16 4 14.5 4z" />
       </svg>
@@ -461,6 +462,7 @@ input[type=file] { display: none; }
   <button class="btn" onclick="resetFilters()">Reset View</button>
 </div>
 
+<!-- ITEM CONTEXT MODAL -->
 <div id="item-modal" class="modal-overlay hidden">
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 16px;">
@@ -501,6 +503,7 @@ input[type=file] { display: none; }
   </div>
 </div>
 
+<!-- SETTINGS MODAL -->
 <div id="settings-modal" class="modal-overlay hidden">
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 24px;">
@@ -563,6 +566,7 @@ input[type=file] { display: none; }
       <button class="tab" onclick="switchTab('log',this)">Feed Log</button>
     </div>
 
+    <!-- OVERVIEW -->
     <div id="panel-overview" class="panel active">
       <div class="grid-2">
         <div class="card">
@@ -585,6 +589,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- ITEMS -->
     <div id="panel-items" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Most Requested Items</span></div>
@@ -614,6 +619,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- TIMELINE -->
     <div id="panel-timeline" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Daily Feeds</span></div>
@@ -625,6 +631,7 @@ input[type=file] { display: none; }
       </div>
     </div>
 
+    <!-- LOG -->
     <div id="panel-log" class="panel">
       <div class="card">
         <div class="card-header" style="margin-bottom:16px;">
@@ -760,7 +767,6 @@ document.addEventListener('click', e => {
 function openItemModal(itemName) {
   currentOpenItem = itemName;
   
-  // Calculate specific item stats
   const allData = getFilteredData().filter(e => e.item === itemName);
   const fed = allData.filter(e => e.status === 'success').length;
   const missed = allData.filter(e => e.status === 'sniped').length;
@@ -779,7 +785,10 @@ function openItemModal(itemName) {
   document.getElementById('item-modal-fed').textContent = fed + ' Fed';
   document.getElementById('item-modal-missed').textContent = missed + ' Missed';
   
-  document.getElementById('link-itemdb').href = `https://itemdb.com.br/search?query=${encodeURIComponent(itemName)}`;
+  // Format the item name into a URL-friendly slug for ItemDB
+  const itemdbSlug = itemName.toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  document.getElementById('link-itemdb').href = `https://itemdb.com.br/item/${itemdbSlug}`;
+  
   document.getElementById('link-sdb').href = `https://www.neopets.com/safetydeposit.phtml?obj_name=${encodeURIComponent(itemName)}&exact_match=1`;
   
   document.getElementById('manual-price-input').value = cache.price || '';
@@ -857,7 +866,6 @@ function fetchMissingPrices() {
   }
 
   toast(`Requesting prices for ${missingItems.length} items from extension...`);
-  // Ensure we safely stringify before sending to the extension sandbox
   document.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: JSON.stringify(missingItems) }));
 }
 
