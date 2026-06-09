@@ -45,7 +45,7 @@
   --header-text: var(--text);
   --blob-opacity: 0.3;
 
-  /* Table & Log variables */
+  /* Table, Log & Chart variables */
   --table-row: rgba(0,0,0,0.2);
   --table-row-hover: rgba(255,255,255,0.05);
   --log-bg: rgba(0,0,0,0.2);
@@ -53,6 +53,9 @@
   --badge-red-bg: rgba(255,255,255,0.05);
   --badge-red-text: var(--text3);
   --c-red-bg: rgba(255,255,255,0.02);
+  
+  --chart-empty: rgba(255,255,255,0.05);
+  --chart-line: rgba(255,255,255,0.1);
 }
 
 /* ── DISTINCT DARK THEMES ── */
@@ -127,6 +130,8 @@ body.theme-faerieland {
   --theme-card-bg: rgba(255, 255, 255, 0.8);
   --theme-card-border: 3px solid #fdf4ff;
   --theme-shadow: 0 15px 35px rgba(217, 70, 239, 0.15);
+  --chart-empty: rgba(0,0,0,0.05);
+  --chart-line: rgba(0,0,0,0.1);
 }
 
 body.theme-classic {
@@ -155,6 +160,8 @@ body.theme-classic {
   --badge-red-bg: #ffeeee;
   --badge-red-text: #cc0000;
   --c-red-bg: #ffeeee;
+  --chart-empty: rgba(0,0,0,0.1);
+  --chart-line: rgba(0,0,0,0.15);
 }
 
 body.theme-faerieland .stat-num, 
@@ -313,7 +320,6 @@ body {
 }
 .stat-num { font-family: var(--theme-font-display); font-size: 2.8rem; font-weight: 800; line-height: 1; color: var(--text); margin-bottom: 6px; }
 
-/* Expanded Content Area */
 .stat-expanded {
   max-height: 0;
   opacity: 0;
@@ -338,7 +344,6 @@ body {
   font-size: 0.6rem;
 }
 
-/* Card Accent Colors */
 .c-green { background: var(--green-glow); border-color: var(--green); }
 .c-green .stat-num { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
 .c-amber { background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.2); }
@@ -501,7 +506,6 @@ input[type=file] { display: none; }
   <button class="btn" onclick="resetFilters()">Reset View</button>
 </div>
 
-<!-- ITEM CONTEXT MODAL -->
 <div id="item-modal" class="modal-overlay hidden">
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 16px;">
@@ -542,7 +546,6 @@ input[type=file] { display: none; }
   </div>
 </div>
 
-<!-- SETTINGS MODAL -->
 <div id="settings-modal" class="modal-overlay hidden">
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 24px;">
@@ -557,7 +560,7 @@ input[type=file] { display: none; }
         <button class="btn theme-btn" data-theme="virtupets" onclick="setTheme('virtupets')">Virtupets</button>
         <button class="btn theme-btn" data-theme="maraqua" onclick="setTheme('maraqua')">Maraqua</button>
         <button class="btn theme-btn" data-theme="shenkuu" onclick="setTheme('shenkuu')">Shenkuu</button>
-        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland</button>
+        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland (Light)</button>
         <button class="btn theme-btn" data-theme="classic" onclick="setTheme('classic')">Neopets Classic</button>
       </div>
     </div>
@@ -595,7 +598,6 @@ input[type=file] { display: none; }
   </div>
 
   <div id="dashboard" class="hidden">
-    <!-- NEW EXPANDABLE STATS GRID -->
     <div class="stats-grid" id="stats-grid"></div>
 
     <div class="tabs">
@@ -605,7 +607,6 @@ input[type=file] { display: none; }
       <button class="tab" onclick="switchTab('log',this)">Feed Log</button>
     </div>
 
-    <!-- OVERVIEW -->
     <div id="panel-overview" class="panel active">
       <div class="grid-2">
         <div class="card">
@@ -624,7 +625,6 @@ input[type=file] { display: none; }
       </div>
     </div>
 
-    <!-- ITEMS -->
     <div id="panel-items" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Most Requested Items</span></div>
@@ -654,7 +654,6 @@ input[type=file] { display: none; }
       </div>
     </div>
 
-    <!-- TIMELINE -->
     <div id="panel-timeline" class="panel">
       <div class="card">
         <div class="card-header"><span class="card-title">Daily Feeds</span></div>
@@ -666,7 +665,6 @@ input[type=file] { display: none; }
       </div>
     </div>
 
-    <!-- LOG -->
     <div id="panel-log" class="panel">
       <div class="card">
         <div class="card-header" style="margin-bottom:16px;">
@@ -692,16 +690,6 @@ let currentOpenItem = null;
 
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-const THEMES = {
-  default:    { empty: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.2)' },
-  kadoatery:  { empty: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.2)' },
-  virtupets:  { empty: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.2)' },
-  maraqua:    { empty: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.2)' },
-  shenkuu:    { empty: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.2)' },
-  faerieland: { empty: 'rgba(0,0,0,0.05)', line: 'rgba(0,0,0,0.15)' },
-  classic:    { empty: 'rgba(0,0,0,0.1)', line: 'rgba(0,0,0,0.2)' }
-};
-
 let currentThemeKey = localStorage.getItem('statdoatie_theme') || 'default';
 
 // ─── INIT ───
@@ -715,7 +703,6 @@ document.addEventListener('DOMContentLoaded', () => {
         feedLog = parsed;
         populateMonths();
         showDashboard();
-        renderWidgets();
       }
     } catch (e) { console.error("Failed to parse local storage", e); }
   }
@@ -724,23 +711,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const sc = localStorage.getItem('statdoatie_prices');
     if (sc) itemdbCache = JSON.parse(sc);
   } catch(e) {}
+  
+  // Render after initial DOM is ready
+  setTimeout(() => { if (feedLog.length > 0) renderWidgets(); }, 50);
 });
 
 // ─── THEME ───
 function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
 function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
 
-function getCssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function getCssVar(name) { 
+  return getComputedStyle(document.body).getPropertyValue(name).trim(); 
+}
 
 function applyThemeDOM(key) {
   document.body.className = key === 'default' ? '' : `theme-${key}`;
   document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
   const activeBtn = document.querySelector(`.theme-btn[data-theme="${key}"]`);
   if (activeBtn) activeBtn.classList.add('active');
+}
 
-  const isLight = key === 'faerieland' || key === 'classic';
-  
+function setTheme(key) {
+  currentThemeKey = key;
+  localStorage.setItem('statdoatie_theme', key);
+  applyThemeDOM(key);
+
+  // Allow DOM to repaint CSS variables before updating charts
   setTimeout(() => {
+      const isLight = key === 'faerieland' || key === 'classic';
+      
       Chart.defaults.font.family = getCssVar('--theme-font-body') || "'DM Sans', sans-serif";
       Chart.defaults.plugins.tooltip.titleFont.family = getCssVar('--theme-font-display') || "'Outfit', sans-serif";
       Chart.defaults.plugins.tooltip.bodyFont.family = getCssVar('--theme-font-body') || "'DM Sans', sans-serif";
@@ -750,18 +749,8 @@ function applyThemeDOM(key) {
       Chart.defaults.plugins.tooltip.titleColor = isLight ? '#0f172a' : '#ffffff';
       Chart.defaults.plugins.tooltip.bodyColor = isLight ? '#334155' : '#ffffff';
       
-      if (Object.keys(charts).length > 0) {
-        Object.values(charts).forEach(c => c.update());
-      }
-  }, 10);
-}
-
-function setTheme(key) {
-  if (!THEMES[key]) return;
-  currentThemeKey = key;
-  localStorage.setItem('statdoatie_theme', key);
-  applyThemeDOM(key);
-  if (feedLog.length > 0) renderWidgets();
+      if (feedLog.length > 0) renderWidgets();
+  }, 50);
 }
 
 // ─── CHART DEFAULTS ───
@@ -1017,11 +1006,11 @@ function switchTab(name, btn) {
 
 // ─── CHARTS ───
 function destroyCharts() { Object.values(charts).forEach(c => { try { c.destroy(); } catch {} }); charts = {}; }
-function gridLines() { return { color: currentThemeKey === 'faerieland' || currentThemeKey === 'classic' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,.05)', drawBorder: false, borderDash: [5, 5] }; }
+function gridLines() { return { color: getCssVar('--chart-line'), drawBorder: false, borderDash: [5, 5] }; }
 function buildRichTooltip(l, v, t) { const pct = t > 0 ? Math.round((v/t)*100) : 0; return `${l}: ${v.toLocaleString()} (${pct}%)`; }
 
 // ─── RENDER PIPELINE ───
-async function renderWidgets() {
+function renderWidgets() {
   const data = getFilteredData();
   document.getElementById('status-text').textContent = `${data.length.toLocaleString()} Tracked`;
 
@@ -1122,7 +1111,9 @@ function renderPie(data) {
   if (!data.length) return;
   const s = data.filter(e => e.status === 'success').length;
   const n = data.filter(e => e.status === 'sniped').length;
+  const pct = data.length > 0 ? Math.round((s / data.length) * 100) : 0;
 
+  document.getElementById('doughnut-pct').textContent = pct + '%';
   document.getElementById('pie-meta').textContent = data.length.toLocaleString() + ' Total';
 
   charts.pie = new Chart(document.getElementById('pieChart'), {
@@ -1131,9 +1122,9 @@ function renderPie(data) {
       labels: ['Fed', 'Sniped'], 
       datasets: [{ 
         data: [s, n], 
-        backgroundColor: [getCssVar('--green'), getCssVar('--red')], 
+        backgroundColor: [getCssVar('--green'), getCssVar('--chart-empty')], 
         borderWidth: 2,
-        borderColor: getCssVar('--bg')
+        borderColor: getCssVar('--theme-card-bg')
       }] 
     },
     options: {
@@ -1145,8 +1136,7 @@ function renderPie(data) {
       plugins: { 
         legend: { 
           display: true,
-          position: 'right',
-          labels: { color: getCssVar('--text'), font: { family: getCssVar('--theme-font-body') } }
+          position: 'right'
         }, 
         tooltip: { 
           callbacks: { label: ctx => buildRichTooltip(ctx.label, ctx.raw, s+n) } 
@@ -1166,8 +1156,8 @@ function renderDow(data) {
     data: {
       labels: DAYS,
       datasets: [
-        { label: 'Fed', data: sC, backgroundColor: getCssVar('--blue'), stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: nC, backgroundColor: THEMES[currentThemeKey].empty, stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed', data: sC, backgroundColor: getCssVar('--green'), stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: nC, backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -1194,8 +1184,8 @@ function renderItemsChart(data) {
     data: {
       labels: arr.map(([k]) => k),
       datasets: [
-        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: getCssVar('--purple'), stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: THEMES[currentThemeKey].empty, stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: getCssVar('--teal'), stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -1217,7 +1207,7 @@ function renderItemsChart(data) {
       },
       scales: { 
         x: { stacked: true, grid: gridLines(), border: { display: false } }, 
-        y: { stacked: true, grid: { display: false }, ticks: { color: getCssVar('--text') }, border: { display: false } } 
+        y: { stacked: true, grid: { display: false }, border: { display: false } } 
       }
     }
   });
@@ -1276,8 +1266,8 @@ function renderDaily(data) {
     data: {
       labels: lbls,
       datasets: [
-        { label: 'Fed',    data: lbls.map(d => dObj[d].s), backgroundColor: getCssVar('--teal'),  stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: THEMES[currentThemeKey].empty, stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed',    data: lbls.map(d => dObj[d].s), backgroundColor: getCssVar('--blue'),  stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -1295,6 +1285,7 @@ function renderCumul(data) {
 
   const ctx = document.getElementById('cumulChart').getContext('2d');
   const hex2rgba = (hex, alpha = 1) => {
+    if (!hex.startsWith('#')) return hex;
     const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
     return `rgba(${r},${g},${b},${alpha})`;
   };
@@ -1315,12 +1306,12 @@ function renderCumul(data) {
       labels: arr.map(e => e.timestamp.slice(0,10)),
       datasets: [
         { label:'Total Fed',    data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor: getCssVar('--amber'), backgroundColor: gAmber, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
-        { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }),  borderColor: THEMES[currentThemeKey].line, fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
+        { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }),  borderColor: getCssVar('--chart-line'), fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { display: true, labels: { color: getCssVar('--text'), font: { family: "'Outfit', sans-serif", size: 14 } } } },
+      plugins: { legend: { display: true } },
       scales: { x: { grid: { display: false }, border: { display: false } }, y: { grid: gridLines(), border: { display: false } } }
     }
   });
