@@ -53,8 +53,7 @@
   --badge-red-bg: rgba(255,255,255,0.05);
   --badge-red-text: var(--text3);
   --c-red-bg: rgba(255,255,255,0.02);
-
-  /* FIXED: Added these to the root so dark themes don't crash the charts */
+  
   --chart-empty: rgba(255, 255, 255, 0.05);
   --chart-line: rgba(255, 255, 255, 0.15);
 }
@@ -561,7 +560,7 @@ input[type=file] { display: none; }
         <button class="btn theme-btn" data-theme="virtupets" onclick="setTheme('virtupets')">Virtupets</button>
         <button class="btn theme-btn" data-theme="maraqua" onclick="setTheme('maraqua')">Maraqua</button>
         <button class="btn theme-btn" data-theme="shenkuu" onclick="setTheme('shenkuu')">Shenkuu</button>
-        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland</button>
+        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland (Light)</button>
         <button class="btn theme-btn" data-theme="classic" onclick="setTheme('classic')">Neopets Classic</button>
       </div>
     </div>
@@ -697,13 +696,11 @@ let currentThemeKey = localStorage.getItem('statdoatie_theme') || 'default';
 document.addEventListener('DOMContentLoaded', () => {
   applyThemeDOM(currentThemeKey);
   
-  // Load prices first
   try {
     const sc = localStorage.getItem('statdoatie_prices');
     if (sc) itemdbCache = JSON.parse(sc);
   } catch(e) {}
 
-  // Then load data and render
   const saved = localStorage.getItem('statdoatie_save');
   if (saved) {
     try {
@@ -718,6 +715,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// ─── TIMEZONE HELPER (Neopian Standard Time / Pacific Time) ───
+function getNSTDateStr(isoString) {
+  const ptDate = new Date(new Date(isoString).toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+  const y = ptDate.getFullYear();
+  const m = String(ptDate.getMonth() + 1).padStart(2, '0');
+  const d = String(ptDate.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function getNSTDateObj(isoString) {
+  return new Date(new Date(isoString).toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+}
+
 // ─── THEME ───
 function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
 function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
@@ -731,12 +741,6 @@ function applyThemeDOM(key) {
   document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
   const activeBtn = document.querySelector(`.theme-btn[data-theme="${key}"]`);
   if (activeBtn) activeBtn.classList.add('active');
-}
-
-function setTheme(key) {
-  currentThemeKey = key;
-  localStorage.setItem('statdoatie_theme', key);
-  applyThemeDOM(key);
 
   setTimeout(() => {
       const isLight = key === 'faerieland' || key === 'classic';
@@ -750,8 +754,17 @@ function setTheme(key) {
       Chart.defaults.plugins.tooltip.titleColor = isLight ? '#0f172a' : '#ffffff';
       Chart.defaults.plugins.tooltip.bodyColor = isLight ? '#334155' : '#ffffff';
       
-      if (feedLog.length > 0) renderWidgets();
+      if (Object.keys(charts).length > 0) {
+        Object.values(charts).forEach(c => c.update());
+      }
   }, 50);
+}
+
+function setTheme(key) {
+  currentThemeKey = key;
+  localStorage.setItem('statdoatie_theme', key);
+  applyThemeDOM(key);
+  setTimeout(() => { if (feedLog.length > 0) renderWidgets(); }, 60);
 }
 
 // ─── CHART DEFAULTS ───
@@ -953,7 +966,7 @@ function clearData() {
 
 // ─── FILTER ───
 function populateMonths() {
-  const monthSet = new Set(feedLog.map(e => e.timestamp.slice(0, 7)));
+  const monthSet = new Set(feedLog.map(e => getNSTDateStr(e.timestamp).slice(0, 7)));
   availableMonths = Array.from(monthSet).sort((a, b) => b.localeCompare(a));
   const select = document.getElementById('month-select');
   select.innerHTML = `<option value="all">ALL TIME</option>` +
@@ -973,7 +986,7 @@ function updateFilterStatus() {
   const lbl = document.getElementById('filter-status');
   lbl.innerHTML = currentMonth === 'all' ? 'Filter: Off' : `Filter: <span style="color:var(--text)">${currentMonth}</span>`;
 }
-function getFilteredData() { return currentMonth === 'all' ? feedLog : feedLog.filter(e => e.timestamp.startsWith(currentMonth)); }
+function getFilteredData() { return currentMonth === 'all' ? feedLog : feedLog.filter(e => getNSTDateStr(e.timestamp).startsWith(currentMonth)); }
 
 function mergeData(entries) {
   const ex = new Set(feedLog.map(e => e.timestamp + '|' + e.item));
@@ -1032,7 +1045,7 @@ function renderStats(data) {
   const s = data.filter(e => e.status === 'success').length;
   const n = data.filter(e => e.status === 'sniped').length;
   const rate = t > 0 ? Math.round(s / t * 100) : 0;
-  const days = new Set(data.map(e => e.timestamp.slice(0,10))).size;
+  const days = new Set(data.map(e => getNSTDateStr(e.timestamp))).size;
   const uniqueItems = new Set(data.filter(e=>e.status==='success').map(e=>e.item)).size;
   const avgPerDay = days > 0 ? (s / days).toFixed(1) : 0;
 
@@ -1100,9 +1113,35 @@ function renderStats(data) {
 }
 
 function renderStreak() {
-  const daySet = new Set(feedLog.filter(e => e.status === 'success').map(e => e.timestamp.slice(0,10)));
-  let streak = 0, d = new Date();
-  while (daySet.has(d.toISOString().slice(0,10))) { streak++; d.setDate(d.getDate()-1); }
+  const daySet = new Set(feedLog.filter(e => e.status === 'success').map(e => getNSTDateStr(e.timestamp)));
+  let streak = 0;
+  
+  // Calculate Neopian Standard Time (Pacific Time) today
+  let checkDate = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+  
+  const fmt = (dt) => {
+     return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+  };
+
+  if (daySet.has(fmt(checkDate))) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+      while (daySet.has(fmt(checkDate))) {
+          streak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+      }
+  } else {
+      checkDate.setDate(checkDate.getDate() - 1);
+      if (daySet.has(fmt(checkDate))) {
+          streak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+          while (daySet.has(fmt(checkDate))) {
+              streak++;
+              checkDate.setDate(checkDate.getDate() - 1);
+          }
+      }
+  }
+
   const b = document.getElementById('streak-badge');
   document.getElementById('streak-val').textContent = streak;
   b.classList.toggle('hidden', streak === 0 || currentMonth !== 'all');
@@ -1121,9 +1160,9 @@ function renderPie(data) {
       labels: ['Fed', 'Sniped'], 
       datasets: [{ 
         data: [s, n], 
-        backgroundColor: ['var(--green)', 'var(--chart-empty)'], 
+        backgroundColor: [getCssVar('--green'), getCssVar('--chart-empty')], 
         borderWidth: 2,
-        borderColor: 'var(--theme-card-bg)'
+        borderColor: getCssVar('--theme-card-bg')
       }] 
     },
     options: {
@@ -1148,15 +1187,15 @@ function renderPie(data) {
 function renderDow(data) {
   if (!data.length) return;
   const sC = Array(7).fill(0), nC = Array(7).fill(0);
-  data.forEach(e => { if (e.status === 'success') sC[new Date(e.timestamp).getDay()]++; else nC[new Date(e.timestamp).getDay()]++; });
+  data.forEach(e => { if (e.status === 'success') sC[getNSTDateObj(e.timestamp).getDay()]++; else nC[getNSTDateObj(e.timestamp).getDay()]++; });
 
   charts.dow = new Chart(document.getElementById('dowChart'), {
     type: 'bar',
     data: {
       labels: DAYS,
       datasets: [
-        { label: 'Fed', data: sC, backgroundColor: 'var(--blue)', stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: nC, backgroundColor: 'var(--chart-empty)', stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed', data: sC, backgroundColor: getCssVar('--blue'), stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: nC, backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -1183,8 +1222,8 @@ function renderItemsChart(data) {
     data: {
       labels: arr.map(([k]) => k),
       datasets: [
-        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: 'var(--teal)', stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: 'var(--chart-empty)', stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed',    data: arr.map(([,v]) => v.s), backgroundColor: getCssVar('--teal'), stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: arr.map(([,v]) => v.n), backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -1257,7 +1296,7 @@ function renderItemTable(ds) {
 function renderDaily(data) {
   if (!data.length) return;
   const dObj = {};
-  data.forEach(e => { const d = e.timestamp.slice(0,10); if (!dObj[d]) dObj[d]={s:0,n:0}; dObj[d][e.status==='success'?'s':'n']++; });
+  data.forEach(e => { const d = getNSTDateStr(e.timestamp); if (!dObj[d]) dObj[d]={s:0,n:0}; dObj[d][e.status==='success'?'s':'n']++; });
   const lbls = Object.keys(dObj).sort();
 
   charts.daily = new Chart(document.getElementById('dailyChart'), {
@@ -1265,8 +1304,8 @@ function renderDaily(data) {
     data: {
       labels: lbls,
       datasets: [
-        { label: 'Fed',    data: lbls.map(d => dObj[d].s), backgroundColor: 'var(--teal)',  stack: 'a', borderRadius: 10, borderSkipped: false },
-        { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: 'var(--chart-empty)', stack: 'a', borderRadius: 10, borderSkipped: false }
+        { label: 'Fed',    data: lbls.map(d => dObj[d].s), backgroundColor: getCssVar('--teal'),  stack: 'a', borderRadius: 10, borderSkipped: false },
+        { label: 'Sniped', data: lbls.map(d => dObj[d].n), backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10, borderSkipped: false }
       ]
     },
     options: {
@@ -1302,10 +1341,10 @@ function renderCumul(data) {
   charts.cumul = new Chart(document.getElementById('cumulChart'), {
     type: 'line',
     data: {
-      labels: arr.map(e => e.timestamp.slice(0,10)),
+      labels: arr.map(e => getNSTDateStr(e.timestamp)),
       datasets: [
-        { label:'Total Fed',    data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor: 'var(--amber)', backgroundColor: gAmber, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
-        { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }),  borderColor: 'var(--chart-line)', fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
+        { label:'Total Fed',    data: arr.map(e => { if(e.status==='success') s++; return s; }), borderColor: getCssVar('--amber'), backgroundColor: gAmber, fill:true, tension:0.4, pointRadius:0, borderWidth:3 },
+        { label:'Total Snipes', data: arr.map(e => { if(e.status==='sniped') n++; return n; }),  borderColor: getCssVar('--chart-line'), fill:false, tension:0.4, pointRadius:0, borderWidth:1, borderDash: [5,5] }
       ]
     },
     options: {
@@ -1328,9 +1367,18 @@ function renderLog(data) {
       
     const safeName = e.item.replace(/"/g, '&quot;');
 
+    // Parse date explicitly to PT
+    const ptDateStr = new Date(e.timestamp).toLocaleString('en-US', {
+      timeZone: 'America/Los_Angeles', 
+      month: 'short', 
+      day: 'numeric', 
+      hour: 'numeric', 
+      minute: '2-digit'
+    });
+
     return `
       <div class="log-entry" style="opacity: ${e.status === 'success' ? '1' : '0.6'}">
-        <div><div class="log-name item-clickable item-underline" data-name="${safeName}">${e.item}</div><div class="log-ts">${new Date(e.timestamp).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</div></div>
+        <div><div class="log-name item-clickable item-underline" data-name="${safeName}">${e.item}</div><div class="log-ts">${ptDateStr}</div></div>
         ${priceHtml}
         <span class="log-dot ${e.status}"></span>
         <span></span>
