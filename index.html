@@ -196,7 +196,7 @@ body {
   100% { transform: translate(10vw, 5vh) scale(1.1) rotate(20deg); border-radius: 50%; }
 }
 
-/* ── HEADER ── */
+/* ── HEADER (SLIM VIEW) ── */
 .header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 24px; height: 60px; background: var(--header-bg);
@@ -242,7 +242,6 @@ body {
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
-/* Custom class for the top-bar sync button */
 .header-btn-text { margin-left: 4px; }
 
 /* ── MODALS ── */
@@ -452,15 +451,12 @@ input[type=file] { display: none; }
 
 /* ── MOBILE FIXES ── */
 @media (max-width: 900px) {
-  /* Force a single row for the header */
   .header { padding: 0 16px; height: 56px; flex-wrap: nowrap; }
   .header-right { margin-top: 0; width: auto; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
   
-  /* Hide the text in the top sync button so it shrinks to an icon */
   .header-btn-text { display: none; }
   .header-sync-btn { padding: 0 !important; width: 32px; height: 32px; justify-content: center; }
 
-  /* Shrink elements to fit */
   .logo-sub { display: none; }
   .logo-text { font-size: 1.1rem; }
   .pill-badge { padding: 4px 8px; font-size: 0.65rem; }
@@ -471,7 +467,6 @@ input[type=file] { display: none; }
   
   .filter-bar { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
 
-  /* Grid Layouts */
   .grid-2 { grid-template-columns: 1fr; }
   .main { padding: 20px 16px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -486,34 +481,16 @@ input[type=file] { display: none; }
 }
 
 @media (max-width: 600px) {
-  .crown-jewel-content {
-    align-items: center;
-  }
-  .crown-jewel-name { 
-    font-size: 1.4rem !important; 
-    white-space: normal; 
-    word-wrap: break-word; 
-    line-height: 1.2; 
-  }
-  .crown-jewel-content .stat-num { 
-    font-size: 1.3rem !important; 
-  }
-  .crown-jewel-content .stat-label { 
-    font-size: 0.6rem !important; 
-    white-space: normal;
-  }
-  .crown-jewel-content > div:first-child { 
-    flex: 1; 
-    min-width: 0; 
-    padding-right: 12px; 
-  }
-  .crown-jewel-content > div:last-child {
-    flex-shrink: 0;
-  }
+  .crown-jewel-content { align-items: center; }
+  .crown-jewel-name { font-size: 1.4rem !important; white-space: normal; word-wrap: break-word; line-height: 1.2; }
+  .crown-jewel-content .stat-num { font-size: 1.3rem !important; }
+  .crown-jewel-content .stat-label { font-size: 0.6rem !important; white-space: normal; }
+  .crown-jewel-content > div:first-child { flex: 1; min-width: 0; padding-right: 12px; }
+  .crown-jewel-content > div:last-child { flex-shrink: 0; }
 }
 
 @media (max-width: 400px) {
-  .logo-text { display: none; } /* On extremely tiny screens, just show the S logo to keep badges visible */
+  .logo-text { display: none; } 
   .logo-icon { margin-right: 4px; }
   .stats-grid { grid-template-columns: 1fr; }
 }
@@ -546,8 +523,8 @@ input[type=file] { display: none; }
       <span id="status-text">Awaiting Data</span>
     </div>
     
-    <button class="btn btn-primary header-sync-btn" onclick="triggerExtensionSync()" title="Import Data" style="padding: 0 16px;">
-      <svg viewBox="0 0 24 24" style="width:16px; height:16px;" fill="currentColor"><path d="M12,18c-3.31,0-6-2.69-6-6s2.69-6,6-6c1.01,0,1.97,0.25,2.8,0.7l-1.46,1.46L19,9.59V3l-2.45,2.45 C15.21,4.54,13.7,4,12,4c-4.42,0-8,3.58-8,8s3.58,8,8,8c3.66,0,6.77-2.46,7.74-5.81l-1.92-0.53C17.06,16.03,14.74,18,12,18z"/></svg>
+    <button class="btn btn-primary header-sync-btn" onclick="triggerExtensionSync()" title="Sync Extension Data" style="padding: 0 16px;">
+      <svg viewBox="0 0 24 24" style="width:16px; height:16px;" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6c0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6c0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
       <span class="header-btn-text">Sync Data</span>
     </button>
 
@@ -624,7 +601,7 @@ input[type=file] { display: none; }
         <button class="btn theme-btn" data-theme="virtupets" onclick="setTheme('virtupets')">Virtupets</button>
         <button class="btn theme-btn" data-theme="maraqua" onclick="setTheme('maraqua')">Maraqua</button>
         <button class="btn theme-btn" data-theme="shenkuu" onclick="setTheme('shenkuu')">Shenkuu</button>
-        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland</button>
+        <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland (Light)</button>
         <button class="btn theme-btn" data-theme="classic" onclick="setTheme('classic')">Neopets Classic</button>
       </div>
     </div>
@@ -632,6 +609,7 @@ input[type=file] { display: none; }
     <div>
       <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">DATA MANAGEMENT</div>
       <div style="display:flex; flex-direction:column; gap:12px;">
+        <button class="btn btn-primary" id="modal-import-ext" onclick="triggerExtensionSync()" style="justify-content:center;">Import Extension Data</button>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
           <button class="btn" onclick="document.getElementById('file-input').click(); closeSettings();" style="justify-content:center;">Load JSON</button>
           <button class="btn" id="modal-export-btn" onclick="exportData(); closeSettings();" style="justify-content:center;">Export JSON</button>
@@ -662,7 +640,10 @@ input[type=file] { display: none; }
     <h2>It's quiet in here...</h2>
     <p>Connect your <a href="https://greasyfork.org/en/scripts/581360-statdoatie-analytics-sync" target="_blank" style="color:var(--blue); text-decoration:none; font-weight:700;">Tampermonkey extension</a>, drop in a JSON save file, or load up some dummy data to see the dashboard in action.</p>
     <div class="import-btns">
-      <button class="btn btn-primary" id="empty-import-btn" onclick="triggerExtensionSync()">Import Extension Data</button>
+      <button class="btn btn-primary" id="empty-import-btn" onclick="triggerExtensionSync()">
+        <svg viewBox="0 0 24 24" style="width:18px; height:18px; margin-right:6px;" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+        Import Extension Data
+      </button>
       <input type="file" id="file-input" accept=".json" onchange="handleFileLoad(event)">
       <button class="btn" onclick="document.getElementById('file-input').click()">Load JSON</button>
       <button class="btn" onclick="loadDemoData()">Try Demo Data</button>
@@ -944,16 +925,7 @@ function copyModalItemName() {
 }
 
 // ─── DATA SYNC ───
-let syncTimeout;
-
-document.addEventListener('KadData_ExtAck', () => {
-  clearTimeout(syncTimeout); // Kill the error timeout immediately
-  toast('Extension connected! Checking for new items...');
-});
-
 document.addEventListener('KadData_ExtToPage', e => {
-  clearTimeout(syncTimeout); // Failsafe kill
-  
   let payload;
   try { payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   
@@ -964,7 +936,6 @@ document.addEventListener('KadData_ExtToPage', e => {
     Object.assign(itemdbCache, prices);
     try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
     
-    // Check if there are completely new items that need ItemDB prices
     const newNames = [...new Set(records.map(r => r.item))];
     const totallyNewItems = newNames.filter(item => !(item in itemdbCache));
     
@@ -982,15 +953,14 @@ document.addEventListener('KadData_ExtToPage', e => {
 });
 
 function triggerExtensionSync() {
-  clearTimeout(syncTimeout);
+  // NEW: Instantly checks for the Tampermonkey DOM stamp instead of waiting for a timeout
+  if (document.documentElement.getAttribute('data-extension-installed') !== 'true') {
+    toast('No active extension detected. Make sure it is installed and enabled!');
+    return;
+  }
+  
   toast('Requesting data from extension...');
   document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
-  
-  // Set the error trap that gets cancelled by KadData_ExtAck
-  syncTimeout = setTimeout(() => { 
-    toast('No active extension detected. Make sure it is installed and enabled!'); 
-  }, 1500);
-  
   try { closeSettings(); } catch(e) {}
 }
 
