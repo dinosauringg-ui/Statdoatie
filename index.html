@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -92,26 +93,30 @@ body.theme-kadoatery {
 }
 
 body.theme-virtupets {
-  --bg: #050a05; 
-  --glass: rgba(0, 20, 5, 0.6); 
-  --glass-hover: rgba(0, 40, 10, 0.8);
+  --bg: #000000; 
+  --glass: rgba(0, 30, 10, 0.4); 
+  --glass-hover: rgba(0, 50, 15, 0.6);
   --green: #4ade80; 
-  --green-glow: rgba(74, 222, 128, 0.6); 
+  --green-glow: rgba(74, 222, 128, 0.4); 
   --red: #ef4444; --blue: #22c55e; --amber: #facc15; --purple: #16a34a; --teal: #15803d;
   --theme-font-display: 'Courier New', Courier, monospace;
   --theme-font-body: 'Courier New', Courier, monospace;
   --theme-radius: 0px;
   --btn-radius: 0px;
-  --theme-card-border: 1px solid rgba(74, 222, 128, 0.3);
+  --theme-card-border: 1px solid #4ade80;
+  --theme-card-bg: rgba(0, 20, 5, 0.8);
   --theme-shadow: 0 0 15px rgba(74, 222, 128, 0.1);
   --theme-top-light: transparent;
   --theme-glass-edge: none;
-  --header-bg: #020502;
+  --header-bg: #000000;
   --blob-opacity: 0; 
+  --theme-shape: none; /* Removed floating shape for Virtupets */
   --heatmap-1: rgba(74, 222, 128, 0.2); --heatmap-2: rgba(74, 222, 128, 0.4);
   --heatmap-3: rgba(74, 222, 128, 0.65); --heatmap-4: rgba(74, 222, 128, 1);
-  
 }
+
+body.theme-virtupets .stat-card::before { display: none; }
+
 body.theme-maraqua {
   --bg: #030f1c; 
   background: radial-gradient(circle at top left, #082f49 0%, #030f1c 100%);
@@ -478,37 +483,41 @@ body {
 
 /* ── HEATMAP CALENDAR ── */
 #heatmap-view {
+  /* Dynamic cell sizing */
+  --cell-size: 28px;
+  --cell-gap: 6px;
+  
   display: flex;
   flex-direction: column;
   flex: 1;
-  justify-content: space-between;
+  justify-content: center;
   padding: 10px 0;
 }
 .heatmap-outer { 
   overflow-x: auto; 
   padding-bottom: 4px; 
   -webkit-overflow-scrolling: touch; 
-  margin: auto 0;
 }
 .heatmap-inner { display: inline-flex; flex-direction: column; gap: 0; min-width: 100%; }
 .heatmap-months-row { display: flex; align-items: flex-end; margin-bottom: 6px; }
 
-/* Spacer matches the day-label width + gap */
-.heatmap-month-spacer { flex-shrink: 0; width: 40px; } 
+/* Spacer aligns the start of the months with the start of the grid */
+.heatmap-month-spacer { flex-shrink: 0; width: calc(32px + 12px); } 
 
 .heatmap-month-label { 
-  flex-shrink: 0; font-size: 11px; color: var(--text3); 
-  user-select: none; overflow: visible; width: 28px; 
+  flex-shrink: 0; font-size: 12px; color: var(--text3); 
+  user-select: none; overflow: visible; 
+  width: calc(var(--cell-size) + var(--cell-gap)); 
 }
 
-.heatmap-day-labels { display: flex; flex-direction: column; gap: 4px; margin-right: 8px; padding-top: 0; }
-.heatmap-day-label { font-size: 11px; color: var(--text3); height: 24px; display: flex; align-items: center; width: 32px; }
+.heatmap-day-labels { display: flex; flex-direction: column; gap: var(--cell-gap); margin-right: 12px; padding-top: 0; }
+.heatmap-day-label { font-size: 11px; color: var(--text3); height: var(--cell-size); display: flex; align-items: center; width: 32px; }
 
-.heatmap-grid-area { display: flex; flex-direction: row; gap: 4px; }
-.heatmap-week-col { display: flex; flex-direction: column; gap: 4px; }
+.heatmap-grid-area { display: flex; flex-direction: row; gap: var(--cell-gap); }
+.heatmap-week-col { display: flex; flex-direction: column; gap: var(--cell-gap); }
 
 .heatmap-cell {
-  width: 24px; height: 24px; border-radius: 4px;
+  width: var(--cell-size); height: var(--cell-size); border-radius: 6px;
   background: var(--heatmap-empty); cursor: pointer;
   transition: transform 0.15s ease, filter 0.15s ease;
   position: relative; flex-shrink: 0;
@@ -674,10 +683,14 @@ input[type=file] { display: none; }
   .card-header-actions { flex-direction: column; align-items: flex-start !important; gap: 12px; }
   .search-input { max-width: 100%; }
   
-  .heatmap-cell { width: 18px; height: 18px; border-radius: 3px; }
-  .heatmap-day-label { height: 18px; width: 28px; font-size: 10px; }
-  .heatmap-month-label { width: 22px; font-size: 10px; }
-  .heatmap-month-spacer { width: 36px; }
+  #heatmap-view {
+    --cell-size: 22px;
+    --cell-gap: 4px;
+  }
+  .heatmap-month-spacer { width: calc(32px + 8px); } 
+  .heatmap-month-label { width: calc(var(--cell-size) + var(--cell-gap)); font-size: 10px; }
+  .heatmap-day-labels { margin-right: 8px; }
+  .heatmap-day-label { height: var(--cell-size); font-size: 10px; }
   
   .db-preview-container { display: none; } 
 }
@@ -725,6 +738,9 @@ input[type=file] { display: none; }
     </div>
     <button class="btn btn-primary import-feeds-btn" onclick="triggerExtensionSync()" title="Import Feeds">
       Import Feeds
+    </button>
+    <button class="btn btn-icon" onclick="generateShareCard()" title="Share Stat Card">
+      <svg viewBox="0 0 24 24" style="width:16px; height:16px;" fill="currentColor"><path d="M4 4h3l2-2h6l2 2h3c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm8 3c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
     </button>
     <button class="btn btn-icon" onclick="openSettings()" title="Settings">
       <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.88,11.36,4.86,11.69,4.86,12s0.02,0.64,0.06,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
@@ -843,6 +859,18 @@ input[type=file] { display: none; }
   </div>
 </div>
 
+<div id="share-modal" class="modal-overlay hidden">
+  <div class="modal-card card" style="max-width: 500px; text-align: center;">
+    <div class="card-header" style="margin-bottom: 16px;">
+      <span class="card-title">Your Statdoatie Card</span>
+      <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('share-modal').classList.add('hidden')">✕</button>
+    </div>
+    <div id="share-preview-container" style="margin-bottom: 20px; border-radius: 12px; overflow: hidden; box-shadow: var(--theme-shadow); background: transparent;">
+       </div>
+    <a id="share-download-btn" class="btn btn-primary" style="width: 100%; justify-content: center; text-decoration: none;" download="Statdoatie_Card.png">Download Image</a>
+  </div>
+</div>
+
 <div class="hmap-tooltip" id="hmap-tooltip"></div>
 
 <main class="main">
@@ -877,8 +905,12 @@ input[type=file] { display: none; }
           <span id="current-chart-label">Feed Activity (Heatmap)</span>
         </button>
       </div>
-      <div class="chart-wrap" style="flex:1; min-height:350px;">
-        <canvas id="mainChart" role="img" aria-label="Main metrics chart" class="hidden"></canvas>
+      
+      <div class="chart-wrap" style="flex:1;">
+        
+        <div id="canvas-view" style="width:100%; min-height:350px;" class="hidden">
+           <canvas id="mainChart" role="img" aria-label="Main metrics chart"></canvas>
+        </div>
         
         <div id="log-view" class="hidden" style="max-height:400px; overflow-y:auto; padding-right:10px;">
            <div id="log-count-label" style="font-size:0.8rem; color:var(--text3); margin-bottom:10px; font-weight:600;"></div>
@@ -959,6 +991,130 @@ document.addEventListener('mousemove', (e) => {
   const y = (window.innerHeight / 2 - e.clientY) / 40;
   blobs.style.transform = `translate(${x}px, ${y}px)`;
 });
+
+// ─── SHARE CARD GENERATOR ───
+async function generateShareCard() {
+  toast("Generating your Statdoatie Card...");
+
+  // Setup the hidden export canvas
+  const exportBox = document.createElement('div');
+  exportBox.className = document.body.className; // inherit exact theme
+  exportBox.style.cssText = `
+    position: absolute; left: -9999px; top: 0;
+    width: 480px; padding: 32px;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--theme-font-body);
+    display: flex; flex-direction: column; gap: 24px;
+    z-index: -10;
+  `;
+
+  // Clone blobs for aesthetic
+  const blobs = document.querySelector('.bg-blobs').cloneNode(true);
+  blobs.style.position = 'absolute';
+  exportBox.appendChild(blobs);
+
+  // Logo / Title Header
+  const header = document.createElement('div');
+  header.style.display = 'flex';
+  header.style.alignItems = 'center';
+  header.style.justifyContent = 'space-between';
+  header.style.zIndex = '1';
+  header.innerHTML = `
+    <div style="display:flex; align-items:center; gap:12px;">
+      ${document.querySelector('.logo-icon').outerHTML}
+      <div>
+        <div style="font-family:var(--theme-font-display); font-weight:800; font-size:1.4rem;">Statdoatie</div>
+      </div>
+    </div>
+    <div style="font-size:0.8rem; color:var(--text3); font-weight:600;">
+      ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+    </div>
+  `;
+  exportBox.appendChild(header);
+
+  // Stats Grid Clone (Force 2-column mobile layout)
+  const gridClone = document.getElementById('stats-grid').cloneNode(true);
+  gridClone.style.display = 'grid';
+  gridClone.style.gridTemplateColumns = '1fr 1fr';
+  gridClone.style.gap = '16px';
+  gridClone.style.zIndex = '1';
+  
+  // Force wide card to span both columns
+  const wideCard = gridClone.querySelector('.stat-card.wide');
+  if (wideCard) wideCard.style.gridColumn = '1 / -1';
+  
+  // Rip out interactivity/expanded content
+  gridClone.querySelectorAll('.stat-expanded').forEach(el => el.remove());
+  gridClone.querySelectorAll('.stat-label').forEach(lbl => {
+      lbl.style.display = 'block'; // removes the flex gap for the dropdown arrow
+  });
+  exportBox.appendChild(gridClone);
+
+  // Analytics Card Clone
+  const analyticsCard = document.createElement('div');
+  analyticsCard.className = 'card';
+  analyticsCard.style.margin = '0';
+  analyticsCard.style.zIndex = '1';
+  analyticsCard.style.display = 'flex';
+  analyticsCard.style.flexDirection = 'column';
+  
+  const chartLabel = document.getElementById('current-chart-label').textContent;
+  analyticsCard.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <span style="font-family:var(--theme-font-display); font-size:1.2rem; font-weight:700;">Analytics</span>
+      <span style="font-size:0.8rem; font-weight:600; color:var(--text2); background:var(--table-row); padding:4px 10px; border-radius:100px;">${chartLabel}</span>
+    </div>
+  `;
+
+  const chartWrap = document.createElement('div');
+  chartWrap.style.width = '100%';
+  chartWrap.style.display = 'flex';
+  chartWrap.style.justifyContent = 'center';
+  chartWrap.style.alignItems = 'center';
+
+  // Inject current view state
+  if (currentMainChartType === 'heatmap') {
+     const heatmapClone = document.getElementById('heatmap-view').cloneNode(true);
+     heatmapClone.classList.remove('hidden');
+     // Ensure scrollbar overflow is visible so the whole grid is captured
+     const hOuter = heatmapClone.querySelector('.heatmap-outer');
+     if(hOuter) hOuter.style.overflowX = 'visible';
+     chartWrap.appendChild(heatmapClone);
+  } else if (currentMainChartType === 'log') {
+     const logClone = document.getElementById('log-view').cloneNode(true);
+     logClone.classList.remove('hidden');
+     logClone.style.maxHeight = '300px';
+     chartWrap.appendChild(logClone);
+  } else {
+     // Canvas data extraction
+     const canvas = document.getElementById('mainChart');
+     const img = document.createElement('img');
+     img.src = canvas.toDataURL('image/png');
+     img.style.width = '100%';
+     img.style.height = 'auto';
+     chartWrap.appendChild(img);
+  }
+  
+  analyticsCard.appendChild(chartWrap);
+  exportBox.appendChild(analyticsCard);
+  document.body.appendChild(exportBox);
+
+  // A tiny delay ensures fonts and layouts paint perfectly before snap
+  await new Promise(r => setTimeout(r, 150));
+
+  html2canvas(exportBox, {
+     backgroundColor: getComputedStyle(document.body).backgroundColor,
+     scale: 2, 
+     logging: false
+  }).then(canvas => {
+     const resultImg = canvas.toDataURL('image/png');
+     document.getElementById('share-preview-container').innerHTML = `<img src="${resultImg}" style="width:100%; height:auto; display:block;" />`;
+     document.getElementById('share-download-btn').href = resultImg;
+     document.getElementById('share-modal').classList.remove('hidden');
+     exportBox.remove();
+  });
+}
 
 // ─── STATE ───
 let feedLog = [];
@@ -1517,7 +1673,7 @@ function renderMainChart(type) {
   };
   document.getElementById('current-chart-label').textContent = chartNames[type];
   
-  const canvas = document.getElementById('mainChart');
+  const canvas = document.getElementById('canvas-view');
   const logView = document.getElementById('log-view');
   const heatmapView = document.getElementById('heatmap-view');
   
@@ -1539,7 +1695,7 @@ function renderMainChart(type) {
     canvas.classList.remove('hidden'); 
   }
 
-  const ctx = canvas.getContext('2d');
+  const ctx = document.getElementById('mainChart').getContext('2d');
   const p = window.chartPayload;
   if (!p || p.labelsTime.length === 0) return;
 
@@ -1657,7 +1813,7 @@ function renderMainChart(type) {
     };
   }
 
-  charts.main = new Chart(ctx, config);
+  charts.main = new Chart(document.getElementById('mainChart'), config);
 }
 
 // ─── RENDER PIPELINE ───
