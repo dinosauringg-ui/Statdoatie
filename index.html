@@ -1275,11 +1275,23 @@ function renderHeatmap(data) {
   let lastMonth = -1;
   weeks.forEach((week, wi) => {
     const monthLabel = document.createElement('div');
-    monthLabel.style.cssText = `width:17px; flex-shrink:0; font-size:10px; color:var(--text3); user-select:none;`;
+    monthLabel.style.cssText = `width:17px; flex-shrink:0; font-size:10px; color:var(--text3); user-select:none; overflow:visible;`;
     const weekMonth = week[0].getMonth();
+    
     if (weekMonth !== lastMonth) {
-      monthLabel.textContent = MONTHS_SHORT[weekMonth];
       lastMonth = weekMonth;
+      
+      // Peek ahead to see how many columns this month will get
+      let weeksLeftInMonth = 0;
+      for (let j = wi; j < weeks.length; j++) {
+        if (weeks[j][0].getMonth() === weekMonth) weeksLeftInMonth++;
+        else break;
+      }
+      
+      // Only print the label if it has at least 2 weeks of space to prevent text overlapping
+      if (weeksLeftInMonth >= 2) {
+        monthLabel.textContent = MONTHS_SHORT[weekMonth];
+      }
     }
     monthsRow.appendChild(monthLabel);
   });
@@ -1362,6 +1374,7 @@ function renderHeatmap(data) {
   container.appendChild(monthsRow);
   container.appendChild(mainRow);
 }
+
 
 
 // ─── CHARTS ───
