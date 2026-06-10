@@ -231,7 +231,7 @@ body {
   background-color: var(--bg); color: var(--text);
   font-family: var(--theme-font-body); min-height: 100vh;
   -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative;
-  transition: background-color 0.4s ease, color 0.4s ease; /* STRIPPED TRANSITION: ALL */
+  transition: background-color 0.4s ease, color 0.4s ease; 
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -291,7 +291,7 @@ body {
   font-family: var(--theme-font-body); font-size: .85rem; font-weight: 600; padding: 0 20px;
   height: 40px; border-radius: var(--btn-radius); border: var(--theme-card-border);
   background: var(--glass); color: var(--text); cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s; /* STRIPPED TRANSITION ALL */
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
   backdrop-filter: blur(10px);
   display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
 }
@@ -300,8 +300,12 @@ body {
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
+/* Active Chart Selection Highlighting */
 .btn.active-chart-btn {
-  background: var(--text); color: var(--bg); border-color: transparent; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: var(--text);
+  color: var(--bg);
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 /* ── MODALS ── */
@@ -331,7 +335,7 @@ body {
 .month-select option { background: var(--bg); color: var(--text); }
 
 /* ── MAIN ── */
-.main { padding: 32px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
+.main { padding: 32px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; transition: all 0.3s ease; }
 
 /* ── IMPORT SCREEN ── */
 .import-screen {
@@ -339,7 +343,7 @@ body {
   min-height: 50vh; text-align: center; border-radius: var(--theme-radius);
   background: var(--theme-card-bg); border: var(--theme-card-border); 
   box-shadow: var(--theme-shadow), inset 0 1px 0 var(--theme-top-light);
-  backdrop-filter: blur(20px); padding: 60px 20px; 
+  backdrop-filter: blur(20px); padding: 60px 20px; transition: all 0.5s ease;
 }
 .import-screen h2 { font-family: var(--theme-font-display); font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
 .import-screen p { font-size: 1rem; color: var(--text2); max-width: 450px; line-height: 1.6; margin-bottom: 32px; }
@@ -353,7 +357,7 @@ body {
   border: var(--theme-card-border); border-radius: var(--theme-radius);
   padding: 28px; 
   box-shadow: var(--theme-shadow), inset 0 1px 0 var(--theme-top-light);
-  transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease; /* STRIPPED TRANSITION ALL */
+  transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease; 
 }
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
 .card-title { font-family: var(--theme-font-display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
@@ -596,7 +600,10 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 .db-card.expanded .db-card-body {
   display: block;
   margin-top: 24px;
+  animation: fadeIn 0.3s ease;
 }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
 .db-preview-container {
   display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
 }
@@ -638,17 +645,6 @@ body.share-mode .logo-sub::after { content: " • " attr(data-date); }
 .share-exit-fab { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.4); color: #ffffff; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); font-family: var(--theme-font-body); font-weight: 600; padding: 10px 24px; border-radius: 100px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); cursor: pointer; z-index: 10000; display: none; align-items: center; gap: 8px; font-size: 0.85rem; transition: all 0.2s ease; }
 .share-exit-fab:hover { background: rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.2); }
 body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
-
-@keyframes fadeup { from { opacity: 0; transform: translateY(30px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
-
-/* ── CARD ENTRANCE ANIMATION ── */
-@keyframes cardEntrance { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-.stat-card { animation: cardEntrance 0.4s ease both; }
-.stat-card:nth-child(1) { animation-delay: 0.05s; }
-.stat-card:nth-child(2) { animation-delay: 0.10s; }
-.stat-card:nth-child(3) { animation-delay: 0.15s; }
-.stat-card:nth-child(4) { animation-delay: 0.20s; }
-.stat-card:nth-child(5) { animation-delay: 0.25s; }
 
 /* ── MOBILE ── */
 @media (max-width: 900px) {
@@ -996,7 +992,7 @@ function queueRender() {
   clearTimeout(renderTimeout);
   renderTimeout = setTimeout(() => {
     renderWidgets();
-  }, 100); // Wait until 100ms of complete silence before rendering
+  }, 100); 
 }
 
 // ─── BACKGROUND PARALLAX ───
@@ -1076,7 +1072,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) { console.error("Failed to parse local storage", e); }
   }
   
-  // Heatmap Event Delegation (No Memory Leaks)
   const heatmapGrid = document.getElementById('heatmap-inner');
   const tooltip = document.getElementById('hmap-tooltip');
   if(heatmapGrid && tooltip) {
@@ -1195,6 +1190,9 @@ function openItemModal(itemName) {
   const rate = seen > 0 ? Math.round((fed / seen) * 100) : 0;
   const cache = getCached(itemName);
   document.getElementById('item-modal-name').textContent = itemName;
+  document.getElementById('item-modal-img').src = cache.image || '';
+  document.getElementById('item-modal-img').style.display = cache.image ? 'block' : 'none';
+  document.getElementById('item-modal-price-display').textContent = `Current Price: ${cache.price != null ? cache.price.toLocaleString() + ' NP' : 'Unknown'}`;
   document.getElementById('item-modal-rate').textContent = rate + '%';
   document.getElementById('item-modal-seen').textContent = seen;
   document.getElementById('item-modal-fed').textContent = fed + ' Fed';
@@ -1236,21 +1234,28 @@ document.addEventListener('KadData_ExtAck', () => {
   clearTimeout(syncTimeout);
   toast('Extension connected! Checking for new items...');
 });
+
 document.addEventListener('KadData_ExtToPage', e => {
   clearTimeout(syncTimeout);
   let payload;
   try { payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   const records = Array.isArray(payload) ? payload : (payload.records || []);
   const prices = payload.prices || {};
+  
   if (records && records.length > 0) {
     Object.assign(itemdbCache, prices);
     try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
+    
     const newNames = [...new Set(records.map(r => r.item))];
     const totallyNewItems = newNames.filter(item => !(item in itemdbCache));
     
     const addedCount = mergeData(records);
-    if(addedCount > 0) toast(`✨ Synced: ${addedCount} new records added`);
-    else toast(`No new feeds since last sync.`);
+    
+    // TELL THE EXTENSION TO CLEAR ITS MEMORY SO IT DOES NOT BECOME A FAT CLIENT
+    document.dispatchEvent(new CustomEvent('KadData_SyncComplete'));
+    
+    if(addedCount > 0) toast(`✨ Synced: ${addedCount} new records. Extension memory wiped.`);
+    else toast(`No new feeds since last sync. Extension memory wiped.`);
     
     if (totallyNewItems.length > 0) {
       const estimatedSeconds = Math.ceil(totallyNewItems.length / 25) * 2;
@@ -1258,9 +1263,10 @@ document.addEventListener('KadData_ExtToPage', e => {
       document.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: JSON.stringify(totallyNewItems) }));
     }
   } else {
-    toast('No data found in extension');
+    toast('No new data found in extension');
   }
 });
+
 function triggerExtensionSync() {
   clearTimeout(syncTimeout);
   syncTimeout = setTimeout(() => {
@@ -1270,6 +1276,7 @@ function triggerExtensionSync() {
   document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
   try { closeSettings(); } catch(e) {}
 }
+
 function fetchMissingPrices() {
   const allItems = [...new Set(feedLog.map(e => e.item))];
   const missingItems = allItems.filter(item => {
@@ -1281,16 +1288,18 @@ function fetchMissingPrices() {
   toast(`Syncing ${missingItems.length} items. This may take ~${estimatedSeconds} seconds...`);
   document.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: JSON.stringify(missingItems) }));
 }
+
 document.addEventListener('KadData_ReceivePrices', e => {
   let newPrices;
   try { newPrices = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   const count = Object.keys(newPrices).filter(k => newPrices[k].price != null).length;
   Object.assign(itemdbCache, newPrices);
   try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
-  queueRender(); // Use debouncer here to stop mass-render lag
+  queueRender(); 
   if (count > 0) toast(`✨ Successfully synced ${count} missing prices`);
   else toast('No new prices found on itemdb.');
 });
+
 function handleFileLoad(e) {
   const file = e.target.files[0]; if (!file) return;
   const r = new FileReader();
@@ -1306,12 +1315,14 @@ function handleFileLoad(e) {
   };
   r.readAsText(file); e.target.value = '';
 }
+
 function exportData() {
   if (feedLog.length === 0) return toast('Nothing to export');
   const b = new Blob([JSON.stringify(feedLog, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b);
   a.download = `statdoatie_${new Date().toISOString().slice(0,10)}.json`; a.click(); toast('Exported JSON');
 }
+
 function clearData() {
   if (!confirm('Wipe all dashboard data?')) return;
   feedLog = []; currentMonth = 'all'; destroyCharts();
@@ -1336,6 +1347,7 @@ function populateMonths() {
     availableMonths.map(m => `<option value="${m}">${m}</option>`).join('');
   select.value = currentMonth; updateFilterStatus();
 }
+
 function setMonth(val) { currentMonth = val; document.getElementById('month-select').value = val; updateFilterStatus(); queueRender(); }
 function changeMonth(dir) {
   if (availableMonths.length === 0) return;
@@ -1356,14 +1368,12 @@ function mergeData(entries) {
   
   for(let e of entries) {
     if(!ex.has(e.timestamp + '|' + e.item)) {
-       // Pre-calculate date math immediately upon data entry
        getMemoizedDateInfo(e);
        newEntries.push(e);
     }
   }
   
   feedLog = [...feedLog, ...newEntries];
-  // Fast string alphabetical sort instead of instantiating new Dates
   feedLog.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
   
   populateMonths();
@@ -1510,7 +1520,6 @@ function renderHeatmap(data) {
       if (!isFuture) {
          const d = dayData || { fed: 0, sniped: 0 };
          const dateFormatted = day.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-         // Attach string to HTML node instead of thousands of individual listeners
          cell.setAttribute('data-info', `${dateFormatted} · ${d.fed} fed, ${d.sniped} sniped`);
       }
       weekCol.appendChild(cell);
@@ -1561,7 +1570,6 @@ function prepareChartData(data) {
   let totalFed = 0, totalSniped = 0, totalNP = 0;
   let seenSet = new Set();
   
-  // Data is already presorted in mergeData
   data.forEach(e => {
     const entry = getMemoizedDateInfo(e);
     const d = entry.nstDateStr;
@@ -1587,7 +1595,7 @@ function prepareChartData(data) {
     }
   });
   
-  const lbls = Object.keys(dObj).sort(); // Fast string alphabetical sort
+  const lbls = Object.keys(dObj).sort();
   window.chartPayload.labelsTime = lbls;
   let runningUnique = 0;
   lbls.forEach(d => {
@@ -1613,6 +1621,7 @@ function renderMainChart(type) {
     'tiers': 'Item Price Tiers', 'heatmap': 'Feed Activity (Heatmap)', 'log': 'Raw Feed Log'
   };
   document.getElementById('current-chart-label').textContent = chartNames[type];
+  document.getElementById('mobile-chart-select').value = type;
   
   document.querySelectorAll('.chart-btn').forEach(btn => {
     if (btn.dataset.chart === type) {
@@ -1783,7 +1792,6 @@ function renderStats(data) {
   const n = data.filter(e => e.status === 'sniped').length;
   const rate = t > 0 ? Math.round(s / t * 100) : 0;
   
-  // Use pre-memoized date strings
   const days = new Set(data.map(e => getMemoizedDateInfo(e).nstDateStr)).size;
   const uniqueItems = new Set(data.filter(e=>e.status==='success').map(e=>e.item)).size;
   const avgPerDay = days > 0 ? (s / days).toFixed(1) : 0;
@@ -1930,7 +1938,6 @@ function renderItemTable(ds) {
   let displayArray = rawArray;
   if (dbSearchTerm) displayArray = rawArray.filter(x => x.name.toLowerCase().includes(dbSearchTerm));
   
-  // Fast variable sort
   displayArray.sort((a, b) => {
     let valA = a[dbSortKey]; let valB = b[dbSortKey];
     if (valA == null) valA = -1; if (valB == null) valB = -1;
@@ -1957,7 +1964,6 @@ function renderItemTable(ds) {
     return `<th class="th-sortable ${h.a}" style="${colorStyle}" onclick="handleDbSort('${h.k}')">${h.l} ${arrow}</th>`;
   }).join('') + '</tr>';
 
-  // Strict DOM cap to prevent GPU blurring lag
   const MAX_ROWS = 15; 
   const isCapped = displayArray.length > MAX_ROWS && !dbSearchTerm;
   const rowsToRender = displayArray.slice(0, MAX_ROWS);
@@ -1995,7 +2001,6 @@ function renderItemTable(ds) {
 }
 
 function renderLog(data) {
-  // Fast string alphabetical sort instead of instantiating new Dates
   const arr = [...data].sort((a,b) => b.timestamp.localeCompare(a.timestamp)).slice(0,300);
   document.getElementById('log-count-label').textContent = `Showing ${Math.min(300, data.length)} of ${data.length.toLocaleString()}`;
   const html = arr.map(e => {
@@ -2005,7 +2010,6 @@ function renderLog(data) {
       : `<span class="log-price no-data">no price</span>`;
     const safeName = e.item.replace(/"/g, '&quot;');
     
-    // Utilize the pre-calculated date info instead of heavy toLocaleString
     const info = getMemoizedDateInfo(e);
     const dateObj = new Date(e.timestamp);
     const timeStr = dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
