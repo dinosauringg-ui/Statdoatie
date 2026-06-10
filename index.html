@@ -11,7 +11,6 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* ── BASE COLORS ── */
   --bg:        #0d0f14;
   --glass:     rgba(25, 29, 38, 0.4);
   --glass-hover: rgba(35, 41, 54, 0.6);
@@ -30,7 +29,6 @@
   --purple:    #8b5cf6;
   --teal:      #14b8a6;
 
-  /* ── STRUCTURAL VARIABLES ── */
   --theme-font-display: 'Outfit', sans-serif;
   --theme-font-body: 'DM Sans', sans-serif;
   
@@ -46,7 +44,6 @@
   --header-text: var(--text);
   --blob-opacity: 0.3;
 
-  /* Table & Log variables */
   --table-row: rgba(0,0,0,0.2);
   --table-row-hover: rgba(255,255,255,0.05);
   --log-bg: rgba(0,0,0,0.2);
@@ -58,18 +55,15 @@
   --chart-empty: rgba(255, 255, 255, 0.05);
   --chart-line: rgba(255, 255, 255, 0.15);
 
-  /* Heatmap */
   --heatmap-empty: rgba(255,255,255,0.05);
   --heatmap-1: rgba(34, 197, 94, 0.2);
   --heatmap-2: rgba(34, 197, 94, 0.4);
   --heatmap-3: rgba(34, 197, 94, 0.65);
   --heatmap-4: rgba(34, 197, 94, 1);
   
-  /* Default Shape: Circle */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3C/svg%3E");
 }
 
-/* ── DISTINCT DARK THEMES ── */
 body.theme-kadoatery {
   --bg: #110517; 
   --glass: rgba(45, 10, 50, 0.4); 
@@ -144,7 +138,6 @@ body.theme-moltara {
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M11.66 22.05c-3.15 0-5.83-1.89-6.9-4.71-1.04-2.73-.55-5.61.64-7.53.51-.83 1.62-.97 2.22-.26.54.64.67 1.48.51 2.25-.26 1.25.04 2.51.81 3.46.74.93 1.95 1.34 3.01 1.09.77-.18 1.41-.69 1.76-1.38.38-.76.38-1.63.02-2.38-.41-.85-.98-1.61-1.68-2.22-1.74-1.51-2.9-3.7-2.9-6.09 0-1.5.47-2.94 1.34-4.14.49-.68 1.5-.7 2.05-.09C17.51 5.3 21 10.45 21 14.86c0 3.94-3.19 7.19-7.14 7.19h-2.2z'/%3E%3C/svg%3E");
 }
 
-/* ── LIGHT THEMES ── */
 body.theme-faerieland {
   --bg: #fdf4ff;
   background: linear-gradient(180deg, #fff 0%, #fdf4ff 100%);
@@ -228,18 +221,16 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
 
-/* ── BACKGROUND BLOBS (STATIC - ZERO GPU OVERHEAD) ── */
 .bg-blobs {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none; z-index: -1; overflow: hidden; filter: blur(80px);
-  -webkit-transform: translate3d(0,0,0); /* Hardware accelerate the blur */
+  -webkit-transform: translate3d(0,0,0);
 }
 .blob { position: absolute; border-radius: 50%; opacity: var(--blob-opacity); }
 .blob-1 { width: 50vw; height: 50vw; background: var(--blue); top: -10%; left: -10%; }
 .blob-2 { width: 60vw; height: 60vw; background: var(--purple); bottom: -20%; right: -10%; }
 .blob-3 { width: 45vw; height: 45vw; background: var(--teal); top: 30%; left: 40%; }
 
-/* ── HEADER ── */
 .header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 24px; height: 60px; background: var(--header-bg);
@@ -272,7 +263,6 @@ body {
 @keyframes pulsing { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
 .status-chip { display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--header-text); font-weight: 600; background: var(--glass); padding: 6px 16px; border-radius: var(--btn-radius); border: 1px solid var(--border); white-space: nowrap; flex-shrink: 0; }
 
-/* ── BUTTONS ── */
 .btn {
   font-family: var(--theme-font-body); font-size: .85rem; font-weight: 600; padding: 0 20px;
   height: 40px; border-radius: var(--btn-radius); border: var(--theme-card-border);
@@ -293,7 +283,6 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-/* ── MODALS ── */
 .modal-overlay {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
@@ -305,7 +294,6 @@ body {
 .theme-grid { display: flex; flex-wrap: wrap; gap: 10px; }
 .theme-btn.active { background: var(--text); color: var(--bg); border-color: transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-/* ── FILTER BAR ── */
 .filter-bar {
   display: flex; align-items: center; justify-content: space-between;
   padding: 12px 24px; background: var(--header-bg); backdrop-filter: blur(10px);
@@ -319,10 +307,8 @@ body {
 }
 .month-select option { background: var(--bg); color: var(--text); }
 
-/* ── MAIN ── */
 .main { padding: 32px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; transition: all 0.3s ease; }
 
-/* ── IMPORT SCREEN ── */
 .import-screen {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   min-height: 50vh; text-align: center; border-radius: var(--theme-radius);
@@ -336,20 +322,18 @@ body {
 .import-icon-wrap svg { width: 100%; height: 100%; fill: var(--text); }
 .import-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
-/* ── GLASS CARDS 2.0 ── */
 .card {
-  background: var(--theme-card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); /* Lower blur budget */
+  background: var(--theme-card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border: var(--theme-card-border); border-radius: var(--theme-radius);
   padding: 28px; 
   box-shadow: var(--theme-shadow), inset 0 1px 0 var(--theme-top-light);
   transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease; 
-  -webkit-transform: translate3d(0,0,0); /* Force HW acceleration */
+  -webkit-transform: translate3d(0,0,0);
 }
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
 .card-title { font-family: var(--theme-font-display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
 .card-meta { font-size: .8rem; color: var(--text3); font-weight: 500; }
 
-/* Main Feature Cards Static Shapes */
 .analytics-card, .db-card { position: relative; overflow: hidden; }
 .analytics-card::before, .db-card::before {
   content: ''; position: absolute; 
@@ -366,7 +350,6 @@ body {
 .db-card::before { background: var(--purple); }
 .analytics-card > *, .db-card > * { position: relative; z-index: 1; }
 
-/* ── EXPANDABLE STAT CARDS ── */
 .stats-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px; 
@@ -378,10 +361,9 @@ body {
   box-shadow: var(--theme-shadow), inset 0 1px 0 var(--theme-top-light); 
   transition: transform 0.2s, background 0.3s ease, border 0.3s ease;
   position: relative; overflow: hidden;
-  -webkit-transform: translate3d(0,0,0); /* Force HW acceleration */
+  -webkit-transform: translate3d(0,0,0);
 }
 
-/* Static Ghost Watermarks for Stat Cards (No Animations) */
 .stat-card::before {
   content: '';
   position: absolute;
@@ -403,7 +385,6 @@ body {
 .c-purple::before { background: var(--purple); }
 .stat-card > * { position: relative; z-index: 1; }
 
-/* Accent bar at bottom of stat card */
 .stat-card::after {
   content: '';
   position: absolute;
@@ -459,11 +440,9 @@ body {
 .c-purple { background: rgba(139, 92, 246, 0.05); border-color: rgba(139, 92, 246, 0.2); }
 .c-purple .stat-num { color: var(--purple); }
 
-/* ── COUNTER ANIMATION ── */
 .stat-num.counting { animation: countUp 0.4s ease both; }
 @keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ── HEATMAP CALENDAR ── */
 #heatmap-view {
   --cell-size: 28px;
   --cell-gap: 6px;
@@ -490,7 +469,6 @@ body {
 .heatmap-legend-cells { display: flex; gap: 4px; }
 .heatmap-legend-cell { width: 14px; height: 14px; border-radius: 3px; }
 
-/* Heatmap tooltip */
 .hmap-tooltip {
   position: fixed; z-index: 999;
   background: rgba(0,0,0,0.85); color: #fff;
@@ -503,10 +481,8 @@ body {
 }
 .hmap-tooltip.visible { opacity: 1; }
 
-/* ── PANELS & GRIDS ── */
 .chart-wrap { position: relative; width: 100%; display: flex; flex-direction: column; }
 
-/* ── TABLE SEARCH & SORT ── */
 .search-input {
   background: var(--table-row); border: 1px solid var(--border); color: var(--text);
   padding: 8px 16px; border-radius: var(--btn-radius); font-family: var(--theme-font-body);
@@ -516,7 +492,6 @@ body {
 .th-sortable { cursor: pointer; user-select: none; transition: color 0.2s; }
 .th-sortable:hover { color: var(--text); }
 
-/* ── TABLE ── */
 .table-wrap { 
   max-height: 450px; 
   overflow-y: auto; 
@@ -547,13 +522,11 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 .item-clickable:hover { opacity: 0.7; }
 .item-underline { text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 4px; }
 
-/* ── PRICE CELL ── */
 .price-cell { font-family: monospace; font-size: .85rem; }
 .price-cell.no-data { color: var(--text3); font-style: italic; font-family: var(--theme-font-body); }
 .price-cell.inflated { color: var(--amber); }
 .price-cell.inflated::after { content: ' ⚠'; font-size: .7rem; }
 
-/* ── BADGES & BARS ── */
 .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; font-size: .8rem; font-weight: 700; padding: 4px 10px; border-radius: var(--btn-radius); }
 .badge-green { background: var(--green-glow); color: var(--green); }
 .badge-red   { background: var(--badge-red-bg); color: var(--badge-red-text); }
@@ -562,7 +535,6 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 .rate-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); background: var(--green); }
 .rate-pct { font-family: var(--theme-font-display); font-size: .9rem; font-weight: 700; color: var(--text); min-width: 36px; text-align: right; }
 
-/* ── LOG ── */
 .log-entry {
   display: grid; grid-template-columns: 1fr 100px 30px auto 100px;
   align-items: center; gap: 16px; padding: 12px 20px;
@@ -579,30 +551,20 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 .log-dot.sniped  { background: var(--border-strong); }
 .log-status { display: flex; justify-content: flex-end; }
 
-/* ── EXPANDABLE DB CARD ── */
-.db-card-body {
-  display: none; 
-}
+.db-card-body { display: none; }
 .db-card.expanded .db-card-body {
-  display: block;
-  margin-top: 24px;
-  animation: fadeIn 0.3s ease;
+  display: block; margin-top: 24px; animation: fadeIn 0.3s ease;
 }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-.db-preview-container {
-  display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-}
-.db-card.expanded .db-preview-container {
-  display: none;
-}
+.db-preview-container { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.db-card.expanded .db-preview-container { display: none; }
 .db-preview-item {
   display: flex; align-items: center; gap: 8px;
   background: var(--table-row); padding: 4px 12px 4px 4px;
   border-radius: 100px; border: 1px solid var(--border);
 }
 
-/* ── TOAST ── */
 .toast {
   position: fixed; bottom: 32px; right: 32px; background: var(--text);
   color: var(--bg); padding: 16px 24px; border-radius: var(--btn-radius);
@@ -614,7 +576,6 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 .hidden { display: none !important; }
 input[type=file] { display: none; }
 
-/* ── SHARE MODE PURE CSS OVERRIDES ── */
 body.share-mode .filter-bar,
 body.share-mode .db-card,
 body.share-mode .header-right,
@@ -634,7 +595,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 
 @keyframes fadeup { from { opacity: 0; transform: translateY(30px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
 
-/* ── CARD ENTRANCE ANIMATION ── */
 @keyframes cardEntrance { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .stat-card { animation: cardEntrance 0.4s ease both; }
 .stat-card:nth-child(1) { animation-delay: 0.05s; }
@@ -643,7 +603,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 .stat-card:nth-child(4) { animation-delay: 0.20s; }
 .stat-card:nth-child(5) { animation-delay: 0.25s; }
 
-/* ── MOBILE ── */
 @media (max-width: 900px) {
   .header { padding: 0 16px; height: 56px; flex-wrap: nowrap; }
   .header-right { margin-top: 0; width: auto; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
@@ -911,8 +870,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
             <span class="heatmap-meta" id="heatmap-meta"></span>
           </div>
           <div class="heatmap-outer">
-            <div class="heatmap-inner" id="heatmap-inner">
-              </div>
+            <div class="heatmap-inner" id="heatmap-inner"></div>
           </div>
           <div class="heatmap-footer">
             <span style="font-size:.75rem; color:var(--text3);">NST timezone · hover for details</span>
@@ -939,8 +897,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
             <span class="card-title">Item Value DB <span style="font-size:0.6em; margin-left:8px; opacity:0.6;">▼</span></span>
             <span class="card-meta" id="item-count">0 Items</span>
           </div>
-          <div id="db-preview" class="db-preview-container">
-             </div>
+          <div id="db-preview" class="db-preview-container"></div>
         </div>
       </div>
       
@@ -950,8 +907,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
         </div>
         <div class="table-wrap">
           <table id="item-table">
-            <thead>
-              </thead>
+            <thead></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -962,7 +918,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 </main>
 
 <script>
-// ─── MEMOIZED DATA PARSING (PREVENTS LAG LOOPS) ───
+// ─── NST FORMATTER ───
 const nstFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'America/Los_Angeles',
   year: 'numeric', month: '2-digit', day: '2-digit',
@@ -974,61 +930,40 @@ const memoizedDates = new Map();
 
 function getMemoizedDateInfo(e) {
   if (memoizedDates.has(e.timestamp)) return memoizedDates.get(e.timestamp);
-  
   const d = new Date(e.timestamp);
-  
-  // Safety check for invalid dates causing crash loops
-  if (isNaN(d.getTime())) {
-    return { nstDateStr: '1970-01-01', dow: 0, hour: 0 }; 
-  }
-
+  if (isNaN(d.getTime())) return { nstDateStr: '1970-01-01', dow: 0, hour: 0 };
   const parts = nstFormatter.formatToParts(d);
   const p = {};
   parts.forEach(part => { p[part.type] = part.value; });
-  
   let hour = parseInt(p.hour, 10);
   if (hour === 24) hour = 0;
-
-  // Compute dow without instantiating another localized string 
   const safeDateForDow = new Date(Date.UTC(parseInt(p.year, 10), parseInt(p.month, 10) - 1, parseInt(p.day, 10)));
-  
-  const info = {
-    nstDateStr: `${p.year}-${p.month}-${p.day}`,
-    dow: safeDateForDow.getUTCDay(),
-    hour: hour
-  };
-  
+  const info = { nstDateStr: `${p.year}-${p.month}-${p.day}`, dow: safeDateForDow.getUTCDay(), hour };
   memoizedDates.set(e.timestamp, info);
   return info;
 }
 
-// ─── RENDER DEBOUNCER (PREVENTS EXTENSION SPAM LAG) ───
+// ─── RENDER DEBOUNCER (400ms collapses rapid price-batch fires) ───
 let renderTimeout = null;
 function queueRender() {
   clearTimeout(renderTimeout);
-  renderTimeout = setTimeout(() => {
-    renderWidgets();
-  }, 100); 
+  renderTimeout = setTimeout(renderWidgets, 400);
 }
 
-// ─── PURE CSS SHARE MODE ───
+// ─── SHARE MODE ───
 function toggleShareMode() {
   document.body.classList.toggle('share-mode');
-  
   if (document.body.classList.contains('share-mode')) {
     const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     document.getElementById('logo-sub-text').setAttribute('data-date', dateStr);
     toast("Ready for screenshot! 📸");
   }
-  
-  if(charts.main) {
-    setTimeout(() => { charts.main.resize(); }, 350); 
-  }
+  if (charts.main) setTimeout(() => { charts.main.resize(); }, 350);
 }
 
 // ─── STATE ───
 let feedLog = [];
-let charts  = {};
+let charts = {};
 let currentMonth = 'all';
 let availableMonths = [];
 let itemdbCache = {};
@@ -1036,10 +971,76 @@ let currentOpenItem = null;
 let dbSearchTerm = '';
 let dbSortKey = 's';
 let dbSortDir = -1;
-let absoluteMostExpensiveItem = '';
-const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+let dbSortKeyPrev = null;   // dirty flag: only rebuild thead when sort changes
+let dbSortDirPrev = null;
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 let currentMainChartType = 'heatmap';
+
+// ─── DERIVED DATA CACHE ───
+// Single shared object computed once per renderWidgets() call.
+// Both renderStats() and renderItemTable() read from this — no double passes.
+let derived = null;
+
+function computeDerived(data) {
+  const itemMap = {};   // name -> { s, n }
+  let totalFed = 0, totalSniped = 0, totalNP = 0;
+  let maxItemCost = 0;
+  let crownJewelName = '';
+  const daySet = new Set();
+
+  for (const entry of data) {
+    const info = getMemoizedDateInfo(entry);
+    daySet.add(info.nstDateStr);
+
+    if (!itemMap[entry.item]) itemMap[entry.item] = { s: 0, n: 0 };
+
+    if (entry.status === 'success') {
+      itemMap[entry.item].s++;
+      totalFed++;
+      const price = getCached(entry.item).price ?? 0;
+      totalNP += price;
+      if (price > maxItemCost) { maxItemCost = price; crownJewelName = entry.item; }
+    } else {
+      itemMap[entry.item].n++;
+      totalSniped++;
+    }
+  }
+
+  // Build rawArray once — used by both stats and table
+  const rawArray = Object.entries(itemMap).map(([name, { s, n }]) => {
+    const { price, inflated, image } = getCached(name);
+    const spent = price != null ? price * s : null;
+    return { name, price, inflated, image, spent, t: s + n, s, n, rate: Math.round(s / (s + n) * 100) };
+  });
+
+  // Top 3 for preview (computed once here, not again in renderItemTable)
+  const topItems = [...rawArray]
+    .filter(x => x.s > 0)
+    .sort((a, b) => b.s !== a.s ? b.s - a.s : (b.price || 0) - (a.price || 0))
+    .slice(0, 3);
+
+  const days = daySet.size;
+  const uniqueItems = rawArray.filter(x => x.s > 0).length;
+  const rate = (totalFed + totalSniped) > 0 ? Math.round(totalFed / (totalFed + totalSniped) * 100) : 0;
+  const avgPerDay = days > 0 ? (totalFed / days).toFixed(1) : 0;
+  const avgCost = totalFed > 0 ? Math.round(totalNP / totalFed) : 0;
+  const hasAnyPrice = data.some(e => getCached(e.item).price != null);
+
+  // Most fed item
+  let mostFedItem = 'None', mostFedCount = 0;
+  for (const { name, s } of rawArray) {
+    if (s > mostFedCount) { mostFedCount = s; mostFedItem = name; }
+  }
+
+  return {
+    rawArray, topItems,
+    totalFed, totalSniped, totalNP,
+    days, uniqueItems, rate, avgPerDay, avgCost, hasAnyPrice,
+    mostFedItem, mostFedCount,
+    crownJewelName, maxItemCost
+  };
+}
 
 window.chartPayload = {
   labelsTime: [], dailyFed: [], dailySniped: [],
@@ -1070,29 +1071,27 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (e) { console.error("Failed to parse local storage", e); }
   }
-  
+
   const heatmapGrid = document.getElementById('heatmap-inner');
   const tooltip = document.getElementById('hmap-tooltip');
-  if(heatmapGrid && tooltip) {
+  if (heatmapGrid && tooltip) {
     heatmapGrid.addEventListener('mouseover', e => {
-       if(e.target.classList.contains('heatmap-cell') && e.target.dataset.info) {
-          tooltip.textContent = e.target.dataset.info;
-          tooltip.classList.add('visible');
-       }
+      if (e.target.classList.contains('heatmap-cell') && e.target.dataset.info) {
+        tooltip.textContent = e.target.dataset.info;
+        tooltip.classList.add('visible');
+      }
     });
     heatmapGrid.addEventListener('mousemove', e => {
-       if(e.target.classList.contains('heatmap-cell')) {
-          tooltip.style.left = (e.clientX + 14) + 'px';
-          tooltip.style.top  = (e.clientY - 32) + 'px';
-       }
+      if (e.target.classList.contains('heatmap-cell')) {
+        tooltip.style.left = (e.clientX + 14) + 'px';
+        tooltip.style.top  = (e.clientY - 32) + 'px';
+      }
     });
     heatmapGrid.addEventListener('mouseout', e => {
-       if(e.target.classList.contains('heatmap-cell')) {
-          tooltip.classList.remove('visible');
-       }
+      if (e.target.classList.contains('heatmap-cell')) tooltip.classList.remove('visible');
     });
   }
-  
+
   setTimeout(() => { if (feedLog.length > 0) queueRender(); }, 50);
 });
 
@@ -1102,10 +1101,8 @@ function animateCounter(el, target, duration, formatter) {
   if (!el) return;
   const id = el.id;
   if (activeCounters[id]) cancelAnimationFrame(activeCounters[id]);
-  
   const startTime = performance.now();
   function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
-
   function tick(now) {
     const elapsed = now - startTime;
     const progress = Math.min(elapsed / duration, 1);
@@ -1120,9 +1117,7 @@ function animateCounter(el, target, duration, formatter) {
 // ─── THEME ───
 function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
 function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
-function getCssVar(name) {
-  return getComputedStyle(document.body).getPropertyValue(name).trim();
-}
+function getCssVar(name) { return getComputedStyle(document.body).getPropertyValue(name).trim(); }
 function applyThemeDOM(key) {
   document.body.className = key === 'default' ? '' : `theme-${key}`;
   document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
@@ -1138,7 +1133,7 @@ function applyThemeDOM(key) {
     Chart.defaults.plugins.tooltip.titleColor = isLight ? '#0f172a' : '#ffffff';
     Chart.defaults.plugins.tooltip.bodyColor = isLight ? '#334155' : '#ffffff';
     if (Object.keys(charts).length > 0) {
-      if(charts.main) renderMainChart(currentMainChartType);
+      if (charts.main) renderMainChart(currentMainChartType);
     }
   }, 50);
 }
@@ -1167,12 +1162,13 @@ function getCached(name) {
 // ─── TABLE SEARCH & SORT ───
 function handleDbSearch(val) {
   dbSearchTerm = val.toLowerCase();
-  renderItemTable(getFilteredData());
+  // Search only needs to re-filter+render the table body — no full renderWidgets
+  if (derived) renderItemTableFromDerived(derived);
 }
 function handleDbSort(key) {
-  if (dbSortKey === key) { dbSortDir *= -1; }
+  if (dbSortKey === key) dbSortDir *= -1;
   else { dbSortKey = key; dbSortDir = -1; }
-  renderItemTable(getFilteredData());
+  if (derived) renderItemTableFromDerived(derived);
 }
 
 // ─── ITEM CONTEXT MODAL ───
@@ -1213,7 +1209,7 @@ function saveManualPrice() {
   if (!isNaN(val) && val >= 0) {
     const cache = getCached(currentOpenItem);
     itemdbCache[currentOpenItem] = { price: val, inflated: false, image: cache.image };
-    try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err){}
+    try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
     queueRender();
     closeItemModal();
     toast(`✅ Saved price for ${currentOpenItem}`);
@@ -1240,22 +1236,20 @@ document.addEventListener('KadData_ExtToPage', e => {
   try { payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   const records = Array.isArray(payload) ? payload : (payload.records || []);
   const prices = payload.prices || {};
-  
+
   if (records && records.length > 0) {
     Object.assign(itemdbCache, prices);
     try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
-    
+
     const newNames = [...new Set(records.map(r => r.item))];
     const totallyNewItems = newNames.filter(item => !(item in itemdbCache));
-    
+
     const addedCount = mergeData(records);
-    
-    // TELL THE EXTENSION TO CLEAR ITS MEMORY 
     document.dispatchEvent(new CustomEvent('KadData_SyncComplete'));
-    
-    if(addedCount > 0) toast(`✨ Synced: ${addedCount} new records. Extension cache wiped.`);
+
+    if (addedCount > 0) toast(`✨ Synced: ${addedCount} new records. Extension cache wiped.`);
     else toast(`No new feeds since last sync.`);
-    
+
     if (totallyNewItems.length > 0) {
       const estimatedSeconds = Math.ceil(totallyNewItems.length / 25) * 2;
       toast(`Fetching prices for ${totallyNewItems.length} new items... (~${estimatedSeconds}s)`);
@@ -1294,7 +1288,8 @@ document.addEventListener('KadData_ReceivePrices', e => {
   const count = Object.keys(newPrices).filter(k => newPrices[k].price != null).length;
   Object.assign(itemdbCache, newPrices);
   try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
-  queueRender(); 
+  // queueRender here — the 400ms debounce collapses rapid batch returns into one render
+  queueRender();
   if (count > 0) toast(`✨ Successfully synced ${count} missing prices`);
   else toast('No new prices found on itemdb.');
 });
@@ -1305,10 +1300,7 @@ function handleFileLoad(e) {
   r.onload = ev => {
     try {
       const d = JSON.parse(ev.target.result);
-      if (Array.isArray(d)) { 
-        const addedCount = mergeData(d); 
-        toast(`Loaded JSON: ${addedCount} new records added`); 
-      }
+      if (Array.isArray(d)) { const addedCount = mergeData(d); toast(`Loaded JSON: ${addedCount} new records added`); }
       else toast('Invalid format');
     } catch { toast('Could not parse file'); }
   };
@@ -1324,7 +1316,9 @@ function exportData() {
 
 function clearData() {
   if (!confirm('Wipe all dashboard data?')) return;
-  feedLog = []; currentMonth = 'all'; destroyCharts();
+  feedLog = []; currentMonth = 'all'; derived = null;
+  if (charts.main) { try { charts.main.destroy(); } catch {} }
+  charts = {};
   localStorage.removeItem('statdoatie_save');
   localStorage.removeItem('statdoatie_prices');
   itemdbCache = {};
@@ -1346,7 +1340,6 @@ function populateMonths() {
     availableMonths.map(m => `<option value="${m}">${m}</option>`).join('');
   select.value = currentMonth; updateFilterStatus();
 }
-
 function setMonth(val) { currentMonth = val; document.getElementById('month-select').value = val; updateFilterStatus(); queueRender(); }
 function changeMonth(dir) {
   if (availableMonths.length === 0) return;
@@ -1364,22 +1357,16 @@ function getFilteredData() { return currentMonth === 'all' ? feedLog : feedLog.f
 function mergeData(entries) {
   const ex = new Set(feedLog.map(e => e.timestamp + '|' + e.item));
   const newEntries = [];
-  
-  for(let e of entries) {
-    if(!ex.has(e.timestamp + '|' + e.item)) {
-       getMemoizedDateInfo(e);
-       newEntries.push(e);
-    }
+  for (let e of entries) {
+    if (!ex.has(e.timestamp + '|' + e.item)) { getMemoizedDateInfo(e); newEntries.push(e); }
   }
-  
   feedLog = [...feedLog, ...newEntries];
   feedLog.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
-  
   populateMonths();
   localStorage.setItem('statdoatie_save', JSON.stringify(feedLog));
   showDashboard();
   queueRender();
-  return newEntries.length; 
+  return newEntries.length;
 }
 
 function loadDemoData() {
@@ -1393,19 +1380,24 @@ function loadDemoData() {
       demo.push({ item: items[Math.floor(Math.random()*items.length)], status: Math.random() < .65 ? 'success' : 'sniped', timestamp: ts.toISOString() });
     }
   }
-  const addedCount = mergeData(demo); 
+  const addedCount = mergeData(demo);
   toast(`Simulated ${addedCount} new feeds`);
 }
 
-// ─── HEATMAP CALENDAR ───
+// ─── HEATMAP ───
+// Dirty flag: only rebuild if data actually changed (not just sort/search)
+let heatmapDataKey = null;
+
 function renderHeatmap(data) {
   const container = document.getElementById('heatmap-inner');
   if (!container) return;
 
-  if (!data || data.length === 0) {
-    container.innerHTML = '';
-    return;
-  }
+  // Build a cheap fingerprint: total length + last timestamp
+  const key = data.length + '|' + (data.length > 0 ? data[data.length - 1].timestamp : '');
+  if (key === heatmapDataKey) return; // nothing changed, skip the 364-node rebuild
+  heatmapDataKey = key;
+
+  if (!data || data.length === 0) { container.innerHTML = ''; return; }
 
   const dayMap = {};
   for (const entry of data) {
@@ -1418,39 +1410,35 @@ function renderHeatmap(data) {
   const maxFed = Math.max(1, ...Object.values(dayMap).map(v => v.fed));
 
   const sortedDates = Object.keys(dayMap).sort();
-  const firstDateStr = sortedDates[0];
-  const [fY, fM, fD] = firstDateStr.split('-').map(Number);
-  const firstDate = new Date(fY, fM - 1, fD); 
-  
+  const [fY, fM, fD] = sortedDates[0].split('-').map(Number);
+  const firstDate = new Date(fY, fM - 1, fD);
   let startDate = new Date(firstDate);
   startDate.setDate(startDate.getDate() - startDate.getDay());
 
-  const todayNSTStr = getMemoizedDateInfo({timestamp: new Date().toISOString()}).nstDateStr;
+  const todayNSTStr = getMemoizedDateInfo({ timestamp: new Date().toISOString() }).nstDateStr;
   const [tY, tM, tD] = todayNSTStr.split('-').map(Number);
   const todayNST = new Date(tY, tM - 1, tD);
 
   let endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + (52 * 7) - 1); 
-
+  endDate.setDate(endDate.getDate() + (52 * 7) - 1);
   if (todayNST > endDate) {
     endDate = new Date(todayNST);
-    endDate.setDate(endDate.getDate() + (6 - endDate.getDay())); 
+    endDate.setDate(endDate.getDate() + (6 - endDate.getDay()));
   }
 
   const weeks = [];
   let cur = new Date(startDate);
   while (cur <= endDate) {
     const week = [];
-    for (let i = 0; i < 7; i++) {
-      week.push(new Date(cur));
-      cur.setDate(cur.getDate() + 1);
-    }
+    for (let i = 0; i < 7; i++) { week.push(new Date(cur)); cur.setDate(cur.getDate() + 1); }
     weeks.push(week);
   }
 
+  // Build DOM via DocumentFragment to minimise reflows
+  const frag = document.createDocumentFragment();
+
   const monthsRow = document.createElement('div');
   monthsRow.className = 'heatmap-months-row';
-  
   const spacer = document.createElement('div');
   spacer.className = 'heatmap-month-spacer';
   monthsRow.appendChild(spacer);
@@ -1460,7 +1448,6 @@ function renderHeatmap(data) {
     const monthLabel = document.createElement('div');
     monthLabel.className = 'heatmap-month-label';
     const weekMonth = week[0].getMonth();
-    
     if (weekMonth !== lastMonth) {
       lastMonth = weekMonth;
       let weeksLeftInMonth = 0;
@@ -1468,9 +1455,7 @@ function renderHeatmap(data) {
         if (weeks[j][0].getMonth() === weekMonth) weeksLeftInMonth++;
         else break;
       }
-      if (weeksLeftInMonth >= 2) {
-        monthLabel.textContent = MONTHS_SHORT[weekMonth];
-      }
+      if (weeksLeftInMonth >= 2) monthLabel.textContent = MONTHS_SHORT[weekMonth];
     }
     monthsRow.appendChild(monthLabel);
   });
@@ -1494,32 +1479,26 @@ function renderHeatmap(data) {
   weeks.forEach(week => {
     const weekCol = document.createElement('div');
     weekCol.className = 'heatmap-week-col';
-
     week.forEach(day => {
       const cell = document.createElement('div');
       cell.className = 'heatmap-cell';
-
       const dateStr = `${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
       const dayData = dayMap[dateStr];
       const isFuture = day > todayNST;
-
       if (isFuture) {
         cell.classList.add('future');
       } else if (dayData) {
-        const fed = dayData.fed;
-        const ratio = fed / maxFed;
-        let level = 0;
-        if (ratio > 0) level = 1;
+        const ratio = dayData.fed / maxFed;
+        let level = ratio > 0 ? 1 : 0;
         if (ratio >= 0.25) level = 2;
         if (ratio >= 0.55) level = 3;
         if (ratio >= 0.80) level = 4;
         cell.setAttribute('data-level', level);
       }
-
       if (!isFuture) {
-         const d = dayData || { fed: 0, sniped: 0 };
-         const dateFormatted = day.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-         cell.setAttribute('data-info', `${dateFormatted} · ${d.fed} fed, ${d.sniped} sniped`);
+        const d = dayData || { fed: 0, sniped: 0 };
+        const dateFormatted = day.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        cell.setAttribute('data-info', `${dateFormatted} · ${d.fed} fed, ${d.sniped} sniped`);
       }
       weekCol.appendChild(cell);
     });
@@ -1527,23 +1506,19 @@ function renderHeatmap(data) {
   });
 
   mainRow.appendChild(gridArea);
+  frag.appendChild(monthsRow);
+  frag.appendChild(mainRow);
 
   const activeDays = Object.keys(dayMap).length;
   const totalFeeds = data.filter(e => e.status === 'success').length;
   document.getElementById('heatmap-meta').textContent = `${activeDays} active days · ${totalFeeds.toLocaleString()} kads fed`;
 
   container.innerHTML = '';
-  container.appendChild(monthsRow);
-  container.appendChild(mainRow);
+  container.appendChild(frag);
 }
 
 // ─── CHARTS ───
-function destroyCharts() { Object.values(charts).forEach(c => { try { c.destroy(); } catch {} }); charts = {}; }
-
-function getCssHex(varName) {
-  const val = getCssVar(varName);
-  return val || '#888888';
-}
+function getCssHex(varName) { return getCssVar(varName) || '#888888'; }
 
 function hexToRgba(hex, alpha) {
   if (!hex || !hex.startsWith('#')) return hex;
@@ -1568,11 +1543,10 @@ function prepareChartData(data) {
   const dObj = {};
   let totalFed = 0, totalSniped = 0, totalNP = 0;
   let seenSet = new Set();
-  
+
   data.forEach(e => {
     const entry = getMemoizedDateInfo(e);
     const d = entry.nstDateStr;
-    
     if (!dObj[d]) dObj[d] = { s: 0, n: 0, np: 0, newUniques: 0 };
     if (e.status === 'success') {
       dObj[d].s++;
@@ -1593,7 +1567,7 @@ function prepareChartData(data) {
       window.chartPayload.hourSniped[entry.hour]++;
     }
   });
-  
+
   const lbls = Object.keys(dObj).sort();
   window.chartPayload.labelsTime = lbls;
   let runningUnique = 0;
@@ -1613,55 +1587,42 @@ function prepareChartData(data) {
 
 function renderMainChart(type) {
   currentMainChartType = type;
-  const chartNames = {
-    'daily': 'Daily Feeds', 'cumul': 'Cumulative Growth',
-    'np': 'NP Spent Tracker', 'unique': 'Unique Items Fed',
-    'dow': 'Activity by Day', 'hour': 'Activity by Hour',
-    'tiers': 'Item Price Tiers', 'heatmap': 'Feed Activity (Heatmap)', 'log': 'Raw Feed Log'
-  };
-  document.getElementById('current-chart-label').textContent = chartNames[type];
   document.getElementById('mobile-chart-select').value = type;
-  
-  document.querySelectorAll('.chart-btn').forEach(btn => {
-    if (btn.dataset.chart === type) {
-      btn.classList.add('active-chart-btn');
-    } else {
-      btn.classList.remove('active-chart-btn');
-    }
-  });
-  
+
   const canvas = document.getElementById('canvas-view');
   const logView = document.getElementById('log-view');
   const heatmapView = document.getElementById('heatmap-view');
-  
-  canvas.classList.add('hidden'); 
+
+  canvas.classList.add('hidden');
   logView.classList.add('hidden');
   heatmapView.classList.add('hidden');
 
-  if (charts.main) charts.main.destroy();
-
   if (type === 'log') {
     logView.classList.remove('hidden');
-    renderLog(getFilteredData()); 
+    renderLog(getFilteredData());
     return;
   } else if (type === 'heatmap') {
     heatmapView.classList.remove('hidden');
     renderHeatmap(getFilteredData());
     return;
   } else {
-    canvas.classList.remove('hidden'); 
+    canvas.classList.remove('hidden');
   }
 
-  const ctx = document.getElementById('mainChart').getContext('2d');
   const p = window.chartPayload;
-  if (!p || p.labelsTime.length === 0) return;
+  if (!p || p.labelsTime.length === 0) {
+    if (charts.main) { charts.main.destroy(); charts.main = null; }
+    return;
+  }
 
-  const green  = getCssHex('--green')  || '#22c55e';
-  const teal   = getCssHex('--teal')   || '#14b8a6';
-  const blue   = getCssHex('--blue')   || '#3b82f6';
-  const amber  = getCssHex('--amber')  || '#f59e0b';
-  const purple = getCssHex('--purple') || '#8b5cf6';
-  const red    = getCssHex('--red')    || '#ef4444';
+  const green  = getCssHex('--green');
+  const teal   = getCssHex('--teal');
+  const blue   = getCssHex('--blue');
+  const amber  = getCssHex('--amber');
+  const purple = getCssHex('--purple');
+  const red    = getCssHex('--red');
+
+  const ctx = document.getElementById('mainChart').getContext('2d');
 
   function makeGradient(color, alphaTop, alphaBot) {
     const g = ctx.createLinearGradient(0, 0, 0, 280);
@@ -1684,143 +1645,146 @@ function renderMainChart(type) {
     }
   };
 
-  let config = {};
+  // ── CHART REUSE: update data in place instead of destroy+recreate ──
+  // Only destroy when the chart *type* changes (different dataset shape).
+  const existingType = charts.main ? charts.main.config.type : null;
+
+  let newConfig = null; // will be set if we need a fresh chart
 
   if (type === 'daily') {
-    config = {
-      type: 'bar',
-      data: {
-        labels: p.labelsTime,
-        datasets: [
-          { label: 'Fed', data: p.dailyFed, backgroundColor: makeGradient(green, 0.85, 0.5), borderColor: green, borderWidth: 1, borderRadius: { topLeft: 6, topRight: 6 }, borderSkipped: false, stack: 'a' },
-          { label: 'Sniped', data: p.dailySniped, backgroundColor: makeGradient(red, 0.2, 0.05), borderColor: 'transparent', borderWidth: 0, borderRadius: { topLeft: 6, topRight: 6 }, borderSkipped: false, stack: 'a' }
-        ]
-      },
-      options: { ...baseOptions, scales: { x: { ...commonScales.x, stacked: true }, y: { ...commonScales.y, stacked: true } } }
-    };
+    const datasets = [
+      { label: 'Fed', data: p.dailyFed, backgroundColor: makeGradient(green, 0.85, 0.5), borderColor: green, borderWidth: 1, borderRadius: { topLeft: 6, topRight: 6 }, borderSkipped: false, stack: 'a' },
+      { label: 'Sniped', data: p.dailySniped, backgroundColor: makeGradient(red, 0.2, 0.05), borderColor: 'transparent', borderWidth: 0, borderRadius: { topLeft: 6, topRight: 6 }, borderSkipped: false, stack: 'a' }
+    ];
+    if (existingType === 'bar' && charts.main) {
+      charts.main.data.labels = p.labelsTime;
+      charts.main.data.datasets[0].data = p.dailyFed;
+      charts.main.data.datasets[0].backgroundColor = makeGradient(green, 0.85, 0.5);
+      charts.main.data.datasets[0].borderColor = green;
+      charts.main.data.datasets[1].data = p.dailySniped;
+      charts.main.data.datasets[1].backgroundColor = makeGradient(red, 0.2, 0.05);
+      charts.main.update('none');
+    } else {
+      newConfig = { type: 'bar', data: { labels: p.labelsTime, datasets }, options: { ...baseOptions, scales: { x: { ...commonScales.x, stacked: true }, y: { ...commonScales.y, stacked: true } } } };
+    }
   } else if (type === 'cumul') {
-    config = {
-      type: 'line',
-      data: {
-        labels: p.labelsTime,
-        datasets: [
-          { label: 'Total Fed', data: p.cumulFed, borderColor: green, backgroundColor: makeGradient(green, 0.35, 0), fill: true, tension: 0, pointRadius: 0, borderWidth: 2.5 },
-          { label: 'Total Sniped', data: p.cumulSniped, borderColor: hexToRgba(red, 0.5), fill: false, tension: 0, pointRadius: 0, borderWidth: 1.5, borderDash: [6, 4] }
-        ]
-      },
-      options: { ...baseOptions, interaction: { mode: 'index', intersect: false }, plugins: { ...baseOptions.plugins, legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 12, boxHeight: 12, useBorderRadius: true, color: getCssVar('--text2') } } }, scales: commonScales }
-    };
+    const datasets = [
+      { label: 'Total Fed', data: p.cumulFed, borderColor: green, backgroundColor: makeGradient(green, 0.35, 0), fill: true, tension: 0, pointRadius: 0, borderWidth: 2.5 },
+      { label: 'Total Sniped', data: p.cumulSniped, borderColor: hexToRgba(red, 0.5), fill: false, tension: 0, pointRadius: 0, borderWidth: 1.5, borderDash: [6, 4] }
+    ];
+    if (existingType === 'line' && charts.main) {
+      charts.main.data.labels = p.labelsTime;
+      charts.main.data.datasets[0].data = p.cumulFed;
+      charts.main.data.datasets[0].backgroundColor = makeGradient(green, 0.35, 0);
+      charts.main.data.datasets[0].borderColor = green;
+      charts.main.data.datasets[1].data = p.cumulSniped;
+      charts.main.data.datasets[1].borderColor = hexToRgba(red, 0.5);
+      charts.main.update('none');
+    } else {
+      newConfig = { type: 'line', data: { labels: p.labelsTime, datasets }, options: { ...baseOptions, interaction: { mode: 'index', intersect: false }, plugins: { ...baseOptions.plugins, legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 12, boxHeight: 12, useBorderRadius: true, color: getCssVar('--text2') } } }, scales: commonScales } };
+    }
   } else if (type === 'np') {
-    config = {
-      type: 'line',
-      data: { labels: p.labelsTime, datasets: [{ label: 'NP Spent', data: p.cumulNP, borderColor: amber, backgroundColor: makeGradient(amber, 0.4, 0), fill: true, tension: 0, pointRadius: 0, borderWidth: 2.5 }] },
-      options: { ...baseOptions, interaction: { mode: 'index', intersect: false }, plugins: { ...baseOptions.plugins, tooltip: { callbacks: { label: c => `NP Spent: ${c.raw.toLocaleString()} NP` } } }, scales: commonScales }
-    };
+    const datasets = [{ label: 'NP Spent', data: p.cumulNP, borderColor: amber, backgroundColor: makeGradient(amber, 0.4, 0), fill: true, tension: 0, pointRadius: 0, borderWidth: 2.5 }];
+    if (existingType === 'line' && charts.main) {
+      charts.main.data.labels = p.labelsTime;
+      charts.main.data.datasets[0].data = p.cumulNP;
+      charts.main.data.datasets[0].backgroundColor = makeGradient(amber, 0.4, 0);
+      charts.main.data.datasets[0].borderColor = amber;
+      charts.main.update('none');
+    } else {
+      newConfig = { type: 'line', data: { labels: p.labelsTime, datasets }, options: { ...baseOptions, interaction: { mode: 'index', intersect: false }, plugins: { ...baseOptions.plugins, tooltip: { callbacks: { label: c => `NP Spent: ${c.raw.toLocaleString()} NP` } } }, scales: commonScales } };
+    }
   } else if (type === 'unique') {
-    config = {
-      type: 'line',
-      data: { labels: p.labelsTime, datasets: [{ label: 'Unique Items', data: p.cumulUnique, borderColor: purple, backgroundColor: makeGradient(purple, 0.4, 0), fill: true, tension: 0, pointRadius: 0, borderWidth: 2.5 }] },
-      options: { ...baseOptions, interaction: { mode: 'index', intersect: false }, scales: commonScales }
-    };
+    const datasets = [{ label: 'Unique Items', data: p.cumulUnique, borderColor: purple, backgroundColor: makeGradient(purple, 0.4, 0), fill: true, tension: 0, pointRadius: 0, borderWidth: 2.5 }];
+    if (existingType === 'line' && charts.main) {
+      charts.main.data.labels = p.labelsTime;
+      charts.main.data.datasets[0].data = p.cumulUnique;
+      charts.main.data.datasets[0].backgroundColor = makeGradient(purple, 0.4, 0);
+      charts.main.data.datasets[0].borderColor = purple;
+      charts.main.update('none');
+    } else {
+      newConfig = { type: 'line', data: { labels: p.labelsTime, datasets }, options: { ...baseOptions, interaction: { mode: 'index', intersect: false }, scales: commonScales } };
+    }
   } else if (type === 'dow') {
     const total = p.dowFed.map((v, i) => v + p.dowSniped[i]);
-    config = {
-      type: 'bar',
-      data: {
-        labels: p.labelsDow,
-        datasets: [
-          { label: 'Fed', data: p.dowFed, backgroundColor: makeGradient(teal, 0.9, 0.6), borderColor: teal, borderWidth: 1, borderRadius: 6, borderSkipped: false, stack: 'a' },
-          { label: 'Sniped', data: p.dowSniped, backgroundColor: makeGradient(red, 0.25, 0.08), borderColor: 'transparent', borderWidth: 0, borderRadius: 6, borderSkipped: false, stack: 'a' }
-        ]
-      },
-      options: { ...baseOptions, scales: { x: { ...commonScales.x, stacked: true }, y: { ...commonScales.y, stacked: true } }, plugins: { ...baseOptions.plugins, tooltip: { mode: 'index', intersect: false, callbacks: { label: ctx => buildRichTooltip(ctx.dataset.label, ctx.raw, total[ctx.dataIndex]) } } } }
-    };
+    const datasets = [
+      { label: 'Fed', data: p.dowFed, backgroundColor: makeGradient(teal, 0.9, 0.6), borderColor: teal, borderWidth: 1, borderRadius: 6, borderSkipped: false, stack: 'a' },
+      { label: 'Sniped', data: p.dowSniped, backgroundColor: makeGradient(red, 0.25, 0.08), borderColor: 'transparent', borderWidth: 0, borderRadius: 6, borderSkipped: false, stack: 'a' }
+    ];
+    if (existingType === 'bar' && charts.main) {
+      charts.main.data.labels = p.labelsDow;
+      charts.main.data.datasets[0].data = p.dowFed;
+      charts.main.data.datasets[0].backgroundColor = makeGradient(teal, 0.9, 0.6);
+      charts.main.data.datasets[1].data = p.dowSniped;
+      charts.main.update('none');
+    } else {
+      newConfig = { type: 'bar', data: { labels: p.labelsDow, datasets }, options: { ...baseOptions, scales: { x: { ...commonScales.x, stacked: true }, y: { ...commonScales.y, stacked: true } }, plugins: { ...baseOptions.plugins, tooltip: { mode: 'index', intersect: false, callbacks: { label: ctx => buildRichTooltip(ctx.dataset.label, ctx.raw, total[ctx.dataIndex]) } } } } };
+    }
   } else if (type === 'hour') {
-    const hourLabels = Array.from({length: 24}, (_, i) => {
-      const ampm = i >= 12 ? 'PM' : 'AM';
-      return `${i % 12 || 12}${ampm}`;
-    });
+    const hourLabels = Array.from({length: 24}, (_, i) => { const ampm = i >= 12 ? 'PM' : 'AM'; return `${i % 12 || 12}${ampm}`; });
     const total = p.hourFed.map((v, i) => v + p.hourSniped[i]);
-    config = {
-      type: 'bar',
-      data: {
-        labels: hourLabels,
-        datasets: [
-          { label: 'Fed', data: p.hourFed, backgroundColor: makeGradient(blue, 0.9, 0.5), borderColor: blue, borderWidth: 1, borderRadius: 4, borderSkipped: false, stack: 'a' },
-          { label: 'Sniped', data: p.hourSniped, backgroundColor: makeGradient(red, 0.2, 0.05), borderColor: 'transparent', borderWidth: 0, borderRadius: 4, borderSkipped: false, stack: 'a' }
-        ]
-      },
-      options: { ...baseOptions, scales: { x: { ...commonScales.x, stacked: true, ticks: { ...commonScales.x.ticks, maxTicksLimit: 12 } }, y: { ...commonScales.y, stacked: true } }, plugins: { ...baseOptions.plugins, tooltip: { mode: 'index', intersect: false, callbacks: { label: ctx => buildRichTooltip(ctx.dataset.label, ctx.raw, total[ctx.dataIndex]) } } } }
-    };
+    const datasets = [
+      { label: 'Fed', data: p.hourFed, backgroundColor: makeGradient(blue, 0.9, 0.5), borderColor: blue, borderWidth: 1, borderRadius: 4, borderSkipped: false, stack: 'a' },
+      { label: 'Sniped', data: p.hourSniped, backgroundColor: makeGradient(red, 0.2, 0.05), borderColor: 'transparent', borderWidth: 0, borderRadius: 4, borderSkipped: false, stack: 'a' }
+    ];
+    if (existingType === 'bar' && charts.main) {
+      charts.main.data.labels = hourLabels;
+      charts.main.data.datasets[0].data = p.hourFed;
+      charts.main.data.datasets[0].backgroundColor = makeGradient(blue, 0.9, 0.5);
+      charts.main.data.datasets[1].data = p.hourSniped;
+      charts.main.update('none');
+    } else {
+      newConfig = { type: 'bar', data: { labels: hourLabels, datasets }, options: { ...baseOptions, scales: { x: { ...commonScales.x, stacked: true, ticks: { ...commonScales.x.ticks, maxTicksLimit: 12 } }, y: { ...commonScales.y, stacked: true } }, plugins: { ...baseOptions.plugins, tooltip: { mode: 'index', intersect: false, callbacks: { label: ctx => buildRichTooltip(ctx.dataset.label, ctx.raw, total[ctx.dataIndex]) } } } } };
+    }
   } else if (type === 'tiers') {
     const tierColors = [green, blue, purple, amber];
-    const tierGradients = tierColors.map(c => {
+    const makeTierGradients = () => tierColors.map(c => {
       const g = ctx.createLinearGradient(0, 0, 400, 0);
       g.addColorStop(0, hexToRgba(c, 1));
       g.addColorStop(1, hexToRgba(c, 0.4));
       return g;
     });
-    config = {
-      type: 'bar',
-      data: {
-        labels: ['Under 10k NP', '10k – 50k NP', '50k – 100k NP', 'Unbuyable 100k+'],
-        datasets: [{ data: p.tierCounts, backgroundColor: tierGradients, borderRadius: 6, borderSkipped: false }]
-      },
-      options: { ...baseOptions, indexAxis: 'y', scales: { x: { grid: gridLines(), border: { display: false }, ticks: { color: getCssVar('--text3') } }, y: { grid: { display: false }, border: { display: false }, ticks: { color: getCssVar('--text2'), font: { weight: '600' } } } }, plugins: { ...baseOptions.plugins, tooltip: { callbacks: { label: c => `${c.raw.toLocaleString()} items` } } } }
-    };
+    const datasets = [{ data: p.tierCounts, backgroundColor: makeTierGradients(), borderRadius: 6, borderSkipped: false }];
+    // Tiers is a horizontal bar — always recreate if prev type differs
+    if (existingType === 'bar' && charts.main && charts.main.config.options.indexAxis === 'y') {
+      charts.main.data.datasets[0].data = p.tierCounts;
+      charts.main.data.datasets[0].backgroundColor = makeTierGradients();
+      charts.main.update('none');
+    } else {
+      newConfig = { type: 'bar', data: { labels: ['Under 10k NP', '10k – 50k NP', '50k – 100k NP', 'Unbuyable 100k+'], datasets }, options: { ...baseOptions, indexAxis: 'y', scales: { x: { grid: gridLines(), border: { display: false }, ticks: { color: getCssVar('--text3') } }, y: { grid: { display: false }, border: { display: false }, ticks: { color: getCssVar('--text2'), font: { weight: '600' } } } }, plugins: { ...baseOptions.plugins, tooltip: { callbacks: { label: c => `${c.raw.toLocaleString()} items` } } } } };
+    }
   }
 
-  charts.main = new Chart(document.getElementById('mainChart'), config);
+  if (newConfig) {
+    if (charts.main) { try { charts.main.destroy(); } catch {} charts.main = null; }
+    charts.main = new Chart(document.getElementById('mainChart'), newConfig);
+  }
 }
 
 // ─── RENDER PIPELINE ───
+// One pass over the data, results shared across all sub-renders.
 function renderWidgets() {
   const data = getFilteredData();
   document.getElementById('status-text').textContent = `${data.length.toLocaleString()} Tracked`;
-  destroyCharts();
+
+  // Single computation pass — replaces the separate loops in renderStats + renderItemTable
+  derived = computeDerived(data);
+
   renderStreak();
-  renderStats(data);
-  renderItemTable(data);
+  renderStats(derived);
+  renderItemTableFromDerived(derived);
   prepareChartData(data);
   renderMainChart(currentMainChartType);
 }
 
-function renderStats(data) {
-  const t = data.length;
-  const s = data.filter(e => e.status === 'success').length;
-  const n = data.filter(e => e.status === 'sniped').length;
-  const rate = t > 0 ? Math.round(s / t * 100) : 0;
-  
-  const days = new Set(data.map(e => getMemoizedDateInfo(e).nstDateStr)).size;
-  const uniqueItems = new Set(data.filter(e=>e.status==='success').map(e=>e.item)).size;
-  const avgPerDay = days > 0 ? (s / days).toFixed(1) : 0;
-  let vF = 0;
-  let maxItemCost = 0;
-  absoluteMostExpensiveItem = '';
-  const c = {};
-  for (const entry of data) {
-    if (entry.status === 'success') {
-      const p = getCached(entry.item).price ?? 0;
-      vF += p;
-      if (p > maxItemCost) { maxItemCost = p; absoluteMostExpensiveItem = entry.item; }
-      c[entry.item] = (c[entry.item] || 0) + 1;
-    }
-  }
-  let mostFedItem = 'None';
-  let mostFedCount = 0;
-  Object.entries(c).forEach(([k,v]) => {
-    if(v > mostFedCount) { mostFedCount = v; mostFedItem = k; }
-  });
-  const hasAnyPrice = data.some(e => getCached(e.item).price != null);
-  const avgCost = s > 0 ? Math.round(vF / s) : 0;
-
+function renderStats(d) {
   document.getElementById('stats-grid').innerHTML = `
     <div class="stat-card c-green expandable-card" onclick="this.classList.toggle('expanded')">
       <div class="stat-label">Kads Fed</div>
       <div class="stat-num" id="sn-fed">0</div>
       <div class="stat-expanded">
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Total Attempts:</span> <strong>${t.toLocaleString()}</strong></div>
-        <div style="display:flex; justify-content:space-between;"><span>Most Fed:</span> <strong style="text-align:right;">${mostFedItem}<br>(${mostFedCount}x)</strong></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Total Attempts:</span> <strong>${(d.totalFed + d.totalSniped).toLocaleString()}</strong></div>
+        <div style="display:flex; justify-content:space-between;"><span>Most Fed:</span> <strong style="text-align:right;">${d.mostFedItem}<br>(${d.mostFedCount}x)</strong></div>
       </div>
     </div>
 
@@ -1828,17 +1792,17 @@ function renderStats(data) {
       <div class="stat-label">Win Rate</div>
       <div class="stat-num" id="sn-rate">0%</div>
       <div class="stat-expanded">
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Total Sniped:</span> <strong style="color:var(--red);">${n.toLocaleString()}</strong></div>
-        <div style="display:flex; justify-content:space-between;"><span>Total Fed:</span> <strong style="color:var(--green);">${s.toLocaleString()}</strong></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Total Sniped:</span> <strong style="color:var(--red);">${d.totalSniped.toLocaleString()}</strong></div>
+        <div style="display:flex; justify-content:space-between;"><span>Total Fed:</span> <strong style="color:var(--green);">${d.totalFed.toLocaleString()}</strong></div>
       </div>
     </div>
 
     <div class="stat-card c-blue expandable-card" onclick="this.classList.toggle('expanded')">
       <div class="stat-label">NP Spent</div>
-      <div class="stat-num" id="sn-np">${hasAnyPrice ? '0k' : '—'}</div>
+      <div class="stat-num" id="sn-np">${d.hasAnyPrice ? '0k' : '—'}</div>
       <div class="stat-expanded">
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Avg Cost/Kad:</span> <strong>${hasAnyPrice ? avgCost.toLocaleString() + ' NP' : '—'}</strong></div>
-        <div style="display:flex; justify-content:space-between;"><span>Unique Items:</span> <strong>${uniqueItems}</strong></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Avg Cost/Kad:</span> <strong>${d.hasAnyPrice ? d.avgCost.toLocaleString() + ' NP' : '—'}</strong></div>
+        <div style="display:flex; justify-content:space-between;"><span>Unique Items:</span> <strong>${d.uniqueItems}</strong></div>
       </div>
     </div>
 
@@ -1846,124 +1810,88 @@ function renderStats(data) {
       <div class="stat-label">Active Days</div>
       <div class="stat-num" id="sn-days" style="color:var(--text);">0</div>
       <div class="stat-expanded">
-        <div style="display:flex; justify-content:space-between;"><span>Avg Feeds/Day:</span> <strong>${avgPerDay}</strong></div>
+        <div style="display:flex; justify-content:space-between;"><span>Avg Feeds/Day:</span> <strong>${d.avgPerDay}</strong></div>
       </div>
     </div>
 
-    <div class="stat-card c-purple wide expandable-card item-clickable" data-name="${absoluteMostExpensiveItem.replace(/"/g, '&quot;')}" onclick="this.classList.toggle('expanded')">
+    <div class="stat-card c-purple wide expandable-card item-clickable" data-name="${d.crownJewelName.replace(/"/g, '&quot;')}" onclick="this.classList.toggle('expanded')">
       <div class="crown-jewel-content">
         <div style="flex: 1; min-width: 0; padding-right: 10px;">
           <div class="stat-label">Crown Jewel (Most Expensive)</div>
-          <div class="stat-num crown-jewel-name" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${absoluteMostExpensiveItem || 'None'}</div>
+          <div class="stat-num crown-jewel-name" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${d.crownJewelName || 'None'}</div>
         </div>
         <div style="text-align:right; flex-shrink: 0;">
           <div class="stat-label" style="justify-content:flex-end;">Value</div>
-          <div class="stat-num" style="color:var(--text);">${maxItemCost > 0 ? maxItemCost.toLocaleString() + ' NP' : '—'}</div>
+          <div class="stat-num" style="color:var(--text);">${d.maxItemCost > 0 ? d.maxItemCost.toLocaleString() + ' NP' : '—'}</div>
         </div>
       </div>
     </div>
   `;
 
   requestAnimationFrame(() => {
-    const fedEl   = document.getElementById('sn-fed');
-    const rateEl  = document.getElementById('sn-rate');
-    const npEl    = document.getElementById('sn-np');
-    const daysEl  = document.getElementById('sn-days');
-
-    if (fedEl)  animateCounter(fedEl, s, 900);
-    if (rateEl) animateCounter(rateEl, rate, 900, v => v + '%');
-    if (npEl && hasAnyPrice) {
-      const npK = Math.round(vF / 1000);
-      animateCounter(npEl, npK, 900, v => v.toLocaleString() + 'k');
-    }
-    if (daysEl) animateCounter(daysEl, days, 900);
+    const fedEl  = document.getElementById('sn-fed');
+    const rateEl = document.getElementById('sn-rate');
+    const npEl   = document.getElementById('sn-np');
+    const daysEl = document.getElementById('sn-days');
+    if (fedEl)  animateCounter(fedEl, d.totalFed, 900);
+    if (rateEl) animateCounter(rateEl, d.rate, 900, v => v + '%');
+    if (npEl && d.hasAnyPrice) animateCounter(npEl, Math.round(d.totalNP / 1000), 900, v => v.toLocaleString() + 'k');
+    if (daysEl) animateCounter(daysEl, d.days, 900);
   });
 }
 
-function renderStreak() {
-  const daySet = new Set(feedLog.filter(e => e.status === 'success').map(e => getMemoizedDateInfo(e).nstDateStr));
-  let streak = 0;
-  let checkDate = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
-  const fmt = (dt) => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
-  if (daySet.has(fmt(checkDate))) {
-    streak++;
-    checkDate.setDate(checkDate.getDate() - 1);
-    while (daySet.has(fmt(checkDate))) { streak++; checkDate.setDate(checkDate.getDate() - 1); }
-  } else {
-    checkDate.setDate(checkDate.getDate() - 1);
-    if (daySet.has(fmt(checkDate))) {
-      streak++;
-      checkDate.setDate(checkDate.getDate() - 1);
-      while (daySet.has(fmt(checkDate))) { streak++; checkDate.setDate(checkDate.getDate() - 1); }
-    }
-  }
-  const b = document.getElementById('streak-badge');
-  document.getElementById('streak-val').textContent = streak;
-  b.classList.toggle('hidden', streak === 0 || currentMonth !== 'all');
-}
+// ─── TABLE RENDER (reads from derived, no extra passes) ───
+function renderItemTableFromDerived(d) {
+  const { rawArray, topItems, crownJewelName } = d;
 
-function renderItemTable(ds) {
-  const c = {};
-  for (const entry of ds) {
-    if (!c[entry.item]) c[entry.item] = { s:0, n:0 };
-    c[entry.item][entry.status==='success'?'s':'n']++;
-  }
-  const rawArray = Object.entries(c).map(([name, {s, n}]) => {
-    const { price, inflated, image } = getCached(name);
-    const spent = (price != null) ? price * s : null;
-    return { name, price, inflated, image, spent, t: s+n, s, n, rate: Math.round(s/(s+n)*100) };
-  });
-
-  const topItems = [...rawArray]
-    .filter(x => x.s > 0)
-    .sort((a,b) => {
-        if (b.s !== a.s) return b.s - a.s;
-        return (b.price || 0) - (a.price || 0);
-    })
-    .slice(0, 3);
-    
+  // Preview — only update if visible
   const previewContainer = document.getElementById('db-preview');
-  if(topItems.length === 0) {
-      previewContainer.innerHTML = '<span style="color:var(--text3)">No feeds yet...</span>';
+  if (topItems.length === 0) {
+    previewContainer.innerHTML = '<span style="color:var(--text3)">No feeds yet...</span>';
   } else {
-      previewContainer.innerHTML = topItems.map(x => `
-          <div class="db-preview-item">
-              <div style="width:24px; height:24px; background:var(--table-row-hover); border-radius:100px;"></div>
-              <span style="font-size:0.9rem; font-weight:700; color:var(--text); white-space:nowrap; padding-left:4px;">${x.s}x ${x.name}</span>
-          </div>
-      `).join('');
+    previewContainer.innerHTML = topItems.map(x => `
+      <div class="db-preview-item">
+        <div style="width:24px; height:24px; background:var(--table-row-hover); border-radius:100px;"></div>
+        <span style="font-size:0.9rem; font-weight:700; color:var(--text); white-space:nowrap; padding-left:4px;">${x.s}x ${x.name}</span>
+      </div>
+    `).join('');
   }
 
-  let displayArray = rawArray;
-  if (dbSearchTerm) displayArray = rawArray.filter(x => x.name.toLowerCase().includes(dbSearchTerm));
-  
-  displayArray.sort((a, b) => {
+  let displayArray = dbSearchTerm
+    ? rawArray.filter(x => x.name.toLowerCase().includes(dbSearchTerm))
+    : rawArray;
+
+  displayArray = [...displayArray].sort((a, b) => {
     let valA = a[dbSortKey]; let valB = b[dbSortKey];
     if (valA == null) valA = -1; if (valB == null) valB = -1;
     if (typeof valA === 'string') return dbSortDir * valA.localeCompare(valB);
-    else return dbSortDir * (valA - valB);
+    return dbSortDir * (valA - valB);
   });
-  
-  document.getElementById('item-count').textContent = displayArray.length + ' Items';
-  
-  const hdrs = [
-    { k: 'name',  l: 'Item',         a: '' },
-    { k: 'price', l: 'itemdb Price', a: 'td-right' },
-    { k: 't',     l: 'Seen',         a: 'td-right' },
-    { k: 's',     l: 'Fed',          a: 'td-right' },
-    { k: 'n',     l: 'Missed',       a: 'td-right' },
-    { k: 'spent', l: 'NP Spent',     a: 'td-right' },
-    { k: 'rate',  l: 'Win Rate',     a: '' }
-  ];
-  
-  document.querySelector('#item-table thead').innerHTML = '<tr>' + hdrs.map(h => {
-    const isActive = dbSortKey === h.k;
-    const arrow = isActive ? (dbSortDir === 1 ? '↑' : '↓') : '↕';
-    const colorStyle = isActive ? 'color: var(--text); font-weight: 800;' : '';
-    return `<th class="th-sortable ${h.a}" style="${colorStyle}" onclick="handleDbSort('${h.k}')">${h.l} ${arrow}</th>`;
-  }).join('') + '</tr>';
 
-  const MAX_ROWS = 15; 
+  document.getElementById('item-count').textContent = displayArray.length + ' Items';
+
+  // ── Only rebuild thead when sort state changes ──
+  if (dbSortKey !== dbSortKeyPrev || dbSortDir !== dbSortDirPrev) {
+    const hdrs = [
+      { k: 'name',  l: 'Item',         a: '' },
+      { k: 'price', l: 'itemdb Price', a: 'td-right' },
+      { k: 't',     l: 'Seen',         a: 'td-right' },
+      { k: 's',     l: 'Fed',          a: 'td-right' },
+      { k: 'n',     l: 'Missed',       a: 'td-right' },
+      { k: 'spent', l: 'NP Spent',     a: 'td-right' },
+      { k: 'rate',  l: 'Win Rate',     a: '' }
+    ];
+    document.querySelector('#item-table thead').innerHTML = '<tr>' + hdrs.map(h => {
+      const isActive = dbSortKey === h.k;
+      const arrow = isActive ? (dbSortDir === 1 ? '↑' : '↓') : '↕';
+      const colorStyle = isActive ? 'color: var(--text); font-weight: 800;' : '';
+      return `<th class="th-sortable ${h.a}" style="${colorStyle}" onclick="handleDbSort('${h.k}')">${h.l} ${arrow}</th>`;
+    }).join('') + '</tr>';
+    dbSortKeyPrev = dbSortKey;
+    dbSortDirPrev = dbSortDir;
+  }
+
+  const MAX_ROWS = 15;
   const isCapped = displayArray.length > MAX_ROWS && !dbSearchTerm;
   const rowsToRender = displayArray.slice(0, MAX_ROWS);
 
@@ -1974,11 +1902,9 @@ function renderItemTable(ds) {
     const spentHtml = x.spent != null
       ? `<span style="color:var(--text); font-weight:700; font-family:monospace;">${x.spent.toLocaleString()}</span>`
       : `<span style="color:var(--text3); font-style:italic;">—</span>`;
-      
     const safeName = x.name.replace(/"/g, '&quot;');
-    const isCrownJewel = (x.name === absoluteMostExpensiveItem) && x.s > 0;
+    const isCrownJewel = x.name === crownJewelName && x.s > 0;
     const crownHtml = isCrownJewel ? '<span style="margin-left:8px;" title="Most Expensive Feed!">👑</span>' : '';
-    
     return `
       <tr>
         <td class="td-name item-clickable" data-name="${safeName}"><div class="item-img-placeholder" style="width:12px; height:12px; border-radius:50%; margin-right:8px; opacity:0.5;"></div><span class="item-underline">${x.name}</span>${crownHtml}</td>
@@ -1999,8 +1925,35 @@ function renderItemTable(ds) {
   document.querySelector('#item-table tbody').innerHTML = tbodyHtml;
 }
 
+// Keep old name as alias so any external callers still work
+function renderItemTable(ds) {
+  if (derived) renderItemTableFromDerived(derived);
+}
+
+function renderStreak() {
+  const daySet = new Set(feedLog.filter(e => e.status === 'success').map(e => getMemoizedDateInfo(e).nstDateStr));
+  let streak = 0;
+  let checkDate = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
+  const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+  if (daySet.has(fmt(checkDate))) {
+    streak++;
+    checkDate.setDate(checkDate.getDate() - 1);
+    while (daySet.has(fmt(checkDate))) { streak++; checkDate.setDate(checkDate.getDate() - 1); }
+  } else {
+    checkDate.setDate(checkDate.getDate() - 1);
+    if (daySet.has(fmt(checkDate))) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+      while (daySet.has(fmt(checkDate))) { streak++; checkDate.setDate(checkDate.getDate() - 1); }
+    }
+  }
+  const b = document.getElementById('streak-badge');
+  document.getElementById('streak-val').textContent = streak;
+  b.classList.toggle('hidden', streak === 0 || currentMonth !== 'all');
+}
+
 function renderLog(data) {
-  const arr = [...data].sort((a,b) => b.timestamp.localeCompare(a.timestamp)).slice(0,300);
+  const arr = [...data].sort((a,b) => b.timestamp.localeCompare(a.timestamp)).slice(0, 300);
   document.getElementById('log-count-label').textContent = `Showing ${Math.min(300, data.length)} of ${data.length.toLocaleString()}`;
   const html = arr.map(e => {
     const { price, inflated } = getCached(e.item);
@@ -2008,16 +1961,13 @@ function renderLog(data) {
       ? `<span class="log-price${inflated ? ' inflated' : ''}">${price.toLocaleString()} NP</span>`
       : `<span class="log-price no-data">no price</span>`;
     const safeName = e.item.replace(/"/g, '&quot;');
-    
     const info = getMemoizedDateInfo(e);
     let h = info.hour % 12;
     if (h === 0) h = 12;
     const ampm = info.hour >= 12 ? 'PM' : 'AM';
     const m = new Date(e.timestamp).getMinutes().toString().padStart(2, '0');
     const dStr = info.nstDateStr.split('-');
-    
     const ptDateStr = `${MONTHS_SHORT[parseInt(dStr[1])-1]} ${parseInt(dStr[2])}, ${h}:${m} ${ampm}`;
-    
     return `
       <div class="log-entry" style="opacity: ${e.status === 'success' ? '1' : '0.6'}">
         <div><div class="log-name item-clickable item-underline" data-name="${safeName}">${e.item}</div><div class="log-ts">${ptDateStr}</div></div>
