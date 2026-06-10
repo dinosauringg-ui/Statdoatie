@@ -9,7 +9,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
+  /* ── BASE COLORS ── */
   --bg:        #0d0f14;
   --glass:     rgba(25, 29, 38, 0.4);
   --glass-hover: rgba(35, 41, 54, 0.6);
@@ -18,6 +20,7 @@
   --text:      #ffffff;
   --text2:     #a0aec0;
   --text3:     #718096;
+  
   --green:     #22c55e;
   --green-glow: rgba(34, 197, 94, 0.4);
   --red:       #ef4444;
@@ -26,16 +29,23 @@
   --amber:     #f59e0b;
   --purple:    #8b5cf6;
   --teal:      #14b8a6;
+
+  /* ── STRUCTURAL VARIABLES ── */
   --theme-font-display: 'Outfit', sans-serif;
   --theme-font-body: 'DM Sans', sans-serif;
+  
   --theme-radius: 20px;
   --btn-radius: 100px;
+  
   --theme-card-bg: var(--glass);
   --theme-card-border: 1px solid var(--border);
   --theme-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  
   --header-bg: var(--glass);
   --header-text: var(--text);
   --blob-opacity: 0.3;
+
+  /* Table & Log variables */
   --table-row: rgba(0,0,0,0.2);
   --table-row-hover: rgba(255,255,255,0.05);
   --log-bg: rgba(0,0,0,0.2);
@@ -43,8 +53,10 @@
   --badge-red-bg: rgba(255,255,255,0.05);
   --badge-red-text: var(--text3);
   --c-red-bg: rgba(255,255,255,0.02);
+  
   --chart-empty: rgba(255, 255, 255, 0.05);
   --chart-line: rgba(255, 255, 255, 0.15);
+
   /* Heatmap */
   --heatmap-empty: rgba(255,255,255,0.05);
   --heatmap-1: rgba(34, 197, 94, 0.2);
@@ -53,83 +65,130 @@
   --heatmap-4: rgba(34, 197, 94, 1);
 }
 
+/* ── DISTINCT DARK THEMES ── */
 body.theme-kadoatery {
-  --bg: #14081c; --glass: rgba(45, 10, 50, 0.4); --glass-hover: rgba(65, 15, 75, 0.6);
-  --green: #f472b6; --green-glow: rgba(244, 114, 182, 0.4);
+  --bg: #14081c; 
+  --glass: rgba(45, 10, 50, 0.4); 
+  --glass-hover: rgba(65, 15, 75, 0.6);
+  --green: #f472b6; 
+  --green-glow: rgba(244, 114, 182, 0.4); 
   --red: #64748b; --blue: #c084fc; --amber: #fbbf24; --purple: #e879f9; --teal: #2dd4bf;
   --theme-card-border: 1px solid #f472b6;
   --theme-shadow: 0 0 20px rgba(244, 114, 182, 0.15), inset 0 0 10px rgba(192, 132, 252, 0.1);
-  --btn-radius: 8px; --theme-radius: 12px;
+  --btn-radius: 8px;
+  --theme-radius: 12px;
   --heatmap-1: rgba(244, 114, 182, 0.2); --heatmap-2: rgba(244, 114, 182, 0.4);
   --heatmap-3: rgba(244, 114, 182, 0.65); --heatmap-4: rgba(244, 114, 182, 1);
 }
+
 body.theme-virtupets {
-  --bg: #000000; --glass: rgba(0, 30, 10, 0.4); --glass-hover: rgba(0, 50, 15, 0.6);
-  --green: #4ade80; --green-glow: rgba(74, 222, 128, 0.4);
+  --bg: #000000; 
+  --glass: rgba(0, 30, 10, 0.4); 
+  --glass-hover: rgba(0, 50, 15, 0.6);
+  --green: #4ade80; 
+  --green-glow: rgba(74, 222, 128, 0.4); 
   --red: #ef4444; --blue: #22c55e; --amber: #facc15; --purple: #16a34a; --teal: #15803d;
   --theme-font-display: 'Courier New', Courier, monospace;
   --theme-font-body: 'Courier New', Courier, monospace;
-  --theme-radius: 0px; --btn-radius: 0px;
+  --theme-radius: 0px;
+  --btn-radius: 0px;
   --theme-card-border: 1px solid #4ade80;
   --theme-card-bg: rgba(0, 20, 5, 0.8);
   --theme-shadow: 0 0 15px rgba(74, 222, 128, 0.1);
-  --header-bg: #000000; --blob-opacity: 0;
+  --header-bg: #000000;
+  --blob-opacity: 0; 
   --heatmap-1: rgba(74, 222, 128, 0.2); --heatmap-2: rgba(74, 222, 128, 0.4);
   --heatmap-3: rgba(74, 222, 128, 0.65); --heatmap-4: rgba(74, 222, 128, 1);
 }
+
 body.theme-maraqua {
-  --bg: #06111c; --glass: rgba(14, 42, 64, 0.4); --glass-hover: rgba(20, 60, 90, 0.6);
-  --green: #2dd4bf; --green-glow: rgba(45, 212, 191, 0.4);
+  --bg: #06111c; 
+  --glass: rgba(14, 42, 64, 0.4); 
+  --glass-hover: rgba(20, 60, 90, 0.6);
+  --green: #2dd4bf; 
+  --green-glow: rgba(45, 212, 191, 0.4); 
   --red: #fb7185; --blue: #0284c7; --amber: #f59e0b; --purple: #0ea5e9; --teal: #38bdf8;
   --heatmap-1: rgba(45, 212, 191, 0.2); --heatmap-2: rgba(45, 212, 191, 0.4);
   --heatmap-3: rgba(45, 212, 191, 0.65); --heatmap-4: rgba(45, 212, 191, 1);
 }
+
 body.theme-shenkuu {
-  --bg: #1a0f0d; --glass: rgba(60, 20, 15, 0.3); --glass-hover: rgba(80, 25, 20, 0.5);
-  --green: #facc15; --green-glow: rgba(250, 204, 21, 0.4);
+  --bg: #1a0f0d; 
+  --glass: rgba(60, 20, 15, 0.3); 
+  --glass-hover: rgba(80, 25, 20, 0.5);
+  --green: #facc15; 
+  --green-glow: rgba(250, 204, 21, 0.4); 
   --red: #f87171; --blue: #f97316; --amber: #fbbf24; --purple: #be123c; --teal: #fb923c;
   --heatmap-1: rgba(250, 204, 21, 0.2); --heatmap-2: rgba(250, 204, 21, 0.4);
   --heatmap-3: rgba(250, 204, 21, 0.65); --heatmap-4: rgba(250, 204, 21, 1);
 }
+
+/* ── LIGHT THEMES ── */
 body.theme-faerieland {
-  --bg: #fdf4ff; --glass: rgba(255, 255, 255, 0.6); --glass-hover: rgba(255, 255, 255, 0.8);
-  --border: rgba(216, 180, 254, 0.4); --border-strong: rgba(216, 180, 254, 0.8);
-  --text: #4a044e; --text2: #701a75; --text3: #86198f;
+  --bg: #fdf4ff;
+  --glass: rgba(255, 255, 255, 0.6);
+  --glass-hover: rgba(255, 255, 255, 0.8);
+  --border: rgba(216, 180, 254, 0.4);
+  --border-strong: rgba(216, 180, 254, 0.8);
+  --text: #4a044e; --text2: #701a75; --text3: #86198f; 
   --green: #059669; --green-glow: rgba(16, 185, 129, 0.1);
   --red: #e11d48; --blue: #8b5cf6; --amber: #d97706; --purple: #d946ef; --teal: #06b6d4;
-  --table-row: rgba(255, 255, 255, 0.6); --table-row-hover: rgba(255, 255, 255, 0.9);
-  --log-bg: rgba(255, 255, 255, 0.6); --log-hover: rgba(255, 255, 255, 0.9);
-  --badge-red-bg: rgba(225, 29, 72, 0.1); --badge-red-text: #be123c;
-  --c-red-bg: rgba(225, 29, 72, 0.05); --theme-radius: 35px; --btn-radius: 100px;
+  --table-row: rgba(255, 255, 255, 0.6);
+  --table-row-hover: rgba(255, 255, 255, 0.9);
+  --log-bg: rgba(255, 255, 255, 0.6);
+  --log-hover: rgba(255, 255, 255, 0.9);
+  --badge-red-bg: rgba(225, 29, 72, 0.1);
+  --badge-red-text: #be123c;
+  --c-red-bg: rgba(225, 29, 72, 0.05);
+  --theme-radius: 35px;
+  --btn-radius: 100px;
   --theme-card-bg: rgba(255, 255, 255, 0.8);
   --theme-card-border: 3px solid #fdf4ff;
   --theme-shadow: 0 15px 35px rgba(217, 70, 239, 0.15);
-  --chart-empty: rgba(0,0,0,0.05); --chart-line: rgba(0,0,0,0.1);
+  --chart-empty: rgba(0,0,0,0.05);
+  --chart-line: rgba(0,0,0,0.1);
   --heatmap-empty: rgba(0,0,0,0.06);
   --heatmap-1: rgba(5, 150, 105, 0.2); --heatmap-2: rgba(5, 150, 105, 0.45);
   --heatmap-3: rgba(5, 150, 105, 0.7); --heatmap-4: rgba(5, 150, 105, 1);
 }
+
 body.theme-classic {
-  --bg: #ffffff; --glass: #eeeeee; --glass-hover: #dddddd;
-  --border: #000000; --border-strong: #000099;
-  --text: #000000; --text2: #333333; --text3: #444444;
+  --bg: #ffffff; 
+  --glass: #eeeeee;
+  --glass-hover: #dddddd;
+  --border: #000000;
+  --border-strong: #000099;
+  --text: #000000; --text2: #333333; --text3: #444444; 
   --green: #008000; --green-glow: transparent;
   --red: #FF0000; --blue: #000099; --amber: #FF9900; --purple: #660099; --teal: #006666;
-  --header-bg: #ffffcc; --header-text: #000000;
-  --theme-font-display: 'Arial', sans-serif; --theme-font-body: 'Verdana', sans-serif;
-  --theme-radius: 0px; --btn-radius: 0px;
-  --theme-card-bg: #f6f6f6; --theme-card-border: 1px solid #000000;
-  --theme-shadow: 3px 3px 0px rgba(0,0,0,0.15); --blob-opacity: 0;
-  --table-row: #ffffff; --table-row-hover: #ffffcc;
-  --log-bg: #ffffff; --log-hover: #ffffcc;
-  --badge-red-bg: #ffeeee; --badge-red-text: #cc0000; --c-red-bg: #ffeeee;
-  --chart-empty: rgba(0,0,0,0.1); --chart-line: rgba(0,0,0,0.2);
+  --header-bg: #ffffcc; 
+  --header-text: #000000;
+  --theme-font-display: 'Arial', sans-serif;
+  --theme-font-body: 'Verdana', sans-serif;
+  --theme-radius: 0px;
+  --btn-radius: 0px;
+  --theme-card-bg: #f6f6f6;
+  --theme-card-border: 1px solid #000000;
+  --theme-shadow: 3px 3px 0px rgba(0,0,0,0.15); 
+  --blob-opacity: 0;
+  --table-row: #ffffff;
+  --table-row-hover: #ffffcc;
+  --log-bg: #ffffff;
+  --log-hover: #ffffcc;
+  --badge-red-bg: #ffeeee;
+  --badge-red-text: #cc0000;
+  --c-red-bg: #ffeeee;
+  --chart-empty: rgba(0,0,0,0.1);
+  --chart-line: rgba(0,0,0,0.2);
   --heatmap-empty: rgba(0,0,0,0.08);
   --heatmap-1: rgba(0, 128, 0, 0.2); --heatmap-2: rgba(0, 128, 0, 0.45);
   --heatmap-3: rgba(0, 128, 0, 0.7); --heatmap-4: rgba(0, 128, 0, 1);
 }
 
-body.theme-faerieland .stat-num, body.theme-classic .stat-num { text-shadow: none !important; }
+body.theme-faerieland .stat-num, 
+body.theme-classic .stat-num {
+  text-shadow: none !important;
+}
 
 html { font-size: 15px; }
 body {
@@ -138,6 +197,7 @@ body {
   -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative;
   transition: background-color 0.5s ease, color 0.5s ease, font-family 0.5s ease;
 }
+
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
@@ -157,13 +217,14 @@ body {
   100% { transform: translate(10vw, 5vh) scale(1.1) rotate(20deg); border-radius: 50%; }
 }
 
-/* ── HEADER ── */
+/* ── HEADER (SLIM VIEW) ── */
 .header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 24px; height: 60px; background: var(--header-bg);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
-  color: var(--header-text); transition: background 0.5s ease, color 0.5s ease;
+  color: var(--header-text);
+  transition: background 0.5s ease, color 0.5s ease;
 }
 .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .logo-icon {
@@ -175,6 +236,7 @@ body {
 .logo-text { font-family: var(--theme-font-display); font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; user-select: none; white-space: nowrap; }
 .logo-sub { font-size: .75rem; font-weight: 500; opacity: 0.7; white-space: nowrap; }
 .header-right { display: flex; align-items: center; gap: 10px; }
+
 .pill-badge {
   display: inline-flex; align-items: center; gap: 6px; font-size: .75rem;
   font-weight: 600; color: #fff; background: linear-gradient(135deg, #f59e0b, #ef4444);
@@ -200,6 +262,7 @@ body {
 .btn-icon { padding: 0; width: 40px; justify-content: center; font-size: 1.2rem; color: inherit; flex-shrink: 0; }
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+
 .import-feeds-btn { padding: 0 16px; white-space: nowrap; flex-shrink: 0; }
 
 /* ── MODALS ── */
@@ -315,7 +378,6 @@ body {
 .stat-num {
   font-family: var(--theme-font-display); font-size: 2.8rem; font-weight: 800;
   line-height: 1; color: var(--text); margin-bottom: 6px;
-  /* Prevent layout shift during counter animation */
   min-width: 0;
 }
 .stat-expanded {
@@ -1147,32 +1209,43 @@ function renderHeatmap(data) {
   const container = document.getElementById('heatmap-inner');
   if (!container) return;
 
+  if (!data || data.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
   // Build a map of dateStr -> { fed, sniped }
   const dayMap = {};
   for (const entry of data) {
-    const d = getNSTDateStr(entry.timestamp);
-    if (!dayMap[d]) dayMap[d] = { fed: 0, sniped: 0 };
-    if (entry.status === 'success') dayMap[d].fed++;
-    else dayMap[d].sniped++;
+    const dStr = getNSTDateStr(entry.timestamp);
+    if (!dayMap[dStr]) dayMap[dStr] = { fed: 0, sniped: 0 };
+    if (entry.status === 'success') dayMap[dStr].fed++;
+    else dayMap[dStr].sniped++;
   }
 
   // Determine max for scaling
   const maxFed = Math.max(1, ...Object.values(dayMap).map(v => v.fed));
 
-  // We'll show 52 weeks ending today (NST)
-  const todayNST = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
-  todayNST.setHours(0, 0, 0, 0);
+  // Get first recorded date
+  const sortedDates = Object.keys(dayMap).sort();
+  const firstDateStr = sortedDates[0];
+  const [fY, fM, fD] = firstDateStr.split('-').map(Number);
+  const startDate = new Date(fY, fM - 1, fD); // naive local midnight mapping to NST date string
+  
+  // Wind back to Sunday so our grid aligns perfectly
+  startDate.setDate(startDate.getDate() - startDate.getDay());
 
-  // Go back to the Sunday 52 weeks ago
-  const startDate = new Date(todayNST);
-  startDate.setDate(startDate.getDate() - (52 * 7) - startDate.getDay());
+  // Get today (in NST)
+  const todayNSTStr = getNSTDateStr(new Date().toISOString());
+  const [tY, tM, tD] = todayNSTStr.split('-').map(Number);
+  const endDate = new Date(tY, tM - 1, tD); // naive local midnight mapping to today's NST date string
 
   // Build week columns
   const weeks = [];
   let cur = new Date(startDate);
-  while (cur <= todayNST) {
+  while (cur <= endDate) {
     const week = [];
-    for (let d = 0; d < 7; d++) {
+    for (let i = 0; i < 7; i++) {
       week.push(new Date(cur));
       cur.setDate(cur.getDate() + 1);
     }
@@ -1230,7 +1303,7 @@ function renderHeatmap(data) {
 
       const dateStr = `${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
       const dayData = dayMap[dateStr];
-      const isFuture = day > todayNST;
+      const isFuture = day > endDate;
 
       if (isFuture) {
         cell.classList.add('future');
