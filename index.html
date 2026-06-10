@@ -242,7 +242,7 @@ body {
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
-.import-feeds-btn { padding: 0 16px; white-space: nowrap; }
+.header-btn-text { margin-left: 4px; }
 
 /* ── MODALS ── */
 .modal-overlay {
@@ -309,6 +309,7 @@ body {
   box-shadow: var(--theme-shadow); transition: transform 0.2s, background 0.5s ease, border 0.5s ease;
   position: relative;
 }
+
 .stat-card.wide { grid-column: 1 / -1; }
 
 .crown-jewel-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
@@ -367,15 +368,6 @@ body {
 
 /* ── DOUGHNUT CENTER ── */
 .doughnut-wrapper { position: relative; display: flex; align-items: center; justify-content: center; height: 260px; }
-
-/* ── CHART SELECTOR ── */
-.chart-selector {
-  background: var(--table-row); border: 1px solid var(--border); color: var(--text);
-  padding: 6px 12px; border-radius: var(--btn-radius); font-family: var(--theme-font-body);
-  outline: none; font-size: 0.85rem; font-weight: 600; cursor: pointer;
-}
-.chart-selector:focus { border-color: var(--blue); }
-.chart-selector option { background: var(--bg); color: var(--text); }
 
 /* ── TABLE SEARCH & SORT ── */
 .search-input {
@@ -527,7 +519,7 @@ input[type=file] { display: none; }
       <span id="status-text">Awaiting Data</span>
     </div>
     
-    <button class="btn btn-primary import-feeds-btn" onclick="triggerExtensionSync()" title="Import Feeds">
+    <button class="btn btn-primary header-sync-btn" onclick="triggerExtensionSync()" title="Import Feeds">
       Import Feeds
     </button>
 
@@ -586,6 +578,25 @@ input[type=file] { display: none; }
     <div style="display:flex; gap:8px;">
       <input type="number" id="manual-price-input" placeholder="e.g. 15000" style="flex:1; background:var(--table-row); border:1px solid var(--border); color:var(--text); padding:0 16px; border-radius:var(--btn-radius); font-family:var(--theme-font-body); outline:none;">
       <button class="btn btn-primary" onclick="saveManualPrice()">Save Price</button>
+    </div>
+  </div>
+</div>
+
+<div id="chart-modal" class="modal-overlay hidden">
+  <div class="modal-card card">
+    <div class="card-header" style="margin-bottom: 24px;">
+      <span class="card-title">Select Metric</span>
+      <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('chart-modal').classList.add('hidden')">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button class="btn" onclick="renderMainChart('daily'); document.getElementById('chart-modal').classList.add('hidden')">Daily Feeds</button>
+      <button class="btn" onclick="renderMainChart('cumul'); document.getElementById('chart-modal').classList.add('hidden')">Cumulative Growth</button>
+      <button class="btn" onclick="renderMainChart('np'); document.getElementById('chart-modal').classList.add('hidden')">NP Spent Tracker</button>
+      <button class="btn" onclick="renderMainChart('unique'); document.getElementById('chart-modal').classList.add('hidden')">Unique Items Fed</button>
+      <button class="btn" onclick="renderMainChart('dow'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Day</button>
+      <button class="btn" onclick="renderMainChart('hour'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Hour</button>
+      <button class="btn" onclick="renderMainChart('tiers'); document.getElementById('chart-modal').classList.add('hidden')">Item Price Tiers</button>
+      <button class="btn" style="border-color: var(--blue); color: var(--blue);" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
     </div>
   </div>
 </div>
@@ -675,14 +686,10 @@ input[type=file] { display: none; }
         <div class="card" style="display:flex; flex-direction:column;">
           <div class="card-header" style="margin-bottom:12px; flex-wrap:wrap; gap:12px;">
             <span class="card-title">Metrics</span>
-            <select id="main-chart-select" class="chart-selector" onchange="renderMainChart(this.value)">
-              <option value="daily">Daily Feeds</option>
-              <option value="cumul">Cumulative Growth</option>
-              <option value="np">NP Spent</option>
-              <option value="unique">Unique Items Fed</option>
-              <option value="dow">Activity by Day</option>
-              <option value="log">Raw Feed Log</option>
-            </select>
+            <button class="btn" onclick="document.getElementById('chart-modal').classList.remove('hidden')">
+              <svg viewBox="0 0 24 24" style="width:16px; height:16px; margin-right:4px;" fill="currentColor"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></svg>
+              <span id="current-chart-label">Daily Feeds</span>
+            </button>
           </div>
           <div class="chart-wrap" style="flex:1; min-height:260px;">
             <canvas id="mainChart"></canvas>
@@ -744,12 +751,23 @@ let dbSortDir = -1;
 let absoluteMostExpensiveItem = '';
 
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+let currentMainChartType = 'daily';
 
-// Payload object for unified charts
+// The new unified payload object for the main dynamic chart
 window.chartPayload = {
-  labelsTime: [], dailyFed: [], dailySniped: [],
-  cumulFed: [], cumulSniped: [], cumulNP: [], cumulUnique: [],
-  labelsDow: [...DAYS], dowFed: Array(7).fill(0), dowSniped: Array(7).fill(0)
+  labelsTime: [],
+  dailyFed: [],
+  dailySniped: [],
+  cumulFed: [],
+  cumulSniped: [],
+  cumulNP: [],
+  cumulUnique: [],
+  labelsDow: [...DAYS],
+  dowFed: Array(7).fill(0),
+  dowSniped: Array(7).fill(0),
+  hourFed: Array(24).fill(0),
+  hourSniped: Array(24).fill(0),
+  tierCounts: [0, 0, 0, 0] // <10k, 10-50k, 50-100k, 100k+
 };
 
 let currentThemeKey = localStorage.getItem('statdoatie_theme') || 'default';
@@ -804,12 +822,6 @@ function applyThemeDOM(key) {
   document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
   const activeBtn = document.querySelector(`.theme-btn[data-theme="${key}"]`);
   if (activeBtn) activeBtn.classList.add('active');
-}
-
-function setTheme(key) {
-  currentThemeKey = key;
-  localStorage.setItem('statdoatie_theme', key);
-  applyThemeDOM(key);
 
   setTimeout(() => {
       const isLight = key === 'faerieland' || key === 'classic';
@@ -825,9 +837,15 @@ function setTheme(key) {
       
       if (Object.keys(charts).length > 0) {
         if(charts.pie) charts.pie.update();
-        if(charts.main) renderMainChart(document.getElementById('main-chart-select').value);
+        if(charts.main) renderMainChart(currentMainChartType);
       }
   }, 50);
+}
+
+function setTheme(key) {
+  currentThemeKey = key;
+  localStorage.setItem('statdoatie_theme', key);
+  applyThemeDOM(key);
 }
 
 // ─── UTILS ───
@@ -969,17 +987,12 @@ document.addEventListener('KadData_ExtToPage', e => {
 function triggerExtensionSync() {
   clearTimeout(syncTimeout);
   
-  if (document.documentElement.getAttribute('data-extension-installed') !== 'true') {
-    toast('No active extension detected. Make sure it is installed and enabled!');
-    return;
-  }
-  
-  toast('Requesting data from extension...');
-  document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
-  
   syncTimeout = setTimeout(() => { 
     toast('No active extension detected. Make sure it is installed and enabled!'); 
   }, 1500);
+  
+  toast('Requesting data from extension...');
+  document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
   
   try { closeSettings(); } catch(e) {}
 }
@@ -1115,7 +1128,9 @@ function prepareChartData(data) {
   window.chartPayload = {
     labelsTime: [], dailyFed: [], dailySniped: [],
     cumulFed: [], cumulSniped: [], cumulNP: [], cumulUnique: [],
-    labelsDow: [...DAYS], dowFed: Array(7).fill(0), dowSniped: Array(7).fill(0)
+    labelsDow: [...DAYS], dowFed: Array(7).fill(0), dowSniped: Array(7).fill(0),
+    hourFed: Array(24).fill(0), hourSniped: Array(24).fill(0),
+    tierCounts: [0, 0, 0, 0]
   };
 
   if (!data.length) return;
@@ -1129,13 +1144,22 @@ function prepareChartData(data) {
   sorted.forEach(e => {
     const d = getNSTDateStr(e.timestamp);
     if (!dObj[d]) dObj[d] = { s: 0, n: 0, np: 0, newUniques: 0 };
+    
+    const ptDate = getNSTDateObj(e.timestamp);
 
     if (e.status === 'success') {
       dObj[d].s++;
-      window.chartPayload.dowFed[getNSTDateObj(e.timestamp).getDay()]++;
+      window.chartPayload.dowFed[ptDate.getDay()]++;
+      window.chartPayload.hourFed[ptDate.getHours()]++;
 
-      const price = getCached(e.item).price ?? 0;
-      dObj[d].np += price;
+      const price = getCached(e.item).price;
+      if (price != null) {
+          dObj[d].np += price;
+          if (price < 10000) window.chartPayload.tierCounts[0]++;
+          else if (price < 50000) window.chartPayload.tierCounts[1]++;
+          else if (price < 100000) window.chartPayload.tierCounts[2]++;
+          else window.chartPayload.tierCounts[3]++;
+      }
 
       if (!seenSet.has(e.item)) {
         seenSet.add(e.item);
@@ -1143,7 +1167,8 @@ function prepareChartData(data) {
       }
     } else {
       dObj[d].n++;
-      window.chartPayload.dowSniped[getNSTDateObj(e.timestamp).getDay()]++;
+      window.chartPayload.dowSniped[ptDate.getDay()]++;
+      window.chartPayload.hourSniped[ptDate.getHours()]++;
     }
   });
 
@@ -1170,6 +1195,21 @@ function prepareChartData(data) {
 }
 
 function renderMainChart(type) {
+  currentMainChartType = type;
+  
+  const chartNames = {
+      'daily': 'Daily Feeds',
+      'cumul': 'Cumulative Growth',
+      'np': 'NP Spent Tracker',
+      'unique': 'Unique Items Fed',
+      'dow': 'Activity by Day',
+      'hour': 'Activity by Hour',
+      'tiers': 'Item Price Tiers',
+      'log': 'Raw Feed Log'
+  };
+  
+  document.getElementById('current-chart-label').textContent = chartNames[type];
+
   const canvas = document.getElementById('mainChart');
   const logView = document.getElementById('log-view');
 
@@ -1290,6 +1330,45 @@ function renderMainChart(type) {
         scales: { x: { stacked: true, grid: { display: false }, border:{display:false} }, y: { stacked: true, grid: gridLines(), border:{display:false} } }
       }
     };
+  } else if (type === 'hour') {
+    const hourLabels = Array.from({length: 24}, (_, i) => {
+        const ampm = i >= 12 ? 'PM' : 'AM';
+        const hr = i % 12 || 12;
+        return `${hr} ${ampm}`;
+    });
+    config = {
+      type: 'bar',
+      data: {
+        labels: hourLabels,
+        datasets: [
+          { label: 'Fed', data: p.hourFed, backgroundColor: getCssVar('--blue'), stack: 'a', borderRadius: 10 },
+          { label: 'Sniped', data: p.hourSniped, backgroundColor: getCssVar('--chart-empty'), stack: 'a', borderRadius: 10 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: { label: ctx => buildRichTooltip(ctx.dataset.label, ctx.raw, p.hourFed[ctx.dataIndex] + p.hourSniped[ctx.dataIndex]) } } },
+        scales: { x: { stacked: true, grid: { display: false }, border:{display:false}, ticks: { maxTicksLimit: 12 } }, y: { stacked: true, grid: gridLines(), border:{display:false} } }
+      }
+    };
+  } else if (type === 'tiers') {
+      config = {
+        type: 'bar',
+        data: {
+          labels: ['< 10k NP', '10k - 50k NP', '50k - 100k NP', 'Unbuyable (100k+)'],
+          datasets: [{ 
+            data: p.tierCounts, 
+            backgroundColor: [getCssVar('--green'), getCssVar('--blue'), getCssVar('--purple'), getCssVar('--amber')],
+            borderRadius: 10 
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.raw} Items` } } },
+          scales: { x: { grid: gridLines(), border:{display:false} }, y: { grid: { display: false }, border:{display:false} } }
+        }
+      };
   }
 
   charts.main = new Chart(ctx, config);
@@ -1308,7 +1387,7 @@ function renderWidgets() {
   renderItemTable(data);
   
   prepareChartData(data);
-  renderMainChart(document.getElementById('main-chart-select').value);
+  renderMainChart(currentMainChartType);
 }
 
 function renderStats(data) {
@@ -1541,6 +1620,7 @@ function renderLog(data) {
       
     const safeName = e.item.replace(/"/g, '&quot;');
 
+    // Parse date explicitly to PT
     const ptDateStr = new Date(e.timestamp).toLocaleString('en-US', {
       timeZone: 'America/Los_Angeles', 
       month: 'short', 
