@@ -1230,15 +1230,26 @@ function renderHeatmap(data) {
   const sortedDates = Object.keys(dayMap).sort();
   const firstDateStr = sortedDates[0];
   const [fY, fM, fD] = firstDateStr.split('-').map(Number);
-  const startDate = new Date(fY, fM - 1, fD); // naive local midnight mapping to NST date string
+  const firstDate = new Date(fY, fM - 1, fD); 
   
-  // Wind back to Sunday so our grid aligns perfectly
+  // Start on the Sunday of the first recorded week
+  let startDate = new Date(firstDate);
   startDate.setDate(startDate.getDate() - startDate.getDay());
 
   // Get today (in NST)
   const todayNSTStr = getNSTDateStr(new Date().toISOString());
   const [tY, tM, tD] = todayNSTStr.split('-').map(Number);
-  const endDate = new Date(tY, tM - 1, tD); // naive local midnight mapping to today's NST date string
+  const todayNST = new Date(tY, tM - 1, tD);
+
+  // Set the minimum end date to 52 weeks after the start date
+  let endDate = new Date(startDate);
+  endDate.setDate(endDate.getDate() + (52 * 7) - 1); // 52 weeks minus 1 day (ends on a Saturday)
+
+  // If you've been tracking for MORE than 52 weeks, stretch the calendar up to the current week
+  if (todayNST > endDate) {
+    endDate = new Date(todayNST);
+    endDate.setDate(endDate.getDate() + (6 - endDate.getDay())); // Round forward to Saturday
+  }
 
   // Build week columns
   const weeks = [];
@@ -1255,6 +1266,7 @@ function renderHeatmap(data) {
   // Month label row
   const monthsRow = document.createElement('div');
   monthsRow.className = 'heatmap-months-row';
+  
   // Left spacer for day labels
   const spacer = document.createElement('div');
   spacer.style.cssText = 'width:32px; flex-shrink:0;';
@@ -1303,7 +1315,7 @@ function renderHeatmap(data) {
 
       const dateStr = `${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
       const dayData = dayMap[dateStr];
-      const isFuture = day > endDate;
+      const isFuture = day > todayNST;
 
       if (isFuture) {
         cell.classList.add('future');
@@ -1350,6 +1362,7 @@ function renderHeatmap(data) {
   container.appendChild(monthsRow);
   container.appendChild(mainRow);
 }
+
 
 // ─── CHARTS ───
 function destroyCharts() { Object.values(charts).forEach(c => { try { c.destroy(); } catch {} }); charts = {}; }
