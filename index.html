@@ -363,18 +363,18 @@ body {
 .card-title { font-family: var(--theme-font-display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
 .card-meta { font-size: .8rem; color: var(--text3); font-weight: 500; }
 
-/* Main Feature Cards Floating Shapes */
+/* Main Feature Cards Tiled Textures */
 .analytics-card, .db-card { position: relative; overflow: hidden; }
 .analytics-card::before, .db-card::before {
-  content: ''; position: absolute; top: -30px; right: -30px;
-  width: 150px; height: 150px; opacity: 0.04; pointer-events: none;
-  -webkit-mask-image: var(--theme-shape); -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
-  animation: floatShape 15s infinite ease-in-out; transition: opacity 0.3s ease; z-index: 0;
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%; opacity: 0.03; pointer-events: none;
+  -webkit-mask-image: var(--theme-shape); -webkit-mask-size: 40px;
+  -webkit-mask-repeat: repeat; -webkit-mask-position: top left;
+  transition: opacity 0.3s ease; z-index: 0;
 }
-.analytics-card::before { background: var(--blue); animation-delay: -2s; }
-.db-card::before { background: var(--purple); animation-delay: -7s; }
-.analytics-card:hover::before, .db-card:hover::before { opacity: 0.08; }
+.analytics-card::before { background: var(--blue); }
+.db-card::before { background: var(--purple); }
+.analytics-card:hover::before, .db-card:hover::before { opacity: 0.06; }
 .analytics-card > *, .db-card > * { position: relative; z-index: 1; }
 
 /* ── EXPANDABLE STAT CARDS ── */
@@ -391,42 +391,24 @@ body {
   position: relative; overflow: hidden;
 }
 
-/* Organic Floating Animation for Shapes */
-@keyframes floatShape {
-  0%   { transform: translateY(0) translateX(0) rotate(0deg); }
-  33%  { transform: translateY(-12px) translateX(8px) rotate(10deg); }
-  66%  { transform: translateY(6px) translateX(-6px) rotate(-5deg); }
-  100% { transform: translateY(0) translateX(0) rotate(0deg); }
-}
-
+/* Tiled Background for Stat Cards */
 .stat-card::before {
   content: '';
   position: absolute;
-  top: -20px; right: -20px;
-  width: 110px; height: 110px;
-  opacity: 0.12;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  opacity: 0.05;
   pointer-events: none;
-  
-  /* SVG Mask Setup */
   -webkit-mask-image: var(--theme-shape);
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  
-  /* Independent floating */
-  animation: floatShape var(--float-dur, 12s) infinite ease-in-out;
-  animation-delay: var(--float-del, 0s);
+  -webkit-mask-size: 30px;
+  -webkit-mask-repeat: repeat;
+  -webkit-mask-position: top left;
   transition: opacity 0.3s ease;
+  z-index: 0;
 }
 
-/* Staggering the floats so they don't move entirely together */
-.stat-card:nth-child(1) { --float-dur: 12s; --float-del: 0s; }
-.stat-card:nth-child(2) { --float-dur: 15s; --float-del: -3s; }
-.stat-card:nth-child(3) { --float-dur: 13s; --float-del: -7s; }
-.stat-card:nth-child(4) { --float-dur: 11s; --float-del: -2s; }
-.stat-card:nth-child(5) { --float-dur: 14s; --float-del: -5s; }
-
-.stat-card:hover::before { opacity: 0.25; }
+.stat-card:hover::before { opacity: 0.1; }
+.stat-card > * { position: relative; z-index: 1; }
 
 .c-green::before  { background: var(--green); }
 .c-amber::before  { background: var(--amber); }
@@ -786,8 +768,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 </style>
 </head>
 <body>
-
-<div class="hmap-tooltip" id="hmap-tooltip"></div>
 
 <div class="bg-blobs">
   <div class="blob blob-1"></div>
