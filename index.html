@@ -244,7 +244,7 @@ body {
   pointer-events: none; z-index: -1; overflow: hidden; filter: blur(100px);
   will-change: transform;
 }
-.blob { position: absolute; border-radius: 50%; opacity: var(--blob-opacity); animation: float 20s infinite alternate ease-in-out; transition: opacity 0.5s ease, background 0.8s ease; }
+.blob { position: absolute; border-radius: 50%; opacity: var(--blob-opacity); animation: float 30s infinite alternate ease-in-out; transition: opacity 0.5s ease, background 0.8s ease; }
 .blob-1 { width: 40vw; height: 40vw; background: var(--blue); top: -10%; left: -10%; animation-duration: 25s; }
 .blob-2 { width: 50vw; height: 50vw; background: var(--purple); bottom: -20%; right: -10%; animation-duration: 28s; animation-direction: alternate-reverse; }
 .blob-3 { width: 35vw; height: 35vw; background: var(--teal); top: 30%; left: 40%; animation-duration: 35s; }
@@ -482,10 +482,8 @@ body {
 
 /* ── HEATMAP CALENDAR ── */
 #heatmap-view {
-  /* Dynamic cell sizing */
   --cell-size: 28px;
   --cell-gap: 6px;
-  
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -500,7 +498,6 @@ body {
 .heatmap-inner { display: inline-flex; flex-direction: column; gap: 0; min-width: 100%; }
 .heatmap-months-row { display: flex; align-items: flex-end; margin-bottom: 6px; }
 
-/* Spacer aligns the start of the months with the start of the grid */
 .heatmap-month-spacer { flex-shrink: 0; width: calc(32px + 12px); } 
 
 .heatmap-month-label { 
@@ -559,7 +556,6 @@ body {
 .th-sortable:hover { color: var(--text); }
 
 /* ── TABLE ── */
-/* Fixed height and inner scrolling prevents the Glassmorphism footprint from melting the GPU */
 .table-wrap { 
   max-height: 450px; 
   overflow-y: auto; 
@@ -570,11 +566,10 @@ body {
 }
 table { width: 100%; border-collapse: separate; border-spacing: 0 8px; min-width: 800px; }
 
-/* Sticky headers ensure context stays while scrolling */
 #item-table thead th { 
   position: sticky; 
   top: 0; 
-  background: var(--bg); /* Opaque background hides scrolling rows behind it */
+  background: var(--bg); 
   z-index: 10;
   text-align: left; font-size: .75rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--text3); padding: 8px 16px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
@@ -625,7 +620,7 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 
 /* ── EXPANDABLE DB CARD ── */
 .db-card-body {
-  display: none; /* Instant toggle to prevent layout thrashing lag */
+  display: none; 
   opacity: 0;
 }
 .db-card.expanded .db-card-body {
@@ -665,7 +660,6 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 input[type=file] { display: none; }
 
 /* ── SHARE MODE PURE CSS OVERRIDES ── */
-/* When .share-mode is applied to body, the live dashboard transforms into a poster */
 body.share-mode .filter-bar,
 body.share-mode .db-card,
 body.share-mode .header-right,
@@ -673,7 +667,6 @@ body.share-mode .import-screen {
   display: none !important; 
 }
 
-/* Center and strip the header in Share Mode */
 body.share-mode .header { 
   justify-content: center; 
   background: transparent; 
@@ -683,14 +676,12 @@ body.share-mode .header {
 }
 
 body.share-mode .main { 
-  max-width: 480px; /* Mobile poster width */
+  max-width: 480px; 
   padding: 20px 16px 120px 16px; 
   margin: 0 auto; 
 }
 
-body.share-mode .stats-grid { 
-  grid-template-columns: 1fr 1fr; /* Force 2x2 grid */
-}
+body.share-mode .stats-grid { grid-template-columns: 1fr 1fr; }
 body.share-mode .stat-card.wide { grid-column: 1 / -1; }
 
 body.share-mode .stat-expanded { display: none !important; }
@@ -698,12 +689,8 @@ body.share-mode .expandable-card { cursor: default; }
 body.share-mode .stat-label::after { display: none !important; }
 body.share-mode .stat-num { font-size: 2rem !important; }
 
-/* Add the current date below the title in share mode */
-body.share-mode .logo-sub::after {
-  content: " • " attr(data-date);
-}
+body.share-mode .logo-sub::after { content: " • " attr(data-date); }
 
-/* Floating Exit Share Mode Button */
 .share-exit-fab {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.4); color: #ffffff; 
@@ -737,12 +724,11 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   .header { padding: 0 16px; height: 56px; flex-wrap: nowrap; }
   .header-right { margin-top: 0; width: auto; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
   .logo-sub { display: none; }
-  body.share-mode .logo-sub { display: block; } /* Show date in share mode mobile */
+  body.share-mode .logo-sub { display: block; }
   .logo-text { font-size: 1.1rem; }
   .pill-badge { padding: 4px 8px; font-size: 0.65rem; }
   .status-chip { padding: 4px 8px; font-size: 0.65rem; }
   
-  /* Make status-text completely disappear on mobile to save space */
   #status-text { display: none; }
   
   .btn-icon { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -778,7 +764,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 }
 @media (max-width: 400px) {
   .logo-text { display: none; }
-  body.share-mode .logo-text { display: block; } /* Always show branding in share mode */
+  body.share-mode .logo-text { display: block; } 
   .logo-icon { margin-right: 4px; }
   .stats-grid { grid-template-columns: 1fr; }
   body.share-mode .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -786,6 +772,8 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 </style>
 </head>
 <body>
+
+<div class="hmap-tooltip" id="hmap-tooltip"></div>
 
 <div class="bg-blobs">
   <div class="blob blob-1"></div>
@@ -842,7 +830,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 16px;">
       <div style="display:flex; align-items:center; gap:12px;">
-        <div style="width:48px; height:48px; border-radius:8px; background:var(--table-row-hover); flex-shrink:0;"></div>
+        <img id="item-modal-img" class="item-img" style="width:48px; height:48px;" src="" alt="" onerror="this.style.display='none'">
         <div>
           <div class="card-title" id="item-modal-name">Item Name</div>
           <div class="card-meta" id="item-modal-price-display">Current Price: --</div>
@@ -1144,26 +1132,54 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (e) { console.error("Failed to parse local storage", e); }
   }
+  
+  // Heatmap Event Delegation (No Memory Leaks)
+  const heatmapGrid = document.getElementById('heatmap-inner');
+  const tooltip = document.getElementById('hmap-tooltip');
+  if(heatmapGrid && tooltip) {
+    heatmapGrid.addEventListener('mouseover', e => {
+       if(e.target.classList.contains('heatmap-cell') && e.target.dataset.info) {
+          tooltip.textContent = e.target.dataset.info;
+          tooltip.classList.add('visible');
+       }
+    });
+    heatmapGrid.addEventListener('mousemove', e => {
+       if(e.target.classList.contains('heatmap-cell')) {
+          tooltip.style.left = (e.clientX + 14) + 'px';
+          tooltip.style.top  = (e.clientY - 32) + 'px';
+       }
+    });
+    heatmapGrid.addEventListener('mouseout', e => {
+       if(e.target.classList.contains('heatmap-cell')) {
+          tooltip.classList.remove('visible');
+       }
+    });
+  }
+  
   setTimeout(() => { if (feedLog.length > 0) renderWidgets(); }, 50);
 });
 
-// ─── TIMEZONE HELPER ───
-function getNSTDateStr(isoString) {
-  const ptDate = new Date(new Date(isoString).toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
-  const y = ptDate.getFullYear();
-  const m = String(ptDate.getMonth() + 1).padStart(2, '0');
-  const d = String(ptDate.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-}
-function getNSTDateObj(isoString) {
-  return new Date(new Date(isoString).toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+// ─── MEMOIZED DATA PARSING ───
+// Calculates heavy Date math exactly once per item and saves it to the object
+function getMemoizedDateInfo(e) {
+  if (e.nstDateStr) return e;
+  
+  const ptDate = new Date(new Date(e.timestamp).toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+  e.nstDateStr = `${ptDate.getFullYear()}-${String(ptDate.getMonth() + 1).padStart(2, '0')}-${String(ptDate.getDate()).padStart(2, '0')}`;
+  e.dow = ptDate.getDay();
+  e.hour = ptDate.getHours();
+  
+  return e;
 }
 
 // ─── ANIMATED COUNTER ───
+let activeCounters = {};
 function animateCounter(el, target, duration, formatter) {
   if (!el) return;
+  const id = el.id;
+  if (activeCounters[id]) cancelAnimationFrame(activeCounters[id]);
+  
   const startTime = performance.now();
-  const startVal = 0;
   function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 
   function tick(now) {
@@ -1171,10 +1187,10 @@ function animateCounter(el, target, duration, formatter) {
     const progress = Math.min(elapsed / duration, 1);
     const current = Math.round(easeOut(progress) * target);
     el.textContent = formatter ? formatter(current) : current.toLocaleString();
-    if (progress < 1) requestAnimationFrame(tick);
+    if (progress < 1) activeCounters[id] = requestAnimationFrame(tick);
     else el.textContent = formatter ? formatter(target) : (typeof target === 'string' ? target : target.toLocaleString());
   }
-  requestAnimationFrame(tick);
+  activeCounters[id] = requestAnimationFrame(tick);
 }
 
 // ─── THEME ───
@@ -1386,7 +1402,7 @@ function clearData() {
 
 // ─── FILTER ───
 function populateMonths() {
-  const monthSet = new Set(feedLog.map(e => getNSTDateStr(e.timestamp).slice(0, 7)));
+  const monthSet = new Set(feedLog.map(e => getMemoizedDateInfo(e).nstDateStr.slice(0, 7)));
   availableMonths = Array.from(monthSet).sort((a, b) => b.localeCompare(a));
   const select = document.getElementById('month-select');
   select.innerHTML = `<option value="all">ALL TIME</option>` +
@@ -1405,13 +1421,24 @@ function updateFilterStatus() {
   const lbl = document.getElementById('filter-status');
   lbl.innerHTML = currentMonth === 'all' ? 'Filter: Off' : `Filter: <span style="color:var(--text)">${currentMonth}</span>`;
 }
-function getFilteredData() { return currentMonth === 'all' ? feedLog : feedLog.filter(e => getNSTDateStr(e.timestamp).startsWith(currentMonth)); }
+function getFilteredData() { return currentMonth === 'all' ? feedLog : feedLog.filter(e => getMemoizedDateInfo(e).nstDateStr.startsWith(currentMonth)); }
 
 function mergeData(entries) {
   const ex = new Set(feedLog.map(e => e.timestamp + '|' + e.item));
-  const newEntries = entries.filter(e => !ex.has(e.timestamp + '|' + e.item));
+  const newEntries = [];
+  
+  for(let e of entries) {
+    if(!ex.has(e.timestamp + '|' + e.item)) {
+       // Pre-calculate date math immediately upon data entry
+       getMemoizedDateInfo(e);
+       newEntries.push(e);
+    }
+  }
+  
   feedLog = [...feedLog, ...newEntries];
-  feedLog.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+  // Fast string alphabetical sort instead of instantiating new Dates
+  feedLog.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+  
   populateMonths();
   localStorage.setItem('statdoatie_save', JSON.stringify(feedLog));
   showDashboard();
@@ -1446,7 +1473,7 @@ function renderHeatmap(data) {
 
   const dayMap = {};
   for (const entry of data) {
-    const dStr = getNSTDateStr(entry.timestamp);
+    const dStr = getMemoizedDateInfo(entry).nstDateStr;
     if (!dayMap[dStr]) dayMap[dStr] = { fed: 0, sniped: 0 };
     if (entry.status === 'success') dayMap[dStr].fed++;
     else dayMap[dStr].sniped++;
@@ -1462,7 +1489,7 @@ function renderHeatmap(data) {
   let startDate = new Date(firstDate);
   startDate.setDate(startDate.getDate() - startDate.getDay());
 
-  const todayNSTStr = getNSTDateStr(new Date().toISOString());
+  const todayNSTStr = getMemoizedDateInfo({timestamp: new Date().toISOString()}).nstDateStr;
   const [tY, tM, tD] = todayNSTStr.split('-').map(Number);
   const todayNST = new Date(tY, tM - 1, tD);
 
@@ -1528,8 +1555,6 @@ function renderHeatmap(data) {
   const gridArea = document.createElement('div');
   gridArea.className = 'heatmap-grid-area';
 
-  const tooltip = document.getElementById('hmap-tooltip');
-
   weeks.forEach(week => {
     const weekCol = document.createElement('div');
     weekCol.className = 'heatmap-week-col';
@@ -1555,21 +1580,12 @@ function renderHeatmap(data) {
         cell.setAttribute('data-level', level);
       }
 
-      cell.addEventListener('mouseenter', (e) => {
-        if (isFuture) return;
-        const d = dayData || { fed: 0, sniped: 0 };
-        const dateFormatted = day.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        tooltip.textContent = `${dateFormatted} · ${d.fed} fed, ${d.sniped} sniped`;
-        tooltip.classList.add('visible');
-      });
-      cell.addEventListener('mousemove', (e) => {
-        tooltip.style.left = (e.clientX + 14) + 'px';
-        tooltip.style.top  = (e.clientY - 32) + 'px';
-      });
-      cell.addEventListener('mouseleave', () => {
-        tooltip.classList.remove('visible');
-      });
-
+      if (!isFuture) {
+         const d = dayData || { fed: 0, sniped: 0 };
+         const dateFormatted = day.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+         // Attach string to HTML node, do not instantiate thousands of event listeners
+         cell.setAttribute('data-info', `${dateFormatted} · ${d.fed} fed, ${d.sniped} sniped`);
+      }
       weekCol.appendChild(cell);
     });
     gridArea.appendChild(weekCol);
@@ -1617,15 +1633,17 @@ function prepareChartData(data) {
   const dObj = {};
   let totalFed = 0, totalSniped = 0, totalNP = 0;
   let seenSet = new Set();
-  const sorted = [...data].sort((a,b) => new Date(a.timestamp)-new Date(b.timestamp));
-  sorted.forEach(e => {
-    const d = getNSTDateStr(e.timestamp);
+  
+  // Data is already presorted
+  data.forEach(e => {
+    const entry = getMemoizedDateInfo(e);
+    const d = entry.nstDateStr;
+    
     if (!dObj[d]) dObj[d] = { s: 0, n: 0, np: 0, newUniques: 0 };
-    const ptDate = getNSTDateObj(e.timestamp);
     if (e.status === 'success') {
       dObj[d].s++;
-      window.chartPayload.dowFed[ptDate.getDay()]++;
-      window.chartPayload.hourFed[ptDate.getHours()]++;
+      window.chartPayload.dowFed[entry.dow]++;
+      window.chartPayload.hourFed[entry.hour]++;
       const price = getCached(e.item).price;
       if (price != null) {
         dObj[d].np += price;
@@ -1637,11 +1655,12 @@ function prepareChartData(data) {
       if (!seenSet.has(e.item)) { seenSet.add(e.item); dObj[d].newUniques++; }
     } else {
       dObj[d].n++;
-      window.chartPayload.dowSniped[ptDate.getDay()]++;
-      window.chartPayload.hourSniped[ptDate.getHours()]++;
+      window.chartPayload.dowSniped[entry.dow]++;
+      window.chartPayload.hourSniped[entry.hour]++;
     }
   });
-  const lbls = Object.keys(dObj).sort();
+  
+  const lbls = Object.keys(dObj).sort(); // Sort date strings alphabetically (fast)
   window.chartPayload.labelsTime = lbls;
   let runningUnique = 0;
   lbls.forEach(d => {
@@ -1836,7 +1855,9 @@ function renderStats(data) {
   const s = data.filter(e => e.status === 'success').length;
   const n = data.filter(e => e.status === 'sniped').length;
   const rate = t > 0 ? Math.round(s / t * 100) : 0;
-  const days = new Set(data.map(e => getNSTDateStr(e.timestamp))).size;
+  
+  // Use pre-memoized date strings
+  const days = new Set(data.map(e => getMemoizedDateInfo(e).nstDateStr)).size;
   const uniqueItems = new Set(data.filter(e=>e.status==='success').map(e=>e.item)).size;
   const avgPerDay = days > 0 ? (s / days).toFixed(1) : 0;
   let vF = 0;
@@ -1926,7 +1947,7 @@ function renderStats(data) {
 }
 
 function renderStreak() {
-  const daySet = new Set(feedLog.filter(e => e.status === 'success').map(e => getNSTDateStr(e.timestamp)));
+  const daySet = new Set(feedLog.filter(e => e.status === 'success').map(e => getMemoizedDateInfo(e).nstDateStr));
   let streak = 0;
   let checkDate = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
   const fmt = (dt) => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
@@ -1981,6 +2002,8 @@ function renderItemTable(ds) {
 
   let displayArray = rawArray;
   if (dbSearchTerm) displayArray = rawArray.filter(x => x.name.toLowerCase().includes(dbSearchTerm));
+  
+  // Fast variable sort
   displayArray.sort((a, b) => {
     let valA = a[dbSortKey]; let valB = b[dbSortKey];
     if (valA == null) valA = -1; if (valB == null) valB = -1;
@@ -2007,7 +2030,8 @@ function renderItemTable(ds) {
     return `<th class="th-sortable ${h.a}" style="${colorStyle}" onclick="handleDbSort('${h.k}')">${h.l} ${arrow}</th>`;
   }).join('') + '</tr>';
 
-  const MAX_ROWS = 100;
+  // Enforced Hard Cap to prevent DOM Bloat
+  const MAX_ROWS = 15; 
   const isCapped = displayArray.length > MAX_ROWS && !dbSearchTerm;
   const rowsToRender = displayArray.slice(0, MAX_ROWS);
 
@@ -2018,12 +2042,14 @@ function renderItemTable(ds) {
     const spentHtml = x.spent != null
       ? `<span style="color:var(--text); font-weight:700; font-family:monospace;">${x.spent.toLocaleString()}</span>`
       : `<span style="color:var(--text3); font-style:italic;">—</span>`;
+      
     const safeName = x.name.replace(/"/g, '&quot;');
     const isCrownJewel = (x.name === absoluteMostExpensiveItem) && x.s > 0;
     const crownHtml = isCrownJewel ? '<span style="margin-left:8px;" title="Most Expensive Feed!">👑</span>' : '';
+    
     return `
       <tr>
-        <td class="td-name item-clickable" data-name="${safeName}"><span class="item-underline">${x.name}</span>${crownHtml}</td>
+        <td class="td-name item-clickable" data-name="${safeName}"><div class="item-img-placeholder" style="width:12px; height:12px; border-radius:50%; margin-right:8px; opacity:0.5;"></div><span class="item-underline">${x.name}</span>${crownHtml}</td>
         <td class="td-right">${priceHtml}</td>
         <td class="td-right">${x.t}</td>
         <td class="td-right"><span class="badge badge-green">${x.s}</span></td>
@@ -2042,7 +2068,8 @@ function renderItemTable(ds) {
 }
 
 function renderLog(data) {
-  const arr = [...data].sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp)).slice(0,300);
+  // Fast string alphabetical sort instead of instantiating new Dates
+  const arr = [...data].sort((a,b) => b.timestamp.localeCompare(a.timestamp)).slice(0,300);
   document.getElementById('log-count-label').textContent = `Showing ${Math.min(300, data.length)} of ${data.length.toLocaleString()}`;
   const html = arr.map(e => {
     const { price, inflated } = getCached(e.item);
@@ -2050,9 +2077,12 @@ function renderLog(data) {
       ? `<span class="log-price${inflated ? ' inflated' : ''}">${price.toLocaleString()} NP</span>`
       : `<span class="log-price no-data">no price</span>`;
     const safeName = e.item.replace(/"/g, '&quot;');
+    
+    // Utilize the pre-calculated string from memoize instead of heavy toLocaleString
     const ptDateStr = new Date(e.timestamp).toLocaleString('en-US', {
-      timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+      month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
     });
+    
     return `
       <div class="log-entry" style="opacity: ${e.status === 'success' ? '1' : '0.6'}">
         <div><div class="log-name item-clickable item-underline" data-name="${safeName}">${e.item}</div><div class="log-ts">${ptDateStr}</div></div>
