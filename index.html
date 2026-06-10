@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -917,14 +916,15 @@ input[type=file] { display: none; }
 <div id="share-modal" class="modal-overlay hidden">
   <div class="modal-card card" style="max-width: 500px; text-align: center;">
     <div class="card-header" style="margin-bottom: 16px;">
-      <span class="card-title">Your Statdoatie Card</span>
+      <span class="card-title">Share Your Stats</span>
       <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('share-modal').classList.add('hidden')">✕</button>
     </div>
     
     <div id="share-preview-container" style="margin-bottom: 20px; border-radius: 12px; overflow: hidden; background: transparent;">
        </div>
     
-    <a id="share-download-btn" class="btn btn-primary" style="width: 100%; justify-content: center; text-decoration: none;" download="Statdoatie_Card.png">Processing Image...</a>
+    <div style="font-size:0.8rem; color:var(--text3); margin-bottom:16px; font-weight:500;">📸 Snap a screenshot to share your stats graphic!</div>
+    <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="document.getElementById('share-modal').classList.add('hidden')">Dismiss</button>
   </div>
 </div>
 
@@ -1038,7 +1038,7 @@ document.addEventListener('mousemove', (e) => {
 
 // ─── SHARE CARD GENERATOR ───
 function openShareModal() {
-  toast("Preparing Statdoatie Card...");
+  toast("Preparing Statdoatie Card Layout...");
   const preview = document.getElementById('share-preview-container');
   preview.innerHTML = ''; 
 
@@ -1046,10 +1046,12 @@ function openShareModal() {
   card.className = document.body.className; 
   card.style.cssText = `
     width: 100%; margin: 0 auto;
-    background-color: var(--bg); padding: 32px;
+    background-color: var(--bg); padding: 24px;
     display: flex; flex-direction: column; gap: 20px;
-    position: relative; z-index: 1; text-align: left;
-    border-radius: 12px; color: var(--text); font-family: var(--theme-font-body);
+    position: relative; overflow: hidden; text-align: left;
+    border-radius: var(--theme-radius); border: var(--theme-card-border);
+    color: var(--text); font-family: var(--theme-font-body);
+    box-shadow: var(--theme-shadow);
   `;
 
   const styleFix = document.createElement('style');
@@ -1062,6 +1064,7 @@ function openShareModal() {
     #share-preview-container .heatmap-cell { animation: none !important; transition: none !important; }
     #share-preview-container .bg-blobs { opacity: 0.5; }
     #share-preview-container img { display: none !important; } 
+    #share-preview-container .item-img-placeholder { display: none !important; }
   `;
   card.appendChild(styleFix);
 
@@ -1071,16 +1074,13 @@ function openShareModal() {
   card.appendChild(blobs);
 
   const header = document.createElement('div');
-  header.style.display = 'flex';
-  header.style.justifyContent = 'space-between';
-  header.style.alignItems = 'center';
-  header.style.zIndex = '2';
+  header.style.cssText = 'display:flex; justify-content:space-between; align-items:center; z-index:2; position:relative;';
   header.innerHTML = `
     <div style="display:flex; align-items:center; gap:12px;">
       <div style="width:32px; height:32px; background:linear-gradient(135deg, var(--blue), var(--purple)); border-radius:var(--theme-radius); display:flex; align-items:center; justify-content:center;">
         <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:#fff;"><path d="M14.5 4c-3.5 0-5.5 1.5-5.5 4 0 3.5 8 3.5 8 7 0 2.5-2.5 4-6 4-2.5 0-4.5-1-5.5-2.5l2.5-2c.5 1 2 2 3 2 1.5 0 2.5-.5 2.5-1.5 0-2.5-8-2.5-8-7 0-4 3.5-6.5 8.5-6.5 3 0 5 1.5 6.5 3l-2.5 2C17 5 16 4 14.5 4z"/></svg>
       </div>
-      <div style="font-family:var(--theme-font-display); font-weight:800; font-size:1.4rem; color:var(--text);">Statdoatie</div>
+      <div style="font-family:var(--theme-font-display); font-weight:800; font-size:1.3rem; color:var(--text);">Statdoatie</div>
     </div>
     <div style="font-family:var(--theme-font-body); font-weight:600; font-size:0.85rem; color:var(--text3);">
       ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
@@ -1089,10 +1089,7 @@ function openShareModal() {
   card.appendChild(header);
 
   const statsRow = document.createElement('div');
-  statsRow.style.display = 'grid';
-  statsRow.style.gridTemplateColumns = '1fr 1fr';
-  statsRow.style.gap = '12px';
-  statsRow.style.zIndex = '2';
+  statsRow.style.cssText = 'display:grid; grid-template-columns:1fr 1fr; gap:12px; z-index:2; position:relative;';
 
   const originalCards = document.querySelectorAll('#stats-grid .stat-card:not(.wide)');
   originalCards.forEach(oc => {
@@ -1104,14 +1101,7 @@ function openShareModal() {
   card.appendChild(statsRow);
 
   const chartArea = document.createElement('div');
-  chartArea.style.background = 'var(--table-row)';
-  chartArea.style.border = '1px solid var(--border-strong)';
-  chartArea.style.borderRadius = 'var(--theme-radius)';
-  chartArea.style.padding = '20px';
-  chartArea.style.zIndex = '2';
-  chartArea.style.display = 'flex';
-  chartArea.style.flexDirection = 'column';
-  chartArea.style.gap = '16px';
+  chartArea.style.cssText = 'background:var(--table-row); border:1px solid var(--border-strong); border-radius:var(--theme-radius); padding:20px; z-index:2; position:relative; display:flex; flex-direction:column; gap:16px;';
 
   const chartLabel = document.getElementById('current-chart-label').textContent;
   chartArea.innerHTML = `
@@ -1134,42 +1124,13 @@ function openShareModal() {
      const canvas = document.getElementById('mainChart');
      const img = document.createElement('img');
      img.src = canvas.toDataURL('image/png');
-     img.style.width = '100%';
-     img.style.height = 'auto';
-     img.style.setProperty('display', 'block', 'important'); 
+     img.style.cssText = 'width:100%; height:auto; display:block !important;';
      chartArea.appendChild(img);
   }
 
   card.appendChild(chartArea);
   preview.appendChild(card);
   document.getElementById('share-modal').classList.remove('hidden');
-
-  const dlBtn = document.getElementById('share-download-btn');
-  dlBtn.textContent = "Processing Image...";
-  dlBtn.style.opacity = '0.5';
-  dlBtn.style.pointerEvents = 'none';
-
-  setTimeout(() => {
-     if (typeof html2canvas === 'undefined') {
-        dlBtn.textContent = "Screenshot to Share";
-        return;
-     }
-     
-     html2canvas(card, {
-         scale: 2,
-         backgroundColor: getCssHex('--bg'),
-         logging: false
-     }).then(canvas => {
-         const dataUrl = canvas.toDataURL('image/png');
-         dlBtn.href = dataUrl;
-         dlBtn.textContent = "Download Image";
-         dlBtn.style.opacity = '1';
-         dlBtn.style.pointerEvents = 'auto';
-     }).catch(err => {
-         console.error(err);
-         dlBtn.textContent = "Screenshot to Share";
-     });
-  }, 500);
 }
 
 // ─── STATE ───
@@ -1429,12 +1390,12 @@ function handleFileLoad(e) {
   };
   r.readAsText(file); e.target.value = '';
 }
-function exportData() {
+exportData = () => {
   if (feedLog.length === 0) return toast('Nothing to export');
   const b = new Blob([JSON.stringify(feedLog, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b);
   a.download = `statdoatie_${new Date().toISOString().slice(0,10)}.json`; a.click(); toast('Exported JSON');
-}
+};
 function clearData() {
   if (!confirm('Wipe all dashboard data?')) return;
   feedLog = []; currentMonth = 'all'; destroyCharts();
@@ -1480,19 +1441,6 @@ function mergeData(entries) {
   localStorage.setItem('statdoatie_save', JSON.stringify(feedLog));
   showDashboard();
   renderWidgets();
-}
-function loadDemoData() {
-  const items = ['Honey Blossom Extract','Tigersquash Juice','Cheeseburger','Ummagine','Faerie Pancakes','Blueberry Crepes','Puntec Fruit','Purple Grapes','Borovan','Tombola Fruit','Cheese Pizza','Thornberry Juice','Starberry Juice','Strawberry','Watermelon','Melon','Orange','Apple','Pear','Kiwi','Lemon','Lime','Grapefruit','Mango'];
-  const now = new Date(), demo = [];
-  for (let d = 59; d >= 0; d--) {
-    const base = new Date(now); base.setDate(base.getDate() - d);
-    const n = Math.floor(Math.random() * 15) + 3;
-    for (let i = 0; i < n; i++) {
-      const ts = new Date(base); ts.setHours(Math.floor(Math.random()*24), Math.floor(Math.random()*60), 0, 0);
-      demo.push({ item: items[Math.floor(Math.random()*items.length)], status: Math.random() < .65 ? 'success' : 'sniped', timestamp: ts.toISOString() });
-    }
-  }
-  mergeData(demo); toast(`Simulated ${demo.length} feeds`);
 }
 
 // ─── HEATMAP CALENDAR ───
