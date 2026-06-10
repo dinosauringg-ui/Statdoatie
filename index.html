@@ -242,7 +242,6 @@ body {
 .bg-blobs {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none; z-index: -1; overflow: hidden; filter: blur(100px);
-  transition: transform 0.1s ease-out;
   will-change: transform;
 }
 .blob { position: absolute; border-radius: 50%; opacity: var(--blob-opacity); animation: float 20s infinite alternate ease-in-out; transition: opacity 0.5s ease, background 0.8s ease; }
@@ -775,7 +774,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   .crown-jewel-content > div:last-child { flex-shrink: 0; }
 }
 @media (max-width: 500px) { 
-  /* Hide the streak badge entirely on tiny screens to declutter */
   #streak-badge { display: none !important; } 
 }
 @media (max-width: 400px) {
@@ -788,6 +786,8 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 </style>
 </head>
 <body>
+
+<div class="hmap-tooltip" id="hmap-tooltip"></div>
 
 <div class="bg-blobs">
   <div class="blob blob-1"></div>
@@ -1071,12 +1071,21 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 
 <script>
 // ─── BACKGROUND PARALLAX ───
+let parallaxTicking = false;
 document.addEventListener('mousemove', (e) => {
-  const blobs = document.querySelector('.bg-blobs');
-  if (!blobs) return;
-  const x = (window.innerWidth / 2 - e.clientX) / 40;
-  const y = (window.innerHeight / 2 - e.clientY) / 40;
-  blobs.style.transform = `translate(${x}px, ${y}px)`;
+  if (!parallaxTicking) {
+    window.requestAnimationFrame(() => {
+      const blobs = document.querySelector('.bg-blobs');
+      if (blobs) {
+        const x = (window.innerWidth / 2 - e.clientX) / 40;
+        const y = (window.innerHeight / 2 - e.clientY) / 40;
+        // translate3d forces the browser to calculate this using GPU hardware acceleration
+        blobs.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      }
+      parallaxTicking = false;
+    });
+    parallaxTicking = true;
+  }
 });
 
 // ─── PURE CSS SHARE MODE ───
@@ -1300,7 +1309,8 @@ document.addEventListener('KadData_ExtToPage', e => {
     const totallyNewItems = newNames.filter(item => !(item in itemdbCache));
     
     const addedCount = mergeData(records);
-    toast(`✨ Synced: ${addedCount} new records added`);
+    if(addedCount > 0) toast(`✨ Synced: ${addedCount} new records added`);
+    else toast(`No new feeds since last sync.`);
     
     if (totallyNewItems.length > 0) {
       const estimatedSeconds = Math.ceil(totallyNewItems.length / 25) * 2;
@@ -1409,7 +1419,7 @@ function mergeData(entries) {
   localStorage.setItem('statdoatie_save', JSON.stringify(feedLog));
   showDashboard();
   renderWidgets();
-  return newEntries.length; // Return number of added records for accurate toasting
+  return newEntries.length; 
 }
 
 function loadDemoData() {
@@ -2000,7 +2010,11 @@ function renderItemTable(ds) {
     return `<th class="th-sortable ${h.a}" style="${colorStyle}" onclick="handleDbSort('${h.k}')">${h.l} ${arrow}</th>`;
   }).join('') + '</tr>';
 
-  document.querySelector('#item-table tbody').innerHTML = displayArray.map(x => {
+  const MAX_ROWS = 100;
+  const isCapped = displayArray.length > MAX_ROWS && !dbSearchTerm;
+  const rowsToRender = displayArray.slice(0, MAX_ROWS);
+
+  let tbodyHtml = rowsToRender.map(x => {
     const priceHtml = x.price != null
       ? `<span class="price-cell${x.inflated ? ' inflated' : ''}">${x.price.toLocaleString()}</span>`
       : `<span class="price-cell no-data">—</span>`;
@@ -2025,6 +2039,12 @@ function renderItemTable(ds) {
       </tr>
     `;
   }).join('');
+
+  if (isCapped) {
+    tbodyHtml += `<tr><td colspan="7" style="text-align:center; padding:16px; color:var(--text3); font-size:0.85rem;">Showing top ${MAX_ROWS} items. Use the search bar to find specific entries.</td></tr>`;
+  }
+
+  document.querySelector('#item-table tbody').innerHTML = tbodyHtml;
 }
 
 function renderLog(data) {
