@@ -242,7 +242,7 @@ body {
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
-.header-btn-text { margin-left: 4px; }
+.import-feeds-btn { padding: 0 16px; white-space: nowrap; }
 
 /* ── MODALS ── */
 .modal-overlay {
@@ -309,15 +309,10 @@ body {
   box-shadow: var(--theme-shadow); transition: transform 0.2s, background 0.5s ease, border 0.5s ease;
   position: relative;
 }
-
 .stat-card.wide { grid-column: 1 / -1; }
 
-.crown-jewel-content {
-  display: flex; justify-content: space-between; align-items: center; width: 100%;
-}
-.crown-jewel-name { 
-  font-size: 2.2rem; 
-}
+.crown-jewel-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.crown-jewel-name { font-size: 2.2rem; }
 
 .expandable-card { cursor: pointer; }
 .expandable-card:hover { transform: translateY(-4px); background: var(--glass-hover); }
@@ -532,9 +527,8 @@ input[type=file] { display: none; }
       <span id="status-text">Awaiting Data</span>
     </div>
     
-    <button class="btn btn-primary header-sync-btn" onclick="triggerExtensionSync()" title="Sync Extension Data" style="padding: 0 16px;">
-      <svg viewBox="0 0 24 24" style="width:16px; height:16px;" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6c0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6c0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
-      <span class="header-btn-text">Sync Data</span>
+    <button class="btn btn-primary import-feeds-btn" onclick="triggerExtensionSync()" title="Import Feeds">
+      Import Feeds
     </button>
 
     <button class="btn btn-icon" onclick="openSettings()" title="Settings">
@@ -663,12 +657,11 @@ input[type=file] { display: none; }
     <div class="stats-grid" id="stats-grid"></div>
 
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('overview',this)">Overview</button>
-      <button class="tab" onclick="switchTab('items',this)">Items & Pricing</button>
-      <button class="tab" onclick="switchTab('log',this)">Feed Log</button>
+      <button class="tab active" onclick="switchTab('analytics',this)">Analytics</button>
+      <button class="tab" onclick="switchTab('items',this)">Item Database</button>
     </div>
 
-    <div id="panel-overview" class="panel active">
+    <div id="panel-analytics" class="panel active">
       <div class="grid-2">
         <div class="card">
           <div class="card-header">
@@ -681,17 +674,23 @@ input[type=file] { display: none; }
         </div>
         <div class="card" style="display:flex; flex-direction:column;">
           <div class="card-header" style="margin-bottom:12px; flex-wrap:wrap; gap:12px;">
-            <span class="card-title">Analytics</span>
+            <span class="card-title">Metrics</span>
             <select id="main-chart-select" class="chart-selector" onchange="renderMainChart(this.value)">
               <option value="daily">Daily Feeds</option>
               <option value="cumul">Cumulative Growth</option>
               <option value="np">NP Spent</option>
               <option value="unique">Unique Items Fed</option>
               <option value="dow">Activity by Day</option>
+              <option value="log">Raw Feed Log</option>
             </select>
           </div>
           <div class="chart-wrap" style="flex:1; min-height:260px;">
             <canvas id="mainChart"></canvas>
+            
+            <div id="log-view" class="hidden" style="max-height:300px; overflow-y:auto; padding-right:10px;">
+               <div id="log-count-label" style="font-size:0.8rem; color:var(--text3); margin-bottom:10px; font-weight:600;"></div>
+               <div id="log-list"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -724,16 +723,6 @@ input[type=file] { display: none; }
         </div>
       </div>
     </div>
-
-    <div id="panel-log" class="panel">
-      <div class="card">
-        <div class="card-header" style="margin-bottom:16px;">
-          <span class="card-title">Raw Feed Log</span>
-          <span id="log-count-label" class="card-meta"></span>
-        </div>
-        <div id="log-list" style="max-height:800px;overflow-y:auto; padding-right:10px;"></div>
-      </div>
-    </div>
   </div>
 </main>
 
@@ -756,18 +745,11 @@ let absoluteMostExpensiveItem = '';
 
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-// The new unified payload object for the main dynamic chart
+// Payload object for unified charts
 window.chartPayload = {
-  labelsTime: [],
-  dailyFed: [],
-  dailySniped: [],
-  cumulFed: [],
-  cumulSniped: [],
-  cumulNP: [],
-  cumulUnique: [],
-  labelsDow: [...DAYS],
-  dowFed: Array(7).fill(0),
-  dowSniped: Array(7).fill(0)
+  labelsTime: [], dailyFed: [], dailySniped: [],
+  cumulFed: [], cumulSniped: [], cumulNP: [], cumulUnique: [],
+  labelsDow: [...DAYS], dowFed: Array(7).fill(0), dowSniped: Array(7).fill(0)
 };
 
 let currentThemeKey = localStorage.getItem('statdoatie_theme') || 'default';
@@ -789,10 +771,11 @@ document.addEventListener('DOMContentLoaded', () => {
         feedLog = parsed;
         populateMonths();
         showDashboard();
-        renderWidgets();
       }
     } catch (e) { console.error("Failed to parse local storage", e); }
   }
+  
+  setTimeout(() => { if (feedLog.length > 0) renderWidgets(); }, 50);
 });
 
 // ─── TIMEZONE HELPER ───
@@ -821,6 +804,12 @@ function applyThemeDOM(key) {
   document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
   const activeBtn = document.querySelector(`.theme-btn[data-theme="${key}"]`);
   if (activeBtn) activeBtn.classList.add('active');
+}
+
+function setTheme(key) {
+  currentThemeKey = key;
+  localStorage.setItem('statdoatie_theme', key);
+  applyThemeDOM(key);
 
   setTimeout(() => {
       const isLight = key === 'faerieland' || key === 'classic';
@@ -839,12 +828,6 @@ function applyThemeDOM(key) {
         if(charts.main) renderMainChart(document.getElementById('main-chart-select').value);
       }
   }, 50);
-}
-
-function setTheme(key) {
-  currentThemeKey = key;
-  localStorage.setItem('statdoatie_theme', key);
-  applyThemeDOM(key);
 }
 
 // ─── UTILS ───
@@ -986,12 +969,17 @@ document.addEventListener('KadData_ExtToPage', e => {
 function triggerExtensionSync() {
   clearTimeout(syncTimeout);
   
-  syncTimeout = setTimeout(() => { 
-    toast('No active extension detected. Make sure it is installed and enabled!'); 
-  }, 1500);
+  if (document.documentElement.getAttribute('data-extension-installed') !== 'true') {
+    toast('No active extension detected. Make sure it is installed and enabled!');
+    return;
+  }
   
   toast('Requesting data from extension...');
   document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
+  
+  syncTimeout = setTimeout(() => { 
+    toast('No active extension detected. Make sure it is installed and enabled!'); 
+  }, 1500);
   
   try { closeSettings(); } catch(e) {}
 }
@@ -1123,7 +1111,6 @@ function destroyCharts() { Object.values(charts).forEach(c => { try { c.destroy(
 function gridLines() { return { color: getCssVar('--chart-line'), drawBorder: false, borderDash: [5, 5] }; }
 function buildRichTooltip(l, v, t) { const pct = t > 0 ? Math.round((v/t)*100) : 0; return `${l}: ${v.toLocaleString()} (${pct}%)`; }
 
-// Process data for the main chart hub once so switching is instant
 function prepareChartData(data) {
   window.chartPayload = {
     labelsTime: [], dailyFed: [], dailySniped: [],
@@ -1183,9 +1170,23 @@ function prepareChartData(data) {
 }
 
 function renderMainChart(type) {
-  if (charts.main) charts.main.destroy();
+  const canvas = document.getElementById('mainChart');
+  const logView = document.getElementById('log-view');
 
-  const ctx = document.getElementById('mainChart').getContext('2d');
+  if (type === 'log') {
+    canvas.classList.add('hidden');
+    logView.classList.remove('hidden');
+    if (charts.main) charts.main.destroy();
+    renderLog(getFilteredData());
+    return;
+  } else {
+    canvas.classList.remove('hidden');
+    logView.classList.add('hidden');
+  }
+
+  if (charts.main) charts.main.destroy();
+  const ctx = canvas.getContext('2d');
+  
   const p = window.chartPayload;
   if (!p || p.labelsTime.length === 0) return;
 
@@ -1305,7 +1306,6 @@ function renderWidgets() {
   renderStats(data);
   renderPie(data);
   renderItemTable(data);
-  renderLog(data);
   
   prepareChartData(data);
   renderMainChart(document.getElementById('main-chart-select').value);
@@ -1541,7 +1541,6 @@ function renderLog(data) {
       
     const safeName = e.item.replace(/"/g, '&quot;');
 
-    // Parse date explicitly to PT
     const ptDateStr = new Date(e.timestamp).toLocaleString('en-US', {
       timeZone: 'America/Los_Angeles', 
       month: 'short', 
