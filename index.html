@@ -115,7 +115,11 @@ body.theme-virtupets {
   --heatmap-3: rgba(74, 222, 128, 0.65); --heatmap-4: rgba(74, 222, 128, 1);
 }
 
-body.theme-virtupets .stat-card::before { display: none; }
+body.theme-virtupets .stat-card::before, 
+body.theme-virtupets .analytics-card::before, 
+body.theme-virtupets .db-card::before { 
+  display: none; 
+}
 
 body.theme-maraqua {
   --bg: #030f1c; 
@@ -321,7 +325,7 @@ body {
   opacity: 1; transition: opacity 0.2s ease;
 }
 .modal-overlay.hidden { opacity: 0; pointer-events: none; }
-.modal-card { width: 100%; max-width: 450px; margin: 20px; padding: 32px; position: relative; }
+.modal-card { width: 100%; max-width: 450px; margin: 20px; padding: 32px; position: relative; max-height: 90vh; overflow-y: auto; }
 .theme-grid { display: flex; flex-wrap: wrap; gap: 10px; }
 .theme-btn.active { background: var(--text); color: var(--bg); border-color: transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
@@ -367,6 +371,20 @@ body {
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
 .card-title { font-family: var(--theme-font-display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
 .card-meta { font-size: .8rem; color: var(--text3); font-weight: 500; }
+
+/* Main Feature Cards Floating Shapes */
+.analytics-card, .db-card { position: relative; overflow: hidden; }
+.analytics-card::before, .db-card::before {
+  content: ''; position: absolute; top: -30px; right: -30px;
+  width: 150px; height: 150px; opacity: 0.04; pointer-events: none;
+  -webkit-mask-image: var(--theme-shape); -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  animation: floatShape 15s infinite ease-in-out; transition: opacity 0.3s ease; z-index: 0;
+}
+.analytics-card::before { background: var(--blue); animation-delay: -2s; }
+.db-card::before { background: var(--purple); animation-delay: -7s; }
+.analytics-card:hover::before, .db-card:hover::before { opacity: 0.08; }
+.analytics-card > *, .db-card > * { position: relative; z-index: 1; }
 
 /* ── EXPANDABLE STAT CARDS ── */
 .stats-grid {
@@ -710,7 +728,10 @@ input[type=file] { display: none; }
   .crown-jewel-content > div:first-child { flex: 1; min-width: 0; padding-right: 12px; }
   .crown-jewel-content > div:last-child { flex-shrink: 0; }
 }
-@media (max-width: 500px) { .status-chip { display: none !important; } }
+@media (max-width: 500px) { 
+  .status-chip { display: none !important; } 
+  #streak-badge { display: none !important; } /* Hide streak on small mobile */
+}
 @media (max-width: 400px) {
   .logo-text { display: none; }
   .logo-icon { margin-right: 4px; }
@@ -825,12 +846,37 @@ input[type=file] { display: none; }
   </div>
 </div>
 
+<div id="tutorial-modal" class="modal-overlay hidden">
+  <div class="modal-card card">
+    <div class="card-header" style="margin-bottom: 16px;">
+      <span class="card-title">How to Use Statdoatie</span>
+      <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('tutorial-modal').classList.add('hidden')">✕</button>
+    </div>
+    <div style="color: var(--text2); font-size: 0.95rem; line-height: 1.6;">
+      <ol style="padding-left: 20px; display: flex; flex-direction: column; gap: 12px; margin: 0;">
+        <li><strong>Install the Extension:</strong> Make sure you have the Statdoatie Tampermonkey extension active on Neopets.</li>
+        <li><strong>Feed Kads:</strong> The extension will quietly track your successful feeds and snipes in the background.</li>
+        <li><strong>Sync Data:</strong> Come back to this dashboard and click the <strong>Import Feeds</strong> button. The extension will beam your latest data right into the app.</li>
+        <li><strong>Item Value DB:</strong> The dashboard automatically grabs current ItemDB prices so you know exactly how much you're spending.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
 <div id="settings-modal" class="modal-overlay hidden">
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 24px;">
       <span class="card-title">Settings & Data</span>
       <button class="btn btn-icon" style="height:32px; width:32px;" onclick="closeSettings()">✕</button>
     </div>
+    
+    <div style="margin-bottom: 24px;">
+      <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">HELP</div>
+      <button class="btn" onclick="closeSettings(); document.getElementById('tutorial-modal').classList.remove('hidden');" style="width: 100%; justify-content: center; background: var(--text); color: var(--bg);">How to Use Statdoatie</button>
+    </div>
+    
+    <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
+    
     <div style="margin-bottom: 24px;">
       <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">THEME</div>
       <div class="theme-grid">
@@ -905,7 +951,7 @@ input[type=file] { display: none; }
     
     <div class="stats-grid" id="stats-grid"></div>
 
-    <div class="card" style="display:flex; flex-direction:column;">
+    <div class="card analytics-card" style="display:flex; flex-direction:column;">
       <div class="card-header" style="margin-bottom:12px; flex-wrap:wrap; gap:12px;">
         <span class="card-title">Analytics</span>
         <button class="btn" onclick="document.getElementById('chart-modal').classList.remove('hidden')">
@@ -915,7 +961,6 @@ input[type=file] { display: none; }
       </div>
       
       <div class="chart-wrap" style="flex:1;">
-        
         <div id="canvas-view" style="width:100%; min-height:350px;" class="hidden">
            <canvas id="mainChart" role="img" aria-label="Main metrics chart"></canvas>
         </div>
@@ -948,7 +993,6 @@ input[type=file] { display: none; }
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -993,123 +1037,135 @@ document.addEventListener('mousemove', (e) => {
 
 // ─── SHARE CARD GENERATOR ───
 async function generateShareCard() {
-  toast("Generating your Statdoatie Card...");
+  try {
+    toast("Generating your Statdoatie Card...");
 
-  // Setup the hidden export canvas
-  const exportBox = document.createElement('div');
-  exportBox.className = document.body.className; 
-  exportBox.style.cssText = `
-    position: absolute; left: -9999px; top: 0;
-    width: 480px; padding: 32px;
-    background-color: var(--bg);
-    color: var(--text);
-    font-family: var(--theme-font-body);
-    display: flex; flex-direction: column; gap: 24px;
-    z-index: -10;
-  `;
+    const exportBox = document.createElement('div');
+    exportBox.id = "temp-export-box";
+    exportBox.className = document.body.className; 
+    exportBox.style.cssText = `
+      position: absolute; left: -9999px; top: 0;
+      width: 480px; padding: 32px;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--theme-font-body);
+      display: flex; flex-direction: column; gap: 24px;
+      z-index: -10;
+    `;
 
-  // Clone blobs for aesthetic
-  const blobs = document.querySelector('.bg-blobs').cloneNode(true);
-  blobs.style.position = 'absolute';
-  exportBox.appendChild(blobs);
+    // Clone blobs for aesthetic
+    const blobs = document.querySelector('.bg-blobs').cloneNode(true);
+    blobs.style.position = 'absolute';
+    exportBox.appendChild(blobs);
 
-  // Logo / Title Header
-  const header = document.createElement('div');
-  header.style.display = 'flex';
-  header.style.alignItems = 'center';
-  header.style.justifyContent = 'space-between';
-  header.style.zIndex = '1';
-  header.innerHTML = `
-    <div style="display:flex; align-items:center; gap:12px;">
-      ${document.querySelector('.logo-icon').outerHTML}
-      <div>
-        <div style="font-family:var(--theme-font-display); font-weight:800; font-size:1.4rem;">Statdoatie</div>
+    // Logo / Title Header
+    const header = document.createElement('div');
+    header.style.display = 'flex';
+    header.style.alignItems = 'center';
+    header.style.justifyContent = 'space-between';
+    header.style.zIndex = '1';
+    header.innerHTML = `
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:32px; height:32px; background:linear-gradient(135deg, var(--blue), var(--purple)); border-radius:var(--theme-radius); display:flex; align-items:center; justify-content:center;">
+           <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:#ffffff;"><path d="M14.5 4c-3.5 0-5.5 1.5-5.5 4 0 3.5 8 3.5 8 7 0 2.5-2.5 4-6 4-2.5 0-4.5-1-5.5-2.5l2.5-2c.5 1 2 2 3 2 1.5 0 2.5-.5 2.5-1.5 0-2.5-8-2.5-8-7 0-4 3.5-6.5 8.5-6.5 3 0 5 1.5 6.5 3l-2.5 2C17 5 16 4 14.5 4z" /></svg>
+        </div>
+        <div>
+          <div style="font-family:var(--theme-font-display); font-weight:800; font-size:1.4rem;">Statdoatie</div>
+        </div>
       </div>
-    </div>
-    <div style="font-size:0.8rem; color:var(--text3); font-weight:600;">
-      ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-    </div>
-  `;
-  exportBox.appendChild(header);
+      <div style="font-size:0.8rem; color:var(--text3); font-weight:600;">
+        ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+      </div>
+    `;
+    exportBox.appendChild(header);
 
-  // Stats Grid Clone (Force 2-column mobile layout)
-  const gridClone = document.getElementById('stats-grid').cloneNode(true);
-  gridClone.style.display = 'grid';
-  gridClone.style.gridTemplateColumns = '1fr 1fr';
-  gridClone.style.gap = '16px';
-  gridClone.style.zIndex = '1';
-  
-  // Force wide card to span both columns
-  const wideCard = gridClone.querySelector('.stat-card.wide');
-  if (wideCard) wideCard.style.gridColumn = '1 / -1';
-  
-  // Rip out interactivity/expanded content
-  gridClone.querySelectorAll('.stat-expanded').forEach(el => el.remove());
-  gridClone.querySelectorAll('.stat-label').forEach(lbl => {
-      lbl.style.display = 'block'; // removes the flex gap for the dropdown arrow
-  });
-  exportBox.appendChild(gridClone);
+    // Stats Grid Clone
+    const gridClone = document.getElementById('stats-grid').cloneNode(true);
+    gridClone.style.display = 'grid';
+    gridClone.style.gridTemplateColumns = '1fr 1fr';
+    gridClone.style.gap = '16px';
+    gridClone.style.zIndex = '1';
+    
+    const wideCard = gridClone.querySelector('.stat-card.wide');
+    if (wideCard) wideCard.style.gridColumn = '1 / -1';
+    
+    gridClone.querySelectorAll('.stat-expanded').forEach(el => el.remove());
+    gridClone.querySelectorAll('.stat-label').forEach(lbl => {
+        lbl.style.display = 'block'; 
+    });
+    exportBox.appendChild(gridClone);
 
-  // Analytics Card Clone
-  const analyticsCard = document.createElement('div');
-  analyticsCard.className = 'card';
-  analyticsCard.style.margin = '0';
-  analyticsCard.style.zIndex = '1';
-  analyticsCard.style.display = 'flex';
-  analyticsCard.style.flexDirection = 'column';
-  
-  const chartLabel = document.getElementById('current-chart-label').textContent;
-  analyticsCard.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-      <span style="font-family:var(--theme-font-display); font-size:1.2rem; font-weight:700;">Analytics</span>
-      <span style="font-size:0.8rem; font-weight:600; color:var(--text2); background:var(--table-row); padding:4px 10px; border-radius:100px;">${chartLabel}</span>
-    </div>
-  `;
+    // Analytics Card Clone
+    const analyticsCard = document.createElement('div');
+    analyticsCard.className = 'card analytics-card';
+    analyticsCard.style.margin = '0';
+    analyticsCard.style.zIndex = '1';
+    analyticsCard.style.display = 'flex';
+    analyticsCard.style.flexDirection = 'column';
+    
+    const chartLabel = document.getElementById('current-chart-label').textContent;
+    analyticsCard.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; position:relative; z-index:1;">
+        <span style="font-family:var(--theme-font-display); font-size:1.2rem; font-weight:700;">Analytics</span>
+        <span style="font-size:0.8rem; font-weight:600; color:var(--text2); background:var(--table-row); padding:4px 10px; border-radius:100px;">${chartLabel}</span>
+      </div>
+    `;
 
-  const chartWrap = document.createElement('div');
-  chartWrap.style.width = '100%';
-  chartWrap.style.display = 'flex';
-  chartWrap.style.justifyContent = 'center';
-  chartWrap.style.alignItems = 'center';
+    const chartWrap = document.createElement('div');
+    chartWrap.style.width = '100%';
+    chartWrap.style.display = 'flex';
+    chartWrap.style.justifyContent = 'center';
+    chartWrap.style.alignItems = 'center';
+    chartWrap.style.position = 'relative';
+    chartWrap.style.zIndex = '1';
 
-  // Inject current view state
-  if (currentMainChartType === 'heatmap') {
-     const heatmapClone = document.getElementById('heatmap-view').cloneNode(true);
-     heatmapClone.classList.remove('hidden');
-     const hOuter = heatmapClone.querySelector('.heatmap-outer');
-     if(hOuter) hOuter.style.overflowX = 'visible';
-     chartWrap.appendChild(heatmapClone);
-  } else if (currentMainChartType === 'log') {
-     const logClone = document.getElementById('log-view').cloneNode(true);
-     logClone.classList.remove('hidden');
-     logClone.style.maxHeight = '300px';
-     chartWrap.appendChild(logClone);
-  } else {
-     const canvas = document.getElementById('mainChart');
-     const img = document.createElement('img');
-     img.src = canvas.toDataURL('image/png');
-     img.style.width = '100%';
-     img.style.height = 'auto';
-     chartWrap.appendChild(img);
+    if (currentMainChartType === 'heatmap') {
+       const heatmapClone = document.getElementById('heatmap-view').cloneNode(true);
+       heatmapClone.classList.remove('hidden');
+       const hOuter = heatmapClone.querySelector('.heatmap-outer');
+       if(hOuter) hOuter.style.overflowX = 'visible'; // Ensure scrollbar overflow is rendered
+       chartWrap.appendChild(heatmapClone);
+    } else if (currentMainChartType === 'log') {
+       const logClone = document.getElementById('log-view').cloneNode(true);
+       logClone.classList.remove('hidden');
+       logClone.style.maxHeight = '300px';
+       chartWrap.appendChild(logClone);
+    } else {
+       const canvas = document.getElementById('mainChart');
+       const img = document.createElement('img');
+       img.src = canvas.toDataURL('image/png');
+       img.style.width = '100%';
+       img.style.height = 'auto';
+       chartWrap.appendChild(img);
+    }
+    
+    analyticsCard.appendChild(chartWrap);
+    exportBox.appendChild(analyticsCard);
+    
+    // Mount it temporarily so html2canvas can read its dimensions properly
+    document.body.appendChild(exportBox);
+    await new Promise(r => setTimeout(r, 150));
+
+    const generatedCanvas = await html2canvas(exportBox, {
+       backgroundColor: getComputedStyle(document.body).backgroundColor,
+       scale: 2, 
+       useCORS: true,     // Bypasses image security blocks
+       allowTaint: true,  
+       logging: false
+    });
+
+    const resultImg = generatedCanvas.toDataURL('image/png');
+    document.getElementById('share-preview-container').innerHTML = `<img src="${resultImg}" style="width:100%; height:auto; display:block;" />`;
+    document.getElementById('share-download-btn').href = resultImg;
+    document.getElementById('share-modal').classList.remove('hidden');
+    exportBox.remove();
+
+  } catch (err) {
+    console.error(err);
+    toast("Failed to generate image. Please check console.");
+    const tempBox = document.getElementById('temp-export-box');
+    if (tempBox) tempBox.remove();
   }
-  
-  analyticsCard.appendChild(chartWrap);
-  exportBox.appendChild(analyticsCard);
-  document.body.appendChild(exportBox);
-
-  await new Promise(r => setTimeout(r, 150));
-
-  html2canvas(exportBox, {
-     backgroundColor: getComputedStyle(document.body).backgroundColor,
-     scale: 2, 
-     logging: false
-  }).then(canvas => {
-     const resultImg = canvas.toDataURL('image/png');
-     document.getElementById('share-preview-container').innerHTML = `<img src="${resultImg}" style="width:100%; height:auto; display:block;" />`;
-     document.getElementById('share-download-btn').href = resultImg;
-     document.getElementById('share-modal').classList.remove('hidden');
-     exportBox.remove();
-  });
 }
 
 // ─── STATE ───
@@ -1669,7 +1725,6 @@ function renderMainChart(type) {
   };
   document.getElementById('current-chart-label').textContent = chartNames[type];
   
-  // Update UI Highlighting for the modal buttons
   document.querySelectorAll('.chart-btn').forEach(btn => {
     if (btn.dataset.chart === type) {
       btn.classList.add('active-chart-btn');
@@ -1961,7 +2016,6 @@ function renderItemTable(ds) {
     return { name, price, inflated, image, spent, t: s+n, s, n, rate: Math.round(s/(s+n)*100) };
   });
 
-  // Populate Database Top 3 Preview 
   const topItems = [...rawArray]
     .filter(x => x.s > 0)
     .sort((a,b) => {
@@ -1993,7 +2047,6 @@ function renderItemTable(ds) {
   
   document.getElementById('item-count').textContent = displayArray.length + ' Items';
   
-  // Dynamically update the table headers to show the active sort direction
   const hdrs = [
     { k: 'name',  l: 'Item',         a: '' },
     { k: 'price', l: 'itemdb Price', a: 'td-right' },
@@ -2011,7 +2064,6 @@ function renderItemTable(ds) {
     return `<th class="th-sortable ${h.a}" style="${colorStyle}" onclick="handleDbSort('${h.k}')">${h.l} ${arrow}</th>`;
   }).join('') + '</tr>';
 
-  // Render rows
   document.querySelector('#item-table tbody').innerHTML = displayArray.map(x => {
     const priceHtml = x.price != null
       ? `<span class="price-cell${x.inflated ? ' inflated' : ''}">${x.price.toLocaleString()}</span>`
