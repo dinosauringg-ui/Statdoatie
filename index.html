@@ -84,8 +84,6 @@ body.theme-kadoatery {
   --theme-radius: 24px;
   --heatmap-1: rgba(244, 114, 182, 0.2); --heatmap-2: rgba(244, 114, 182, 0.4);
   --heatmap-3: rgba(244, 114, 182, 0.65); --heatmap-4: rgba(244, 114, 182, 1);
-  
-  /* Heart */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
 }
 
@@ -129,8 +127,6 @@ body.theme-maraqua {
   --theme-shadow: 0 20px 50px rgba(0,0,0,0.4);
   --heatmap-1: rgba(45, 212, 191, 0.2); --heatmap-2: rgba(45, 212, 191, 0.4);
   --heatmap-3: rgba(45, 212, 191, 0.65); --heatmap-4: rgba(45, 212, 191, 1);
-  
-  /* Water Drop */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2c0 0-8 8.61-8 13a8 8 0 0016 0c0-4.39-8-13-8-13z'/%3E%3C/svg%3E");
 }
 
@@ -145,8 +141,6 @@ body.theme-moltara {
   --theme-glass-edge: inset 0 1px 1px rgba(249, 115, 22, 0.2);
   --heatmap-1: rgba(249, 115, 22, 0.2); --heatmap-2: rgba(249, 115, 22, 0.4);
   --heatmap-3: rgba(249, 115, 22, 0.65); --heatmap-4: rgba(249, 115, 22, 1);
-  
-  /* Fire */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M11.66 22.05c-3.15 0-5.83-1.89-6.9-4.71-1.04-2.73-.55-5.61.64-7.53.51-.83 1.62-.97 2.22-.26.54.64.67 1.48.51 2.25-.26 1.25.04 2.51.81 3.46.74.93 1.95 1.34 3.01 1.09.77-.18 1.41-.69 1.76-1.38.38-.76.38-1.63.02-2.38-.41-.85-.98-1.61-1.68-2.22-1.74-1.51-2.9-3.7-2.9-6.09 0-1.5.47-2.94 1.34-4.14.49-.68 1.5-.7 2.05-.09C17.51 5.3 21 10.45 21 14.86c0 3.94-3.19 7.19-7.14 7.19h-2.2z'/%3E%3C/svg%3E");
 }
 
@@ -179,8 +173,6 @@ body.theme-faerieland {
   --heatmap-empty: rgba(0,0,0,0.06);
   --heatmap-1: rgba(5, 150, 105, 0.2); --heatmap-2: rgba(5, 150, 105, 0.45);
   --heatmap-3: rgba(5, 150, 105, 0.7); --heatmap-4: rgba(5, 150, 105, 1);
-  
-  /* Cloud */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z'/%3E%3C/svg%3E");
 }
 
@@ -216,8 +208,6 @@ body.theme-classic {
   --heatmap-empty: rgba(0,0,0,0.08);
   --heatmap-1: rgba(0, 128, 0, 0.2); --heatmap-2: rgba(0, 128, 0, 0.45);
   --heatmap-3: rgba(0, 128, 0, 0.7); --heatmap-4: rgba(0, 128, 0, 1);
-  
-  /* Star */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
 }
 
@@ -238,20 +228,16 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
 
-/* ── BACKGROUND BLOBS (No JS Parallax) ── */
+/* ── BACKGROUND BLOBS (STATIC - ZERO GPU OVERHEAD) ── */
 .bg-blobs {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  pointer-events: none; z-index: -1; overflow: hidden; filter: blur(100px);
+  pointer-events: none; z-index: -1; overflow: hidden; filter: blur(80px);
+  -webkit-transform: translate3d(0,0,0); /* Hardware accelerate the blur */
 }
-.blob { position: absolute; border-radius: 50%; opacity: var(--blob-opacity); animation: float 30s infinite alternate ease-in-out; transition: opacity 0.5s ease, background 0.8s ease; }
-.blob-1 { width: 40vw; height: 40vw; background: var(--blue); top: -10%; left: -10%; animation-duration: 25s; }
-.blob-2 { width: 50vw; height: 50vw; background: var(--purple); bottom: -20%; right: -10%; animation-duration: 28s; animation-direction: alternate-reverse; }
-.blob-3 { width: 35vw; height: 35vw; background: var(--teal); top: 30%; left: 40%; animation-duration: 35s; }
-@keyframes float {
-  0% { transform: translate(0, 0) scale(1) rotate(0deg); border-radius: 50%; }
-  50% { border-radius: 40% 60% 60% 40% / 50% 40% 60% 50%; }
-  100% { transform: translate(10vw, 5vh) scale(1.1) rotate(20deg); border-radius: 50%; }
-}
+.blob { position: absolute; border-radius: 50%; opacity: var(--blob-opacity); }
+.blob-1 { width: 50vw; height: 50vw; background: var(--blue); top: -10%; left: -10%; }
+.blob-2 { width: 60vw; height: 60vw; background: var(--purple); bottom: -20%; right: -10%; }
+.blob-3 { width: 45vw; height: 45vw; background: var(--teal); top: 30%; left: 40%; }
 
 /* ── HEADER ── */
 .header {
@@ -300,7 +286,6 @@ body {
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
-/* Active Chart Selection Highlighting */
 .btn.active-chart-btn {
   background: var(--text);
   color: var(--bg);
@@ -353,11 +338,12 @@ body {
 
 /* ── GLASS CARDS 2.0 ── */
 .card {
-  background: var(--theme-card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  background: var(--theme-card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); /* Lower blur budget */
   border: var(--theme-card-border); border-radius: var(--theme-radius);
   padding: 28px; 
   box-shadow: var(--theme-shadow), inset 0 1px 0 var(--theme-top-light);
   transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease; 
+  -webkit-transform: translate3d(0,0,0); /* Force HW acceleration */
 }
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
 .card-title { font-family: var(--theme-font-display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
@@ -378,7 +364,6 @@ body {
 }
 .analytics-card::before { background: var(--blue); }
 .db-card::before { background: var(--purple); }
-.analytics-card:hover::before, .db-card:hover::before { opacity: 0.08; }
 .analytics-card > *, .db-card > * { position: relative; z-index: 1; }
 
 /* ── EXPANDABLE STAT CARDS ── */
@@ -387,15 +372,16 @@ body {
   gap: 24px; 
 }
 .stat-card {
-  background: var(--theme-card-bg); backdrop-filter: blur(20px);
+  background: var(--theme-card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border: var(--theme-card-border); border-radius: var(--theme-radius);
   padding: 24px; display: flex; flex-direction: column;
   box-shadow: var(--theme-shadow), inset 0 1px 0 var(--theme-top-light); 
   transition: transform 0.2s, background 0.3s ease, border 0.3s ease;
   position: relative; overflow: hidden;
+  -webkit-transform: translate3d(0,0,0); /* Force HW acceleration */
 }
 
-/* Static Ghost Watermarks for Stat Cards */
+/* Static Ghost Watermarks for Stat Cards (No Animations) */
 .stat-card::before {
   content: '';
   position: absolute;
@@ -646,6 +632,17 @@ body.share-mode .logo-sub::after { content: " • " attr(data-date); }
 .share-exit-fab:hover { background: rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.2); }
 body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 
+@keyframes fadeup { from { opacity: 0; transform: translateY(30px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
+
+/* ── CARD ENTRANCE ANIMATION ── */
+@keyframes cardEntrance { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.stat-card { animation: cardEntrance 0.4s ease both; }
+.stat-card:nth-child(1) { animation-delay: 0.05s; }
+.stat-card:nth-child(2) { animation-delay: 0.10s; }
+.stat-card:nth-child(3) { animation-delay: 0.15s; }
+.stat-card:nth-child(4) { animation-delay: 0.20s; }
+.stat-card:nth-child(5) { animation-delay: 0.25s; }
+
 /* ── MOBILE ── */
 @media (max-width: 900px) {
   .header { padding: 0 16px; height: 56px; flex-wrap: nowrap; }
@@ -751,7 +748,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 16px;">
       <div style="display:flex; align-items:center; gap:12px;">
-        <div style="width:48px; height:48px; border-radius:8px; background:var(--table-row-hover); flex-shrink:0;"></div>
+        <img id="item-modal-img" class="item-img" style="width:48px; height:48px;" src="" alt="" onerror="this.style.display='none'">
         <div>
           <div class="card-title" id="item-modal-name">Item Name</div>
           <div class="card-meta" id="item-modal-price-display">Current Price: --</div>
@@ -966,20 +963,39 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 
 <script>
 // ─── MEMOIZED DATA PARSING (PREVENTS LAG LOOPS) ───
+const nstFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'America/Los_Angeles',
+  year: 'numeric', month: '2-digit', day: '2-digit',
+  hour: 'numeric', minute: '2-digit', second: '2-digit',
+  hour12: false
+});
+
 const memoizedDates = new Map();
 
 function getMemoizedDateInfo(e) {
   if (memoizedDates.has(e.timestamp)) return memoizedDates.get(e.timestamp);
   
-  const ptDate = new Date(new Date(e.timestamp).toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
-  const y = ptDate.getFullYear();
-  const m = String(ptDate.getMonth() + 1).padStart(2, '0');
-  const d = String(ptDate.getDate()).padStart(2, '0');
+  const d = new Date(e.timestamp);
+  
+  // Safety check for invalid dates causing crash loops
+  if (isNaN(d.getTime())) {
+    return { nstDateStr: '1970-01-01', dow: 0, hour: 0 }; 
+  }
+
+  const parts = nstFormatter.formatToParts(d);
+  const p = {};
+  parts.forEach(part => { p[part.type] = part.value; });
+  
+  let hour = parseInt(p.hour, 10);
+  if (hour === 24) hour = 0;
+
+  // Compute dow without instantiating another localized string 
+  const safeDateForDow = new Date(Date.UTC(parseInt(p.year, 10), parseInt(p.month, 10) - 1, parseInt(p.day, 10)));
   
   const info = {
-    nstDateStr: `${y}-${m}-${d}`,
-    dow: ptDate.getDay(),
-    hour: ptDate.getHours()
+    nstDateStr: `${p.year}-${p.month}-${p.day}`,
+    dow: safeDateForDow.getUTCDay(),
+    hour: hour
   };
   
   memoizedDates.set(e.timestamp, info);
@@ -994,23 +1010,6 @@ function queueRender() {
     renderWidgets();
   }, 100); 
 }
-
-// ─── BACKGROUND PARALLAX ───
-let parallaxTicking = false;
-document.addEventListener('mousemove', (e) => {
-  if (!parallaxTicking) {
-    window.requestAnimationFrame(() => {
-      const blobs = document.querySelector('.bg-blobs');
-      if (blobs) {
-        const x = (window.innerWidth / 2 - e.clientX) / 40;
-        const y = (window.innerHeight / 2 - e.clientY) / 40;
-        blobs.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      }
-      parallaxTicking = false;
-    });
-    parallaxTicking = true;
-  }
-});
 
 // ─── PURE CSS SHARE MODE ───
 function toggleShareMode() {
@@ -1251,11 +1250,11 @@ document.addEventListener('KadData_ExtToPage', e => {
     
     const addedCount = mergeData(records);
     
-    // TELL THE EXTENSION TO CLEAR ITS MEMORY SO IT DOES NOT BECOME A FAT CLIENT
+    // TELL THE EXTENSION TO CLEAR ITS MEMORY 
     document.dispatchEvent(new CustomEvent('KadData_SyncComplete'));
     
-    if(addedCount > 0) toast(`✨ Synced: ${addedCount} new records. Extension memory wiped.`);
-    else toast(`No new feeds since last sync. Extension memory wiped.`);
+    if(addedCount > 0) toast(`✨ Synced: ${addedCount} new records. Extension cache wiped.`);
+    else toast(`No new feeds since last sync.`);
     
     if (totallyNewItems.length > 0) {
       const estimatedSeconds = Math.ceil(totallyNewItems.length / 25) * 2;
@@ -2011,9 +2010,13 @@ function renderLog(data) {
     const safeName = e.item.replace(/"/g, '&quot;');
     
     const info = getMemoizedDateInfo(e);
-    const dateObj = new Date(e.timestamp);
-    const timeStr = dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-    const ptDateStr = `${MONTHS_SHORT[parseInt(info.nstDateStr.split('-')[1])-1]} ${parseInt(info.nstDateStr.split('-')[2])}, ${timeStr}`;
+    let h = info.hour % 12;
+    if (h === 0) h = 12;
+    const ampm = info.hour >= 12 ? 'PM' : 'AM';
+    const m = new Date(e.timestamp).getMinutes().toString().padStart(2, '0');
+    const dStr = info.nstDateStr.split('-');
+    
+    const ptDateStr = `${MONTHS_SHORT[parseInt(dStr[1])-1]} ${parseInt(dStr[2])}, ${h}:${m} ${ampm}`;
     
     return `
       <div class="log-entry" style="opacity: ${e.status === 'success' ? '1' : '0.6'}">
