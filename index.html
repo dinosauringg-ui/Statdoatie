@@ -41,8 +41,7 @@
   --theme-card-bg: var(--glass);
   --theme-card-border: 1px solid var(--border);
   --theme-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  --theme-glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  --theme-top-light: rgba(255, 255, 255, 0.12);
+  --theme-glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
   
   --header-bg: var(--glass);
   --header-text: var(--text);
@@ -81,8 +80,7 @@ body.theme-kadoatery {
   --red: #64748b; --blue: #c084fc; --amber: #fbbf24; --purple: #e879f9; --teal: #2dd4bf;
   --theme-card-border: 1px solid rgba(244, 114, 182, 0.3);
   --theme-shadow: 0 10px 40px rgba(192, 132, 252, 0.15), inset 0 0 20px rgba(244, 114, 182, 0.05);
-  --theme-top-light: rgba(244, 114, 182, 0.3);
-  --theme-glass-edge: inset 0 1px 1px rgba(244, 114, 182, 0.2);
+  --theme-glass-edge: inset 0 1px 1px rgba(244, 114, 182, 0.4);
   --btn-radius: 12px;
   --theme-radius: 24px;
   --heatmap-1: rgba(244, 114, 182, 0.2); --heatmap-2: rgba(244, 114, 182, 0.4);
@@ -106,7 +104,6 @@ body.theme-virtupets {
   --theme-card-border: 1px solid #4ade80;
   --theme-card-bg: rgba(0, 20, 5, 0.8);
   --theme-shadow: 0 0 15px rgba(74, 222, 128, 0.1);
-  --theme-top-light: transparent;
   --theme-glass-edge: none;
   --header-bg: #000000;
   --blob-opacity: 0; 
@@ -118,7 +115,7 @@ body.theme-virtupets {
 body.theme-virtupets .stat-card::before, 
 body.theme-virtupets .analytics-card::before, 
 body.theme-virtupets .db-card::before { 
-  display: none; 
+  display: none !important; 
 }
 
 body.theme-maraqua {
@@ -146,7 +143,7 @@ body.theme-moltara {
   --green-glow: rgba(249, 115, 22, 0.4); 
   --red: #ef4444; --blue: #f59e0b; --amber: #fbbf24; --purple: #dc2626; --teal: #ea580c;
   --theme-card-border: 1px solid rgba(249, 115, 22, 0.3);
-  --theme-top-light: rgba(249, 115, 22, 0.15);
+  --theme-glass-edge: inset 0 1px 1px rgba(249, 115, 22, 0.2);
   --heatmap-1: rgba(249, 115, 22, 0.2); --heatmap-2: rgba(249, 115, 22, 0.4);
   --heatmap-3: rgba(249, 115, 22, 0.65); --heatmap-4: rgba(249, 115, 22, 1);
   
@@ -176,7 +173,6 @@ body.theme-faerieland {
   --btn-radius: 100px;
   --theme-card-bg: rgba(255, 255, 255, 0.85);
   --theme-card-border: 2px solid #ffffff;
-  --theme-top-light: rgba(255, 255, 255, 0.8);
   --theme-glass-edge: none;
   --theme-shadow: 0 15px 35px rgba(217, 70, 239, 0.1);
   --chart-empty: rgba(0,0,0,0.05);
@@ -206,7 +202,6 @@ body.theme-classic {
   --btn-radius: 0px;
   --theme-card-bg: #f6f6f6;
   --theme-card-border: 1px solid #000000;
-  --theme-top-light: transparent;
   --theme-glass-edge: none;
   --theme-shadow: 3px 3px 0px rgba(0,0,0,0.15); 
   --blob-opacity: 0;
@@ -352,7 +347,6 @@ body {
   min-height: 50vh; text-align: center; border-radius: var(--theme-radius);
   background: var(--theme-card-bg); border: var(--theme-card-border); box-shadow: var(--theme-shadow);
   backdrop-filter: blur(20px); padding: 60px 20px; transition: all 0.5s ease;
-  border-top: 1px solid var(--theme-top-light);
 }
 .import-screen h2 { font-family: var(--theme-font-display); font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
 .import-screen p { font-size: 1rem; color: var(--text2); max-width: 450px; line-height: 1.6; margin-bottom: 32px; }
@@ -365,7 +359,6 @@ body {
   background: var(--theme-card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border: var(--theme-card-border); border-radius: var(--theme-radius);
   padding: 28px; box-shadow: var(--theme-shadow), var(--theme-glass-edge);
-  border-top: 1px solid var(--theme-top-light);
   transition: all 0.5s ease;
 }
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
@@ -396,7 +389,6 @@ body {
   border: var(--theme-card-border); border-radius: var(--theme-radius);
   padding: 24px; display: flex; flex-direction: column;
   box-shadow: var(--theme-shadow), var(--theme-glass-edge); 
-  border-top: 1px solid var(--theme-top-light);
   transition: transform 0.2s, background 0.5s ease, border 0.5s ease;
   position: relative; overflow: hidden;
 }
@@ -730,7 +722,7 @@ input[type=file] { display: none; }
 }
 @media (max-width: 500px) { 
   .status-chip { display: none !important; } 
-  #streak-badge { display: none !important; } /* Hide streak on small mobile */
+  #streak-badge { display: none !important; } 
 }
 @media (max-width: 400px) {
   .logo-text { display: none; }
@@ -1044,19 +1036,26 @@ async function generateShareCard() {
     exportBox.id = "temp-export-box";
     exportBox.className = document.body.className; 
     exportBox.style.cssText = `
-      position: absolute; left: -9999px; top: 0;
+      position: absolute; left: 0; top: 0;
       width: 480px; padding: 32px;
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--theme-font-body);
       display: flex; flex-direction: column; gap: 24px;
-      z-index: -10;
+      z-index: -9999; opacity: 0; pointer-events: none;
     `;
 
     // Clone blobs for aesthetic
     const blobs = document.querySelector('.bg-blobs').cloneNode(true);
     blobs.style.position = 'absolute';
     exportBox.appendChild(blobs);
+    
+    // Inject a <style> block to strip out pseudo-elements that crash html2canvas
+    const styleFix = document.createElement('style');
+    styleFix.innerHTML = `
+      .stat-card::before, .analytics-card::before, .db-card::before { display: none !important; }
+    `;
+    exportBox.appendChild(styleFix);
 
     // Logo / Title Header
     const header = document.createElement('div');
@@ -1123,7 +1122,7 @@ async function generateShareCard() {
        const heatmapClone = document.getElementById('heatmap-view').cloneNode(true);
        heatmapClone.classList.remove('hidden');
        const hOuter = heatmapClone.querySelector('.heatmap-outer');
-       if(hOuter) hOuter.style.overflowX = 'visible'; // Ensure scrollbar overflow is rendered
+       if(hOuter) hOuter.style.overflowX = 'visible'; 
        chartWrap.appendChild(heatmapClone);
     } else if (currentMainChartType === 'log') {
        const logClone = document.getElementById('log-view').cloneNode(true);
@@ -1142,15 +1141,13 @@ async function generateShareCard() {
     analyticsCard.appendChild(chartWrap);
     exportBox.appendChild(analyticsCard);
     
-    // Mount it temporarily so html2canvas can read its dimensions properly
     document.body.appendChild(exportBox);
     await new Promise(r => setTimeout(r, 150));
 
     const generatedCanvas = await html2canvas(exportBox, {
        backgroundColor: getComputedStyle(document.body).backgroundColor,
        scale: 2, 
-       useCORS: true,     // Bypasses image security blocks
-       allowTaint: true,  
+       useCORS: true,
        logging: false
     });
 
