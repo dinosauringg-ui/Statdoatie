@@ -423,15 +423,27 @@ body {
 .stat-num.counting { animation: countUp 0.4s ease both; }
 
 /* ── HEATMAP CALENDAR ── */
-.heatmap-outer { overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+#heatmap-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+.heatmap-outer { 
+  overflow-x: auto; 
+  padding-bottom: 4px; 
+  -webkit-overflow-scrolling: touch; 
+  margin: auto 0;
+}
 .heatmap-inner { display: inline-flex; flex-direction: column; gap: 0; min-width: 100%; }
 .heatmap-months-row { display: flex; align-items: flex-end; margin-bottom: 6px; }
-.heatmap-day-labels { display: flex; flex-direction: column; gap: 2px; margin-right: 8px; padding-top: 0; }
-.heatmap-day-label { font-size: 10px; color: var(--text3); height: 14px; display: flex; align-items: center; width: 24px; }
-.heatmap-grid-area { display: flex; flex-direction: row; gap: 3px; }
-.heatmap-week-col { display: flex; flex-direction: column; gap: 3px; }
+.heatmap-day-labels { display: flex; flex-direction: column; gap: 4px; margin-right: 8px; padding-top: 0; }
+.heatmap-day-label { font-size: 11px; color: var(--text3); height: 20px; display: flex; align-items: center; width: 30px; }
+.heatmap-grid-area { display: flex; flex-direction: row; gap: 4px; }
+.heatmap-week-col { display: flex; flex-direction: column; gap: 4px; }
 .heatmap-cell {
-  width: 14px; height: 14px; border-radius: 3px;
+  width: 20px; height: 20px; border-radius: 4px;
   background: var(--heatmap-empty); cursor: pointer;
   transition: transform 0.15s ease, filter 0.15s ease;
   position: relative; flex-shrink: 0;
@@ -444,8 +456,8 @@ body {
 .heatmap-cell.future { opacity: 0.2; cursor: default; }
 .heatmap-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
 .heatmap-legend { display: flex; align-items: center; gap: 6px; font-size: .75rem; color: var(--text3); }
-.heatmap-legend-cells { display: flex; gap: 3px; }
-.heatmap-legend-cell { width: 12px; height: 12px; border-radius: 2px; }
+.heatmap-legend-cells { display: flex; gap: 4px; }
+.heatmap-legend-cell { width: 14px; height: 14px; border-radius: 3px; }
 
 /* Heatmap tooltip */
 .hmap-tooltip {
@@ -459,6 +471,9 @@ body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 .hmap-tooltip.visible { opacity: 1; }
+
+/* ── PANELS & GRIDS ── */
+.chart-wrap { position: relative; width: 100%; display: flex; flex-direction: column; }
 
 /* ── TABLE SEARCH & SORT ── */
 .search-input {
@@ -593,7 +608,10 @@ input[type=file] { display: none; }
   .log-price, .log-ts, .log-dot { display: none; }
   .card-header-actions { flex-direction: column; align-items: flex-start !important; gap: 12px; }
   .search-input { max-width: 100%; }
-  .heatmap-cell { width: 11px; height: 11px; }
+  
+  .heatmap-cell { width: 16px; height: 16px; }
+  .heatmap-day-label { height: 16px; width: 24px; font-size: 10px; }
+  
   .db-preview-container { display: none; } 
 }
 @media (max-width: 600px) {
@@ -801,7 +819,7 @@ input[type=file] { display: none; }
         </div>
 
         <div id="heatmap-view">
-          <div class="heatmap-header" style="display:flex; justify-content:flex-end; margin-bottom: 20px;">
+          <div class="heatmap-header" style="display:flex; justify-content:flex-end;">
             <span class="heatmap-meta" id="heatmap-meta"></span>
           </div>
           <div class="heatmap-outer">
