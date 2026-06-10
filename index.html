@@ -110,7 +110,7 @@ body.theme-virtupets {
   --theme-glass-edge: none;
   --header-bg: #000000;
   --blob-opacity: 0; 
-  --theme-shape: none; /* Removed floating shape for Virtupets */
+  --theme-shape: none;
   --heatmap-1: rgba(74, 222, 128, 0.2); --heatmap-2: rgba(74, 222, 128, 0.4);
   --heatmap-3: rgba(74, 222, 128, 0.65); --heatmap-4: rgba(74, 222, 128, 1);
 }
@@ -302,6 +302,14 @@ body {
 .btn-icon { padding: 0; width: 40px; justify-content: center; font-size: 1.2rem; color: inherit; flex-shrink: 0; }
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+
+/* Active Chart Selection Highlighting */
+.btn.active-chart-btn {
+  background: var(--text);
+  color: var(--bg);
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
 
 .import-feeds-btn { padding: 0 16px; white-space: nowrap; flex-shrink: 0; }
 
@@ -804,15 +812,15 @@ input[type=file] { display: none; }
       <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('chart-modal').classList.add('hidden')">✕</button>
     </div>
     <div style="display:flex; flex-direction:column; gap:10px;">
-      <button class="btn" onclick="renderMainChart('heatmap'); document.getElementById('chart-modal').classList.add('hidden')">Feed Activity (Heatmap)</button>
-      <button class="btn" onclick="renderMainChart('daily'); document.getElementById('chart-modal').classList.add('hidden')">Daily Feeds</button>
-      <button class="btn" onclick="renderMainChart('cumul'); document.getElementById('chart-modal').classList.add('hidden')">Cumulative Growth</button>
-      <button class="btn" onclick="renderMainChart('np'); document.getElementById('chart-modal').classList.add('hidden')">NP Spent Tracker</button>
-      <button class="btn" onclick="renderMainChart('unique'); document.getElementById('chart-modal').classList.add('hidden')">Unique Items Fed</button>
-      <button class="btn" onclick="renderMainChart('dow'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Day</button>
-      <button class="btn" onclick="renderMainChart('hour'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Hour</button>
-      <button class="btn" onclick="renderMainChart('tiers'); document.getElementById('chart-modal').classList.add('hidden')">Item Price Tiers</button>
-      <button class="btn" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
+      <button class="btn chart-btn" data-chart="heatmap" onclick="renderMainChart('heatmap'); document.getElementById('chart-modal').classList.add('hidden')">Feed Activity (Heatmap)</button>
+      <button class="btn chart-btn" data-chart="daily" onclick="renderMainChart('daily'); document.getElementById('chart-modal').classList.add('hidden')">Daily Feeds</button>
+      <button class="btn chart-btn" data-chart="cumul" onclick="renderMainChart('cumul'); document.getElementById('chart-modal').classList.add('hidden')">Cumulative Growth</button>
+      <button class="btn chart-btn" data-chart="np" onclick="renderMainChart('np'); document.getElementById('chart-modal').classList.add('hidden')">NP Spent Tracker</button>
+      <button class="btn chart-btn" data-chart="unique" onclick="renderMainChart('unique'); document.getElementById('chart-modal').classList.add('hidden')">Unique Items Fed</button>
+      <button class="btn chart-btn" data-chart="dow" onclick="renderMainChart('dow'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Day</button>
+      <button class="btn chart-btn" data-chart="hour" onclick="renderMainChart('hour'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Hour</button>
+      <button class="btn chart-btn" data-chart="tiers" onclick="renderMainChart('tiers'); document.getElementById('chart-modal').classList.add('hidden')">Item Price Tiers</button>
+      <button class="btn chart-btn" data-chart="log" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
     </div>
   </div>
 </div>
@@ -963,16 +971,7 @@ input[type=file] { display: none; }
         <div class="table-wrap">
           <table id="item-table">
             <thead>
-              <tr>
-                <th class="th-sortable" onclick="handleDbSort('name')">Item ↕</th>
-                <th class="td-right th-sortable" onclick="handleDbSort('price')">itemdb Price ↕</th>
-                <th class="td-right th-sortable" onclick="handleDbSort('t')">Seen ↕</th>
-                <th class="td-right th-sortable" onclick="handleDbSort('s')">Fed ↕</th>
-                <th class="td-right th-sortable" onclick="handleDbSort('n')">Missed ↕</th>
-                <th class="td-right th-sortable" onclick="handleDbSort('spent')">NP Spent ↕</th>
-                <th class="th-sortable" onclick="handleDbSort('rate')">Win Rate ↕</th>
-              </tr>
-            </thead>
+              </thead>
             <tbody></tbody>
           </table>
         </div>
@@ -998,7 +997,7 @@ async function generateShareCard() {
 
   // Setup the hidden export canvas
   const exportBox = document.createElement('div');
-  exportBox.className = document.body.className; // inherit exact theme
+  exportBox.className = document.body.className; 
   exportBox.style.cssText = `
     position: absolute; left: -9999px; top: 0;
     width: 480px; padding: 32px;
@@ -1077,7 +1076,6 @@ async function generateShareCard() {
   if (currentMainChartType === 'heatmap') {
      const heatmapClone = document.getElementById('heatmap-view').cloneNode(true);
      heatmapClone.classList.remove('hidden');
-     // Ensure scrollbar overflow is visible so the whole grid is captured
      const hOuter = heatmapClone.querySelector('.heatmap-outer');
      if(hOuter) hOuter.style.overflowX = 'visible';
      chartWrap.appendChild(heatmapClone);
@@ -1087,7 +1085,6 @@ async function generateShareCard() {
      logClone.style.maxHeight = '300px';
      chartWrap.appendChild(logClone);
   } else {
-     // Canvas data extraction
      const canvas = document.getElementById('mainChart');
      const img = document.createElement('img');
      img.src = canvas.toDataURL('image/png');
@@ -1100,7 +1097,6 @@ async function generateShareCard() {
   exportBox.appendChild(analyticsCard);
   document.body.appendChild(exportBox);
 
-  // A tiny delay ensures fonts and layouts paint perfectly before snap
   await new Promise(r => setTimeout(r, 150));
 
   html2canvas(exportBox, {
@@ -1673,6 +1669,15 @@ function renderMainChart(type) {
   };
   document.getElementById('current-chart-label').textContent = chartNames[type];
   
+  // Update UI Highlighting for the modal buttons
+  document.querySelectorAll('.chart-btn').forEach(btn => {
+    if (btn.dataset.chart === type) {
+      btn.classList.add('active-chart-btn');
+    } else {
+      btn.classList.remove('active-chart-btn');
+    }
+  });
+  
   const canvas = document.getElementById('canvas-view');
   const logView = document.getElementById('log-view');
   const heatmapView = document.getElementById('heatmap-view');
@@ -1813,7 +1818,7 @@ function renderMainChart(type) {
     };
   }
 
-  charts.main = new Chart(document.getElementById('mainChart'), config);
+  charts.main = new Chart(ctx, config);
 }
 
 // ─── RENDER PIPELINE ───
@@ -1985,7 +1990,28 @@ function renderItemTable(ds) {
     if (typeof valA === 'string') return dbSortDir * valA.localeCompare(valB);
     else return dbSortDir * (valA - valB);
   });
+  
   document.getElementById('item-count').textContent = displayArray.length + ' Items';
+  
+  // Dynamically update the table headers to show the active sort direction
+  const hdrs = [
+    { k: 'name',  l: 'Item',         a: '' },
+    { k: 'price', l: 'itemdb Price', a: 'td-right' },
+    { k: 't',     l: 'Seen',         a: 'td-right' },
+    { k: 's',     l: 'Fed',          a: 'td-right' },
+    { k: 'n',     l: 'Missed',       a: 'td-right' },
+    { k: 'spent', l: 'NP Spent',     a: 'td-right' },
+    { k: 'rate',  l: 'Win Rate',     a: '' }
+  ];
+  
+  document.querySelector('#item-table thead').innerHTML = '<tr>' + hdrs.map(h => {
+    const isActive = dbSortKey === h.k;
+    const arrow = isActive ? (dbSortDir === 1 ? '↑' : '↓') : '↕';
+    const colorStyle = isActive ? 'color: var(--text); font-weight: 800;' : '';
+    return `<th class="th-sortable ${h.a}" style="${colorStyle}" onclick="handleDbSort('${h.k}')">${h.l} ${arrow}</th>`;
+  }).join('') + '</tr>';
+
+  // Render rows
   document.querySelector('#item-table tbody').innerHTML = displayArray.map(x => {
     const priceHtml = x.price != null
       ? `<span class="price-cell${x.inflated ? ' inflated' : ''}">${x.price.toLocaleString()}</span>`
