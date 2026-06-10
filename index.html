@@ -84,8 +84,6 @@ body.theme-kadoatery {
   --theme-radius: 24px;
   --heatmap-1: rgba(244, 114, 182, 0.2); --heatmap-2: rgba(244, 114, 182, 0.4);
   --heatmap-3: rgba(244, 114, 182, 0.65); --heatmap-4: rgba(244, 114, 182, 1);
-  
-  /* Heart */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
 }
 
@@ -129,8 +127,6 @@ body.theme-maraqua {
   --theme-shadow: 0 20px 50px rgba(0,0,0,0.4);
   --heatmap-1: rgba(45, 212, 191, 0.2); --heatmap-2: rgba(45, 212, 191, 0.4);
   --heatmap-3: rgba(45, 212, 191, 0.65); --heatmap-4: rgba(45, 212, 191, 1);
-  
-  /* Water Drop */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2c0 0-8 8.61-8 13a8 8 0 0016 0c0-4.39-8-13-8-13z'/%3E%3C/svg%3E");
 }
 
@@ -145,8 +141,6 @@ body.theme-moltara {
   --theme-glass-edge: inset 0 1px 1px rgba(249, 115, 22, 0.2);
   --heatmap-1: rgba(249, 115, 22, 0.2); --heatmap-2: rgba(249, 115, 22, 0.4);
   --heatmap-3: rgba(249, 115, 22, 0.65); --heatmap-4: rgba(249, 115, 22, 1);
-  
-  /* Fire */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M11.66 22.05c-3.15 0-5.83-1.89-6.9-4.71-1.04-2.73-.55-5.61.64-7.53.51-.83 1.62-.97 2.22-.26.54.64.67 1.48.51 2.25-.26 1.25.04 2.51.81 3.46.74.93 1.95 1.34 3.01 1.09.77-.18 1.41-.69 1.76-1.38.38-.76.38-1.63.02-2.38-.41-.85-.98-1.61-1.68-2.22-1.74-1.51-2.9-3.7-2.9-6.09 0-1.5.47-2.94 1.34-4.14.49-.68 1.5-.7 2.05-.09C17.51 5.3 21 10.45 21 14.86c0 3.94-3.19 7.19-7.14 7.19h-2.2z'/%3E%3C/svg%3E");
 }
 
@@ -179,8 +173,6 @@ body.theme-faerieland {
   --heatmap-empty: rgba(0,0,0,0.06);
   --heatmap-1: rgba(5, 150, 105, 0.2); --heatmap-2: rgba(5, 150, 105, 0.45);
   --heatmap-3: rgba(5, 150, 105, 0.7); --heatmap-4: rgba(5, 150, 105, 1);
-  
-  /* Cloud */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z'/%3E%3C/svg%3E");
 }
 
@@ -216,8 +208,6 @@ body.theme-classic {
   --heatmap-empty: rgba(0,0,0,0.08);
   --heatmap-1: rgba(0, 128, 0, 0.2); --heatmap-2: rgba(0, 128, 0, 0.45);
   --heatmap-3: rgba(0, 128, 0, 0.7); --heatmap-4: rgba(0, 128, 0, 1);
-  
-  /* Star */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
 }
 
@@ -309,8 +299,6 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.import-feeds-btn { padding: 0 16px; white-space: nowrap; flex-shrink: 0; }
-
 /* ── MODALS ── */
 .modal-overlay {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -338,7 +326,7 @@ body {
 .month-select option { background: var(--bg); color: var(--text); }
 
 /* ── MAIN ── */
-.main { padding: 32px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
+.main { padding: 32px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; transition: all 0.3s ease; }
 
 /* ── IMPORT SCREEN ── */
 .import-screen {
@@ -667,6 +655,46 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 .hidden { display: none !important; }
 input[type=file] { display: none; }
 
+/* ── SHARE MODE CSS OVERRIDES ── */
+/* When .share-mode is applied to body, the live dashboard transforms into a poster */
+body.share-mode .filter-bar,
+body.share-mode .db-card,
+body.share-mode .header-right button:not(#exit-share-btn),
+body.share-mode #status-chip,
+body.share-mode #streak-badge { 
+  display: none !important; 
+}
+
+body.share-mode .main { 
+  max-width: 480px; /* Mobile poster width */
+  padding: 20px 16px; 
+  margin: 0 auto; 
+}
+
+body.share-mode .stats-grid { 
+  grid-template-columns: 1fr 1fr; /* Force 2x2 grid */
+}
+body.share-mode .stat-card.wide { grid-column: 1 / -1; }
+
+body.share-mode .stat-expanded { display: none !important; }
+body.share-mode .expandable-card { cursor: default; }
+body.share-mode .stat-label::after { display: none !important; }
+body.share-mode .stat-num { font-size: 2rem !important; }
+
+/* Add the current date below the title in share mode */
+body.share-mode .logo-sub::after {
+  content: " • " attr(data-date);
+}
+
+#exit-share-btn { display: none; }
+body.share-mode #exit-share-btn { 
+  display: inline-flex; 
+  background: var(--text); 
+  color: var(--bg); 
+  font-weight: 800;
+  padding: 0 24px;
+}
+
 @keyframes fadeup { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ── CARD ENTRANCE ANIMATION ── */
@@ -685,7 +713,6 @@ input[type=file] { display: none; }
 @media (max-width: 900px) {
   .header { padding: 0 16px; height: 56px; flex-wrap: nowrap; }
   .header-right { margin-top: 0; width: auto; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
-  .import-feeds-btn { padding: 0 12px !important; font-size: 0.85rem !important; flex-shrink: 0; }
   .logo-sub { display: none; }
   .logo-text { font-size: 1.1rem; }
   .pill-badge { padding: 4px 8px; font-size: 0.65rem; }
@@ -753,7 +780,7 @@ input[type=file] { display: none; }
     </div>
     <div>
       <div class="logo-text">Statdoatie</div>
-      <div class="logo-sub">Tracker</div>
+      <div class="logo-sub" id="logo-sub-text">Tracker</div>
     </div>
   </div>
   <div class="header-right">
@@ -767,13 +794,15 @@ input[type=file] { display: none; }
       <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
     </button>
 
-    <button class="btn btn-icon" onclick="openShareModal()" title="Share Stat Card">
+    <button class="btn btn-icon" onclick="toggleShareMode()" title="Share Stat Card">
       <svg viewBox="0 0 24 24" style="width:16px; height:16px;" fill="currentColor"><path d="M4 4h3l2-2h6l2 2h3c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm8 3c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
     </button>
     
     <button class="btn btn-icon" onclick="openSettings()" title="Settings">
       <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.88,11.36,4.86,11.69,4.86,12s0.02,0.64,0.06,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
     </button>
+
+    <button class="btn" id="exit-share-btn" onclick="toggleShareMode()">Done</button>
   </div>
 </header>
 
@@ -896,7 +925,7 @@ input[type=file] { display: none; }
         <button class="btn btn-primary" id="modal-import-ext" onclick="triggerExtensionSync()" style="justify-content:center;">Import Extension Data</button>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
           <button class="btn" onclick="document.getElementById('file-input').click(); closeSettings();" style="justify-content:center;">Load JSON</button>
-          <button class="btn" id="modal-export-btn" onclick="exportData(); closeSettings();" style="justify-content:center;">Export JSON</button>
+          <button class="btn" onclick="exportData(); closeSettings();" style="justify-content:center;">Export JSON</button>
         </div>
         <button class="btn" onclick="fetchMissingPrices(); closeSettings();" style="justify-content:center; color:var(--blue); border-color:rgba(59, 130, 246, 0.3);">Sync Missing Prices</button>
         <button class="btn" onclick="clearData(); closeSettings();" style="justify-content:center; color:var(--red); border-color:var(--red-muted);">Wipe Dashboard Data</button>
@@ -913,20 +942,7 @@ input[type=file] { display: none; }
   </div>
 </div>
 
-<div id="share-modal" class="modal-overlay hidden">
-  <div class="modal-card card" style="max-width: 500px; text-align: center;">
-    <div class="card-header" style="margin-bottom: 16px;">
-      <span class="card-title">Share Your Stats</span>
-      <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('share-modal').classList.add('hidden')">✕</button>
-    </div>
-    
-    <div id="share-preview-container" style="margin-bottom: 20px; border-radius: 12px; overflow: hidden; background: transparent;">
-       </div>
-    
-    <div style="font-size:0.8rem; color:var(--text3); margin-bottom:16px; font-weight:500;">📸 Snap a screenshot to share your stats graphic!</div>
-    <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="document.getElementById('share-modal').classList.add('hidden')">Dismiss</button>
-  </div>
-</div>
+<div class="hmap-tooltip" id="hmap-tooltip"></div>
 
 <main class="main">
   <div id="import-screen" class="import-screen">
@@ -938,7 +954,7 @@ input[type=file] { display: none; }
     <h2>It's quiet in here...</h2>
     <p>Connect your <a href="https://greasyfork.org/en/scripts/581360-statdoatie-analytics-sync" target="_blank" style="color:var(--blue); text-decoration:none; font-weight:700;">Tampermonkey extension</a>, drop in a JSON save file, or load up some dummy data to see the dashboard in action.</p>
     <div class="import-btns">
-      <button class="btn btn-primary" id="empty-import-btn" onclick="triggerExtensionSync()">
+      <button class="btn btn-primary" onclick="triggerExtensionSync()">
         <svg viewBox="0 0 24 24" style="width:18px; height:18px; margin-right:6px;" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
         Import Extension Data
       </button>
@@ -1036,101 +1052,21 @@ document.addEventListener('mousemove', (e) => {
   blobs.style.transform = `translate(${x}px, ${y}px)`;
 });
 
-// ─── SHARE CARD GENERATOR ───
-function openShareModal() {
-  toast("Preparing Statdoatie Card Layout...");
-  const preview = document.getElementById('share-preview-container');
-  preview.innerHTML = ''; 
-
-  const card = document.createElement('div');
-  card.className = document.body.className; 
-  card.style.cssText = `
-    width: 100%; margin: 0 auto;
-    background-color: var(--bg); padding: 24px;
-    display: flex; flex-direction: column; gap: 20px;
-    position: relative; overflow: hidden; text-align: left;
-    border-radius: var(--theme-radius); border: var(--theme-card-border);
-    color: var(--text); font-family: var(--theme-font-body);
-    box-shadow: var(--theme-shadow);
-  `;
-
-  const styleFix = document.createElement('style');
-  styleFix.innerHTML = `
-    #share-preview-container .stat-card { animation: none !important; transform: none !important; box-shadow: none !important; border: 1px solid var(--border-strong) !important; background: var(--table-row) !important; padding: 16px; }
-    #share-preview-container .stat-card::before, #share-preview-container .stat-card::after { display: none !important; }
-    #share-preview-container .expandable-card { cursor: default; }
-    #share-preview-container .stat-expanded { display: none !important; }
-    #share-preview-container .stat-label::after { display: none !important; }
-    #share-preview-container .heatmap-cell { animation: none !important; transition: none !important; }
-    #share-preview-container .bg-blobs { opacity: 0.5; }
-    #share-preview-container img { display: none !important; } 
-    #share-preview-container .item-img-placeholder { display: none !important; }
-  `;
-  card.appendChild(styleFix);
-
-  const blobs = document.querySelector('.bg-blobs').cloneNode(true);
-  blobs.style.position = 'absolute';
-  blobs.style.top = '0'; blobs.style.left = '0';
-  card.appendChild(blobs);
-
-  const header = document.createElement('div');
-  header.style.cssText = 'display:flex; justify-content:space-between; align-items:center; z-index:2; position:relative;';
-  header.innerHTML = `
-    <div style="display:flex; align-items:center; gap:12px;">
-      <div style="width:32px; height:32px; background:linear-gradient(135deg, var(--blue), var(--purple)); border-radius:var(--theme-radius); display:flex; align-items:center; justify-content:center;">
-        <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:#fff;"><path d="M14.5 4c-3.5 0-5.5 1.5-5.5 4 0 3.5 8 3.5 8 7 0 2.5-2.5 4-6 4-2.5 0-4.5-1-5.5-2.5l2.5-2c.5 1 2 2 3 2 1.5 0 2.5-.5 2.5-1.5 0-2.5-8-2.5-8-7 0-4 3.5-6.5 8.5-6.5 3 0 5 1.5 6.5 3l-2.5 2C17 5 16 4 14.5 4z"/></svg>
-      </div>
-      <div style="font-family:var(--theme-font-display); font-weight:800; font-size:1.3rem; color:var(--text);">Statdoatie</div>
-    </div>
-    <div style="font-family:var(--theme-font-body); font-weight:600; font-size:0.85rem; color:var(--text3);">
-      ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-    </div>
-  `;
-  card.appendChild(header);
-
-  const statsRow = document.createElement('div');
-  statsRow.style.cssText = 'display:grid; grid-template-columns:1fr 1fr; gap:12px; z-index:2; position:relative;';
-
-  const originalCards = document.querySelectorAll('#stats-grid .stat-card:not(.wide)');
-  originalCards.forEach(oc => {
-     const clone = oc.cloneNode(true);
-     const num = clone.querySelector('.stat-num');
-     if (num) num.style.fontSize = '2rem';
-     statsRow.appendChild(clone);
-  });
-  card.appendChild(statsRow);
-
-  const chartArea = document.createElement('div');
-  chartArea.style.cssText = 'background:var(--table-row); border:1px solid var(--border-strong); border-radius:var(--theme-radius); padding:20px; z-index:2; position:relative; display:flex; flex-direction:column; gap:16px;';
-
-  const chartLabel = document.getElementById('current-chart-label').textContent;
-  chartArea.innerHTML = `
-    <div style="font-family:var(--theme-font-display); font-weight:700; color:var(--text2); font-size:1rem;">${chartLabel}</div>
-  `;
-
-  if (currentMainChartType === 'heatmap') {
-     const hmClone = document.getElementById('heatmap-view').cloneNode(true);
-     hmClone.classList.remove('hidden');
-     const outer = hmClone.querySelector('.heatmap-outer');
-     if (outer) outer.style.overflow = 'hidden'; 
-     chartArea.appendChild(hmClone);
-  } else if (currentMainChartType === 'log') {
-     const logClone = document.getElementById('log-view').cloneNode(true);
-     logClone.classList.remove('hidden');
-     logClone.style.maxHeight = '250px';
-     logClone.style.overflow = 'hidden';
-     chartArea.appendChild(logClone);
-  } else {
-     const canvas = document.getElementById('mainChart');
-     const img = document.createElement('img');
-     img.src = canvas.toDataURL('image/png');
-     img.style.cssText = 'width:100%; height:auto; display:block !important;';
-     chartArea.appendChild(img);
+// ─── PURE CSS SHARE MODE ───
+function toggleShareMode() {
+  document.body.classList.toggle('share-mode');
+  
+  if (document.body.classList.contains('share-mode')) {
+    // Add today's date dynamically to the sub-logo
+    const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    document.getElementById('logo-sub-text').setAttribute('data-date', dateStr);
+    toast("Ready for screenshot! 📸");
   }
-
-  card.appendChild(chartArea);
-  preview.appendChild(card);
-  document.getElementById('share-modal').classList.remove('hidden');
+  
+  // Force Chart.js to recalculate its width for the new container size
+  if(charts.main) {
+    setTimeout(() => { charts.main.resize(); }, 350); 
+  }
 }
 
 // ─── STATE ───
@@ -1390,12 +1326,12 @@ function handleFileLoad(e) {
   };
   r.readAsText(file); e.target.value = '';
 }
-exportData = () => {
+function exportData() {
   if (feedLog.length === 0) return toast('Nothing to export');
   const b = new Blob([JSON.stringify(feedLog, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b);
   a.download = `statdoatie_${new Date().toISOString().slice(0,10)}.json`; a.click(); toast('Exported JSON');
-};
+}
 function clearData() {
   if (!confirm('Wipe all dashboard data?')) return;
   feedLog = []; currentMonth = 'all'; destroyCharts();
@@ -1441,6 +1377,19 @@ function mergeData(entries) {
   localStorage.setItem('statdoatie_save', JSON.stringify(feedLog));
   showDashboard();
   renderWidgets();
+}
+function loadDemoData() {
+  const items = ['Honey Blossom Extract','Tigersquash Juice','Cheeseburger','Ummagine','Faerie Pancakes','Blueberry Crepes','Puntec Fruit','Purple Grapes','Borovan','Tombola Fruit','Cheese Pizza','Thornberry Juice','Starberry Juice','Strawberry','Watermelon','Melon','Orange','Apple','Pear','Kiwi','Lemon','Lime','Grapefruit','Mango'];
+  const now = new Date(), demo = [];
+  for (let d = 59; d >= 0; d--) {
+    const base = new Date(now); base.setDate(base.getDate() - d);
+    const n = Math.floor(Math.random() * 15) + 3;
+    for (let i = 0; i < n; i++) {
+      const ts = new Date(base); ts.setHours(Math.floor(Math.random()*24), Math.floor(Math.random()*60), 0, 0);
+      demo.push({ item: items[Math.floor(Math.random()*items.length)], status: Math.random() < .65 ? 'success' : 'sniped', timestamp: ts.toISOString() });
+    }
+  }
+  mergeData(demo); toast(`Simulated ${demo.length} feeds`);
 }
 
 // ─── HEATMAP CALENDAR ───
