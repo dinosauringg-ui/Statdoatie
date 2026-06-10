@@ -216,7 +216,7 @@ body {
 .bg-blobs {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none; z-index: -1; overflow: hidden; filter: blur(100px);
-  transition: transform 0.1s ease-out; /* Smooths the mouse parallax */
+  transition: transform 0.1s ease-out;
   will-change: transform;
 }
 .blob { position: absolute; border-radius: 50%; opacity: var(--blob-opacity); animation: float 20s infinite alternate ease-in-out; transition: opacity 0.5s ease, background 0.8s ease; }
@@ -460,11 +460,6 @@ body {
 }
 .hmap-tooltip.visible { opacity: 1; }
 
-/* ── PANELS & GRIDS ── */
-.grid-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-.chart-wrap { position: relative; width: 100%; }
-.doughnut-wrapper { position: relative; display: flex; align-items: center; justify-content: center; height: 260px; }
-
 /* ── TABLE SEARCH & SORT ── */
 .search-input {
   background: var(--table-row); border: 1px solid var(--border); color: var(--text);
@@ -532,7 +527,7 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
   opacity: 0;
 }
 .db-card.expanded .db-card-body {
-  max-height: 3000px; /* arbitrary large number to allow full expansion */
+  max-height: 3000px; 
   opacity: 1;
   margin-top: 24px;
 }
@@ -591,7 +586,6 @@ input[type=file] { display: none; }
   .btn-icon svg { width: 16px !important; height: 16px !important; }
   .filter-bar { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
   .main { padding: 20px 16px; gap: 20px; }
-  .grid-2 { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .stat-card { padding: 20px 16px; }
   .stat-num { font-size: 2.2rem; }
@@ -600,7 +594,7 @@ input[type=file] { display: none; }
   .card-header-actions { flex-direction: column; align-items: flex-start !important; gap: 12px; }
   .search-input { max-width: 100%; }
   .heatmap-cell { width: 11px; height: 11px; }
-  .db-preview-container { display: none; } /* Hide preview on small screens to save space */
+  .db-preview-container { display: none; } 
 }
 @media (max-width: 600px) {
   .crown-jewel-content { align-items: center; }
@@ -709,6 +703,7 @@ input[type=file] { display: none; }
       <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('chart-modal').classList.add('hidden')">✕</button>
     </div>
     <div style="display:flex; flex-direction:column; gap:10px;">
+      <button class="btn" style="border-color: var(--teal); color: var(--teal);" onclick="renderMainChart('heatmap'); document.getElementById('chart-modal').classList.add('hidden')">Feed Activity (Heatmap)</button>
       <button class="btn" onclick="renderMainChart('daily'); document.getElementById('chart-modal').classList.add('hidden')">Daily Feeds</button>
       <button class="btn" onclick="renderMainChart('cumul'); document.getElementById('chart-modal').classList.add('hidden')">Cumulative Growth</button>
       <button class="btn" onclick="renderMainChart('np'); document.getElementById('chart-modal').classList.add('hidden')">NP Spent Tracker</button>
@@ -716,7 +711,6 @@ input[type=file] { display: none; }
       <button class="btn" onclick="renderMainChart('dow'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Day</button>
       <button class="btn" onclick="renderMainChart('hour'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Hour</button>
       <button class="btn" onclick="renderMainChart('tiers'); document.getElementById('chart-modal').classList.add('hidden')">Item Price Tiers</button>
-      <button class="btn" style="border-color: var(--teal); color: var(--teal);" onclick="renderMainChart('heatmap'); document.getElementById('chart-modal').classList.add('hidden')">Feed Activity (Heatmap)</button>
       <button class="btn" style="border-color: var(--blue); color: var(--blue);" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
     </div>
   </div>
@@ -795,18 +789,18 @@ input[type=file] { display: none; }
         <span class="card-title">Analytics</span>
         <button class="btn" onclick="document.getElementById('chart-modal').classList.remove('hidden')">
           <svg viewBox="0 0 24 24" style="width:16px; height:16px; margin-right:4px;" fill="currentColor"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></svg>
-          <span id="current-chart-label">Daily Feeds</span>
+          <span id="current-chart-label">Feed Activity (Heatmap)</span>
         </button>
       </div>
       <div class="chart-wrap" style="flex:1; min-height:350px;">
-        <canvas id="mainChart" role="img" aria-label="Main metrics chart"></canvas>
+        <canvas id="mainChart" role="img" aria-label="Main metrics chart" class="hidden"></canvas>
         
         <div id="log-view" class="hidden" style="max-height:400px; overflow-y:auto; padding-right:10px;">
            <div id="log-count-label" style="font-size:0.8rem; color:var(--text3); margin-bottom:10px; font-weight:600;"></div>
            <div id="log-list"></div>
         </div>
 
-        <div id="heatmap-view" class="hidden">
+        <div id="heatmap-view">
           <div class="heatmap-header" style="display:flex; justify-content:flex-end; margin-bottom: 20px;">
             <span class="heatmap-meta" id="heatmap-meta"></span>
           </div>
@@ -894,7 +888,7 @@ let dbSortDir = -1;
 let absoluteMostExpensiveItem = '';
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-let currentMainChartType = 'daily';
+let currentMainChartType = 'heatmap';
 
 window.chartPayload = {
   labelsTime: [], dailyFed: [], dailySniped: [],
