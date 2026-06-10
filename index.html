@@ -65,6 +65,9 @@
   --heatmap-2: rgba(34, 197, 94, 0.4);
   --heatmap-3: rgba(34, 197, 94, 0.65);
   --heatmap-4: rgba(34, 197, 94, 1);
+  
+  /* Default Shape: Circle */
+  --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3C/svg%3E");
 }
 
 /* ── DISTINCT DARK THEMES ── */
@@ -83,6 +86,9 @@ body.theme-kadoatery {
   --theme-radius: 12px;
   --heatmap-1: rgba(244, 114, 182, 0.2); --heatmap-2: rgba(244, 114, 182, 0.4);
   --heatmap-3: rgba(244, 114, 182, 0.65); --heatmap-4: rgba(244, 114, 182, 1);
+  
+  /* Heart */
+  --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
 }
 
 body.theme-virtupets {
@@ -105,6 +111,9 @@ body.theme-virtupets {
   --blob-opacity: 0; 
   --heatmap-1: rgba(74, 222, 128, 0.2); --heatmap-2: rgba(74, 222, 128, 0.4);
   --heatmap-3: rgba(74, 222, 128, 0.65); --heatmap-4: rgba(74, 222, 128, 1);
+  
+  /* Scanlines */
+  --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 4h20v2H2zM2 8h20v2H2zM2 12h20v2H2zM2 16h20v2H2zM2 20h20v2H2z'/%3E%3C/svg%3E");
 }
 
 body.theme-maraqua {
@@ -116,17 +125,25 @@ body.theme-maraqua {
   --red: #fb7185; --blue: #0284c7; --amber: #f59e0b; --purple: #0ea5e9; --teal: #38bdf8;
   --heatmap-1: rgba(45, 212, 191, 0.2); --heatmap-2: rgba(45, 212, 191, 0.4);
   --heatmap-3: rgba(45, 212, 191, 0.65); --heatmap-4: rgba(45, 212, 191, 1);
+  
+  /* Water Drop */
+  --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2c0 0-8 8.61-8 13a8 8 0 0016 0c0-4.39-8-13-8-13z'/%3E%3C/svg%3E");
 }
 
-body.theme-shenkuu {
-  --bg: #1a0f0d; 
-  --glass: rgba(60, 20, 15, 0.3); 
-  --glass-hover: rgba(80, 25, 20, 0.5);
-  --green: #facc15; 
-  --green-glow: rgba(250, 204, 21, 0.4); 
-  --red: #f87171; --blue: #f97316; --amber: #fbbf24; --purple: #be123c; --teal: #fb923c;
-  --heatmap-1: rgba(250, 204, 21, 0.2); --heatmap-2: rgba(250, 204, 21, 0.4);
-  --heatmap-3: rgba(250, 204, 21, 0.65); --heatmap-4: rgba(250, 204, 21, 1);
+body.theme-moltara {
+  --bg: #1c0a00; 
+  --glass: rgba(45, 15, 0, 0.4); 
+  --glass-hover: rgba(65, 20, 0, 0.6);
+  --green: #f97316; 
+  --green-glow: rgba(249, 115, 22, 0.4); 
+  --red: #ef4444; --blue: #f59e0b; --amber: #fbbf24; --purple: #dc2626; --teal: #ea580c;
+  --theme-card-border: 1px solid rgba(249, 115, 22, 0.3);
+  --theme-top-light: rgba(249, 115, 22, 0.15);
+  --heatmap-1: rgba(249, 115, 22, 0.2); --heatmap-2: rgba(249, 115, 22, 0.4);
+  --heatmap-3: rgba(249, 115, 22, 0.65); --heatmap-4: rgba(249, 115, 22, 1);
+  
+  /* Fire */
+  --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M11.66 22.05c-3.15 0-5.83-1.89-6.9-4.71-1.04-2.73-.55-5.61.64-7.53.51-.83 1.62-.97 2.22-.26.54.64.67 1.48.51 2.25-.26 1.25.04 2.51.81 3.46.74.93 1.95 1.34 3.01 1.09.77-.18 1.41-.69 1.76-1.38.38-.76.38-1.63.02-2.38-.41-.85-.98-1.61-1.68-2.22-1.74-1.51-2.9-3.7-2.9-6.09 0-1.5.47-2.94 1.34-4.14.49-.68 1.5-.7 2.05-.09C17.51 5.3 21 10.45 21 14.86c0 3.94-3.19 7.19-7.14 7.19h-2.2z'/%3E%3C/svg%3E");
 }
 
 /* ── LIGHT THEMES ── */
@@ -158,6 +175,9 @@ body.theme-faerieland {
   --heatmap-empty: rgba(0,0,0,0.06);
   --heatmap-1: rgba(5, 150, 105, 0.2); --heatmap-2: rgba(5, 150, 105, 0.45);
   --heatmap-3: rgba(5, 150, 105, 0.7); --heatmap-4: rgba(5, 150, 105, 1);
+  
+  /* Cloud */
+  --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z'/%3E%3C/svg%3E");
 }
 
 body.theme-classic {
@@ -193,6 +213,9 @@ body.theme-classic {
   --heatmap-empty: rgba(0,0,0,0.08);
   --heatmap-1: rgba(0, 128, 0, 0.2); --heatmap-2: rgba(0, 128, 0, 0.45);
   --heatmap-3: rgba(0, 128, 0, 0.7); --heatmap-4: rgba(0, 128, 0, 1);
+  
+  /* Star */
+  --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
 }
 
 body.theme-faerieland .stat-num, 
@@ -347,22 +370,49 @@ body {
   position: relative; overflow: hidden;
 }
 
+/* Organic Floating Animation for Shapes */
+@keyframes floatShape {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); }
+  33%  { transform: translateY(-12px) translateX(8px) rotate(10deg); }
+  66%  { transform: translateY(6px) translateX(-6px) rotate(-5deg); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg); }
+}
+
 .stat-card::before {
   content: '';
   position: absolute;
   top: -20px; right: -20px;
-  width: 100px; height: 100px;
-  border-radius: 50%;
-  opacity: 0.06;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  width: 110px; height: 110px;
+  opacity: 0.12;
   pointer-events: none;
+  
+  /* SVG Mask Setup */
+  -webkit-mask-image: var(--theme-shape);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  
+  /* Independent floating */
+  animation: floatShape var(--float-dur, 12s) infinite ease-in-out;
+  animation-delay: var(--float-del, 0s);
+  transition: opacity 0.3s ease;
 }
-.stat-card:hover::before { opacity: 0.12; transform: scale(1.15); }
+
+/* Staggering the floats so they don't move entirely together */
+.stat-card:nth-child(1) { --float-dur: 12s; --float-del: 0s; }
+.stat-card:nth-child(2) { --float-dur: 15s; --float-del: -3s; }
+.stat-card:nth-child(3) { --float-dur: 13s; --float-del: -7s; }
+.stat-card:nth-child(4) { --float-dur: 11s; --float-del: -2s; }
+.stat-card:nth-child(5) { --float-dur: 14s; --float-del: -5s; }
+
+.stat-card:hover::before { opacity: 0.25; }
+
 .c-green::before  { background: var(--green); }
 .c-amber::before  { background: var(--amber); }
 .c-blue::before   { background: var(--blue); }
 .c-purple::before { background: var(--purple); }
 
+/* Accent bar at bottom of stat card */
 .stat-card::after {
   content: '';
   position: absolute;
@@ -747,7 +797,7 @@ input[type=file] { display: none; }
         <button class="btn theme-btn" data-theme="kadoatery" onclick="setTheme('kadoatery')">Kadoatery</button>
         <button class="btn theme-btn" data-theme="virtupets" onclick="setTheme('virtupets')">Virtupets</button>
         <button class="btn theme-btn" data-theme="maraqua" onclick="setTheme('maraqua')">Maraqua</button>
-        <button class="btn theme-btn" data-theme="shenkuu" onclick="setTheme('shenkuu')">Shenkuu</button>
+        <button class="btn theme-btn" data-theme="moltara" onclick="setTheme('moltara')">Moltara</button>
         <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland (Light)</button>
         <button class="btn theme-btn" data-theme="classic" onclick="setTheme('classic')">Neopets Classic</button>
       </div>
