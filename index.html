@@ -41,7 +41,8 @@
   --theme-card-bg: var(--glass);
   --theme-card-border: 1px solid var(--border);
   --theme-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  --theme-glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  --theme-glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  --theme-top-light: rgba(255, 255, 255, 0.12);
   
   --header-bg: var(--glass);
   --header-text: var(--text);
@@ -80,7 +81,8 @@ body.theme-kadoatery {
   --red: #64748b; --blue: #c084fc; --amber: #fbbf24; --purple: #e879f9; --teal: #2dd4bf;
   --theme-card-border: 1px solid rgba(244, 114, 182, 0.3);
   --theme-shadow: 0 10px 40px rgba(192, 132, 252, 0.15), inset 0 0 20px rgba(244, 114, 182, 0.05);
-  --theme-glass-edge: inset 0 1px 1px rgba(244, 114, 182, 0.4);
+  --theme-top-light: rgba(244, 114, 182, 0.3);
+  --theme-glass-edge: inset 0 1px 1px rgba(244, 114, 182, 0.2);
   --btn-radius: 12px;
   --theme-radius: 24px;
   --heatmap-1: rgba(244, 114, 182, 0.2); --heatmap-2: rgba(244, 114, 182, 0.4);
@@ -347,6 +349,7 @@ body {
   min-height: 50vh; text-align: center; border-radius: var(--theme-radius);
   background: var(--theme-card-bg); border: var(--theme-card-border); box-shadow: var(--theme-shadow);
   backdrop-filter: blur(20px); padding: 60px 20px; transition: all 0.5s ease;
+  border-top: 1px solid var(--theme-top-light);
 }
 .import-screen h2 { font-family: var(--theme-font-display); font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
 .import-screen p { font-size: 1rem; color: var(--text2); max-width: 450px; line-height: 1.6; margin-bottom: 32px; }
@@ -684,11 +687,14 @@ input[type=file] { display: none; }
 @media (max-width: 900px) {
   .header { padding: 0 16px; height: 56px; flex-wrap: nowrap; }
   .header-right { margin-top: 0; width: auto; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
-  .import-feeds-btn { padding: 0 12px !important; font-size: 0.85rem !important; flex-shrink: 0; }
   .logo-sub { display: none; }
   .logo-text { font-size: 1.1rem; }
   .pill-badge { padding: 4px 8px; font-size: 0.65rem; }
   .status-chip { padding: 4px 8px; font-size: 0.65rem; }
+  
+  /* Make status-text completely disappear on mobile to save space */
+  #status-text { display: none; }
+  
   .btn-icon { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .btn-icon svg { width: 16px !important; height: 16px !important; }
   .filter-bar { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
@@ -721,7 +727,7 @@ input[type=file] { display: none; }
   .crown-jewel-content > div:last-child { flex-shrink: 0; }
 }
 @media (max-width: 500px) { 
-  .status-chip { display: none !important; } 
+  /* Hide the streak badge entirely on tiny screens to declutter */
   #streak-badge { display: none !important; } 
 }
 @media (max-width: 400px) {
@@ -757,12 +763,15 @@ input[type=file] { display: none; }
       <span class="pulse" id="pulse-dot" style="display:none"></span>
       <span id="status-text">Awaiting Data</span>
     </div>
-    <button class="btn btn-primary import-feeds-btn" onclick="triggerExtensionSync()" title="Import Feeds">
-      Import Feeds
+    
+    <button class="btn btn-icon" onclick="triggerExtensionSync()" title="Sync Extension Data" style="background: var(--text); color: var(--bg);">
+      <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
     </button>
+
     <button class="btn btn-icon" onclick="generateShareCard()" title="Share Stat Card">
       <svg viewBox="0 0 24 24" style="width:16px; height:16px;" fill="currentColor"><path d="M4 4h3l2-2h6l2 2h3c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm8 3c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
     </button>
+    
     <button class="btn btn-icon" onclick="openSettings()" title="Settings">
       <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.88,11.36,4.86,11.69,4.86,12s0.02,0.64,0.06,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
     </button>
@@ -848,7 +857,7 @@ input[type=file] { display: none; }
       <ol style="padding-left: 20px; display: flex; flex-direction: column; gap: 12px; margin: 0;">
         <li><strong>Install the Extension:</strong> Make sure you have the Statdoatie Tampermonkey extension active on Neopets.</li>
         <li><strong>Feed Kads:</strong> The extension will quietly track your successful feeds and snipes in the background.</li>
-        <li><strong>Sync Data:</strong> Come back to this dashboard and click the <strong>Import Feeds</strong> button. The extension will beam your latest data right into the app.</li>
+        <li><strong>Sync Data:</strong> Come back to this dashboard and click the <strong>Sync icon</strong> in the top right. The extension will beam your latest data right into the app.</li>
         <li><strong>Item Value DB:</strong> The dashboard automatically grabs current ItemDB prices so you know exactly how much you're spending.</li>
       </ol>
     </div>
@@ -1050,10 +1059,12 @@ async function generateShareCard() {
     blobs.style.position = 'absolute';
     exportBox.appendChild(blobs);
     
-    // Inject a <style> block to strip out pseudo-elements that crash html2canvas
+    // Inject a <style> block to strip out pseudo-elements AND external images to prevent canvas crashing
     const styleFix = document.createElement('style');
     styleFix.innerHTML = `
       .stat-card::before, .analytics-card::before, .db-card::before { display: none !important; }
+      .item-img { display: none !important; }
+      .item-img-placeholder { display: none !important; }
     `;
     exportBox.appendChild(styleFix);
 
@@ -1141,13 +1152,16 @@ async function generateShareCard() {
     analyticsCard.appendChild(chartWrap);
     exportBox.appendChild(analyticsCard);
     
+    // Purge ANY img tags that made it into the clone to prevent silent CORS crashing
+    exportBox.querySelectorAll('img').forEach(img => img.remove());
+    
     document.body.appendChild(exportBox);
     await new Promise(r => setTimeout(r, 150));
 
     const generatedCanvas = await html2canvas(exportBox, {
        backgroundColor: getComputedStyle(document.body).backgroundColor,
        scale: 2, 
-       useCORS: true,
+       useCORS: false, // We've stripped external images, so this is safe now
        logging: false
     });
 
