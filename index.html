@@ -655,24 +655,22 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 .hidden { display: none !important; }
 input[type=file] { display: none; }
 
-/* ── SHARE MODE CSS OVERRIDES ── */
-/* When .share-mode is applied to body, the live dashboard transforms into a poster */
+/* ── SHARE MODE PURE CSS OVERRIDES ── */
 body.share-mode .filter-bar,
 body.share-mode .db-card,
-body.share-mode .header-right button:not(#exit-share-btn),
-body.share-mode #status-chip,
-body.share-mode #streak-badge { 
+body.share-mode .header-right,
+body.share-mode .import-screen { 
   display: none !important; 
 }
 
 body.share-mode .main { 
-  max-width: 480px; /* Mobile poster width */
-  padding: 20px 16px; 
+  max-width: 480px; 
+  padding: 20px 16px 120px 16px; 
   margin: 0 auto; 
 }
 
 body.share-mode .stats-grid { 
-  grid-template-columns: 1fr 1fr; /* Force 2x2 grid */
+  grid-template-columns: 1fr 1fr; 
 }
 body.share-mode .stat-card.wide { grid-column: 1 / -1; }
 
@@ -681,21 +679,20 @@ body.share-mode .expandable-card { cursor: default; }
 body.share-mode .stat-label::after { display: none !important; }
 body.share-mode .stat-num { font-size: 2rem !important; }
 
-/* Add the current date below the title in share mode */
 body.share-mode .logo-sub::after {
   content: " • " attr(data-date);
 }
 
-#exit-share-btn { display: none; }
-body.share-mode #exit-share-btn { 
-  display: inline-flex; 
-  background: var(--text); 
-  color: var(--bg); 
-  font-weight: 800;
-  padding: 0 24px;
+/* Floating Exit Share Mode Button */
+.share-exit-fab {
+  position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+  background: var(--text); color: var(--bg); font-family: var(--theme-font-display); font-weight: 800;
+  padding: 14px 32px; border-radius: 100px; border: none; box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  cursor: pointer; z-index: 10000; display: none; align-items: center; gap: 8px; font-size: 1.1rem;
 }
+body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 
-@keyframes fadeup { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeup { from { opacity: 0; transform: translateY(30px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
 
 /* ── CARD ENTRANCE ANIMATION ── */
 @keyframes cardEntrance {
@@ -714,11 +711,11 @@ body.share-mode #exit-share-btn {
   .header { padding: 0 16px; height: 56px; flex-wrap: nowrap; }
   .header-right { margin-top: 0; width: auto; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
   .logo-sub { display: none; }
+  body.share-mode .logo-sub { display: block; } /* Show date in share mode mobile */
   .logo-text { font-size: 1.1rem; }
   .pill-badge { padding: 4px 8px; font-size: 0.65rem; }
   .status-chip { padding: 4px 8px; font-size: 0.65rem; }
   
-  /* Make status-text completely disappear on mobile to save space */
   #status-text { display: none; }
   
   .btn-icon { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -733,10 +730,7 @@ body.share-mode #exit-share-btn {
   .card-header-actions { flex-direction: column; align-items: flex-start !important; gap: 12px; }
   .search-input { max-width: 100%; }
   
-  #heatmap-view {
-    --cell-size: 22px;
-    --cell-gap: 4px;
-  }
+  #heatmap-view { --cell-size: 22px; --cell-gap: 4px; }
   .heatmap-month-spacer { width: calc(32px + 8px); } 
   .heatmap-month-label { width: calc(var(--cell-size) + var(--cell-gap)); font-size: 10px; }
   .heatmap-day-labels { margin-right: 8px; }
@@ -753,13 +747,14 @@ body.share-mode #exit-share-btn {
   .crown-jewel-content > div:last-child { flex-shrink: 0; }
 }
 @media (max-width: 500px) { 
-  /* Hide the streak badge entirely on tiny screens to declutter */
   #streak-badge { display: none !important; } 
 }
 @media (max-width: 400px) {
   .logo-text { display: none; }
+  body.share-mode .logo-text { display: block; } /* Always show branding in share mode */
   .logo-icon { margin-right: 4px; }
   .stats-grid { grid-template-columns: 1fr; }
+  body.share-mode .stats-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
@@ -801,8 +796,6 @@ body.share-mode #exit-share-btn {
     <button class="btn btn-icon" onclick="openSettings()" title="Settings">
       <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.88,11.36,4.86,11.69,4.86,12s0.02,0.64,0.06,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
     </button>
-
-    <button class="btn" id="exit-share-btn" onclick="toggleShareMode()">Done</button>
   </div>
 </header>
 
@@ -942,7 +935,12 @@ body.share-mode #exit-share-btn {
   </div>
 </div>
 
-<div class="hmap-tooltip" id="hmap-tooltip"></div>
+<button class="share-exit-fab" onclick="toggleShareMode()">
+  <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+  Exit Share Mode
+</button>
+
+<div class="toast" id="toast"></div>
 
 <main class="main">
   <div id="import-screen" class="import-screen">
@@ -954,7 +952,7 @@ body.share-mode #exit-share-btn {
     <h2>It's quiet in here...</h2>
     <p>Connect your <a href="https://greasyfork.org/en/scripts/581360-statdoatie-analytics-sync" target="_blank" style="color:var(--blue); text-decoration:none; font-weight:700;">Tampermonkey extension</a>, drop in a JSON save file, or load up some dummy data to see the dashboard in action.</p>
     <div class="import-btns">
-      <button class="btn btn-primary" onclick="triggerExtensionSync()">
+      <button class="btn btn-primary" id="empty-import-btn" onclick="triggerExtensionSync()">
         <svg viewBox="0 0 24 24" style="width:18px; height:18px; margin-right:6px;" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
         Import Extension Data
       </button>
@@ -1057,13 +1055,11 @@ function toggleShareMode() {
   document.body.classList.toggle('share-mode');
   
   if (document.body.classList.contains('share-mode')) {
-    // Add today's date dynamically to the sub-logo
     const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     document.getElementById('logo-sub-text').setAttribute('data-date', dateStr);
     toast("Ready for screenshot! 📸");
   }
   
-  // Force Chart.js to recalculate its width for the new container size
   if(charts.main) {
     setTimeout(() => { charts.main.resize(); }, 350); 
   }
@@ -1273,8 +1269,10 @@ document.addEventListener('KadData_ExtToPage', e => {
     try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
     const newNames = [...new Set(records.map(r => r.item))];
     const totallyNewItems = newNames.filter(item => !(item in itemdbCache));
-    mergeData(records);
-    toast(`✨ Imported ${records.length} records`);
+    
+    const addedCount = mergeData(records);
+    toast(`✨ Synced: ${addedCount} new records added`);
+    
     if (totallyNewItems.length > 0) {
       const estimatedSeconds = Math.ceil(totallyNewItems.length / 25) * 2;
       toast(`Fetching prices for ${totallyNewItems.length} new items... (~${estimatedSeconds}s)`);
@@ -1320,7 +1318,10 @@ function handleFileLoad(e) {
   r.onload = ev => {
     try {
       const d = JSON.parse(ev.target.result);
-      if (Array.isArray(d)) { mergeData(d); toast(`Loaded ${d.length} records`); }
+      if (Array.isArray(d)) { 
+        const addedCount = mergeData(d); 
+        toast(`Loaded JSON: ${addedCount} new records added`); 
+      }
       else toast('Invalid format');
     } catch { toast('Could not parse file'); }
   };
@@ -1369,15 +1370,19 @@ function updateFilterStatus() {
   lbl.innerHTML = currentMonth === 'all' ? 'Filter: Off' : `Filter: <span style="color:var(--text)">${currentMonth}</span>`;
 }
 function getFilteredData() { return currentMonth === 'all' ? feedLog : feedLog.filter(e => getNSTDateStr(e.timestamp).startsWith(currentMonth)); }
+
 function mergeData(entries) {
   const ex = new Set(feedLog.map(e => e.timestamp + '|' + e.item));
-  feedLog = [...feedLog, ...entries.filter(e => !ex.has(e.timestamp + '|' + e.item))];
+  const newEntries = entries.filter(e => !ex.has(e.timestamp + '|' + e.item));
+  feedLog = [...feedLog, ...newEntries];
   feedLog.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
   populateMonths();
   localStorage.setItem('statdoatie_save', JSON.stringify(feedLog));
   showDashboard();
   renderWidgets();
+  return newEntries.length; // Return number of added records for accurate toasting
 }
+
 function loadDemoData() {
   const items = ['Honey Blossom Extract','Tigersquash Juice','Cheeseburger','Ummagine','Faerie Pancakes','Blueberry Crepes','Puntec Fruit','Purple Grapes','Borovan','Tombola Fruit','Cheese Pizza','Thornberry Juice','Starberry Juice','Strawberry','Watermelon','Melon','Orange','Apple','Pear','Kiwi','Lemon','Lime','Grapefruit','Mango'];
   const now = new Date(), demo = [];
@@ -1389,7 +1394,8 @@ function loadDemoData() {
       demo.push({ item: items[Math.floor(Math.random()*items.length)], status: Math.random() < .65 ? 'success' : 'sniped', timestamp: ts.toISOString() });
     }
   }
-  mergeData(demo); toast(`Simulated ${demo.length} feeds`);
+  const addedCount = mergeData(demo); 
+  toast(`Simulated ${addedCount} new feeds`);
 }
 
 // ─── HEATMAP CALENDAR ───
