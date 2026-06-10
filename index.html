@@ -791,7 +791,7 @@ input[type=file] { display: none; }
       <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('chart-modal').classList.add('hidden')">✕</button>
     </div>
     <div style="display:flex; flex-direction:column; gap:10px;">
-      <button class="btn" style="border-color: var(--teal); color: var(--teal);" onclick="renderMainChart('heatmap'); document.getElementById('chart-modal').classList.add('hidden')">Feed Activity (Heatmap)</button>
+      <button class="btn" onclick="renderMainChart('heatmap'); document.getElementById('chart-modal').classList.add('hidden')">Feed Activity (Heatmap)</button>
       <button class="btn" onclick="renderMainChart('daily'); document.getElementById('chart-modal').classList.add('hidden')">Daily Feeds</button>
       <button class="btn" onclick="renderMainChart('cumul'); document.getElementById('chart-modal').classList.add('hidden')">Cumulative Growth</button>
       <button class="btn" onclick="renderMainChart('np'); document.getElementById('chart-modal').classList.add('hidden')">NP Spent Tracker</button>
@@ -799,7 +799,7 @@ input[type=file] { display: none; }
       <button class="btn" onclick="renderMainChart('dow'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Day</button>
       <button class="btn" onclick="renderMainChart('hour'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Hour</button>
       <button class="btn" onclick="renderMainChart('tiers'); document.getElementById('chart-modal').classList.add('hidden')">Item Price Tiers</button>
-      <button class="btn" style="border-color: var(--blue); color: var(--blue);" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
+      <button class="btn" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
     </div>
   </div>
 </div>
