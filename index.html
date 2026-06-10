@@ -231,18 +231,17 @@ body {
   background-color: var(--bg); color: var(--text);
   font-family: var(--theme-font-body); min-height: 100vh;
   -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative;
-  transition: background-color 0.5s ease, color 0.5s ease, font-family 0.5s ease;
+  transition: background-color 0.4s ease, color 0.4s ease; /* STRIPPED TRANSITION: ALL */
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
 
-/* ── BACKGROUND BLOBS ── */
+/* ── BACKGROUND BLOBS (No JS Parallax) ── */
 .bg-blobs {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none; z-index: -1; overflow: hidden; filter: blur(100px);
-  will-change: transform;
 }
 .blob { position: absolute; border-radius: 50%; opacity: var(--blob-opacity); animation: float 30s infinite alternate ease-in-out; transition: opacity 0.5s ease, background 0.8s ease; }
 .blob-1 { width: 40vw; height: 40vw; background: var(--blue); top: -10%; left: -10%; animation-duration: 25s; }
@@ -292,7 +291,8 @@ body {
   font-family: var(--theme-font-body); font-size: .85rem; font-weight: 600; padding: 0 20px;
   height: 40px; border-radius: var(--btn-radius); border: var(--theme-card-border);
   background: var(--glass); color: var(--text); cursor: pointer;
-  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(10px);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s; /* STRIPPED TRANSITION ALL */
+  backdrop-filter: blur(10px);
   display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
 }
 .btn:hover { background: var(--glass-hover); border-color: var(--border-strong); transform: translateY(-1px); }
@@ -300,12 +300,8 @@ body {
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
-/* Active Chart Selection Highlighting */
 .btn.active-chart-btn {
-  background: var(--text);
-  color: var(--bg);
-  border-color: transparent;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: var(--text); color: var(--bg); border-color: transparent; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 /* ── MODALS ── */
@@ -335,7 +331,7 @@ body {
 .month-select option { background: var(--bg); color: var(--text); }
 
 /* ── MAIN ── */
-.main { padding: 32px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; transition: all 0.3s ease; }
+.main { padding: 32px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
 
 /* ── IMPORT SCREEN ── */
 .import-screen {
@@ -343,7 +339,7 @@ body {
   min-height: 50vh; text-align: center; border-radius: var(--theme-radius);
   background: var(--theme-card-bg); border: var(--theme-card-border); 
   box-shadow: var(--theme-shadow), inset 0 1px 0 var(--theme-top-light);
-  backdrop-filter: blur(20px); padding: 60px 20px; transition: all 0.5s ease;
+  backdrop-filter: blur(20px); padding: 60px 20px; 
 }
 .import-screen h2 { font-family: var(--theme-font-display); font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
 .import-screen p { font-size: 1rem; color: var(--text2); max-width: 450px; line-height: 1.6; margin-bottom: 32px; }
@@ -357,7 +353,7 @@ body {
   border: var(--theme-card-border); border-radius: var(--theme-radius);
   padding: 28px; 
   box-shadow: var(--theme-shadow), inset 0 1px 0 var(--theme-top-light);
-  transition: all 0.5s ease;
+  transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease; /* STRIPPED TRANSITION ALL */
 }
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
 .card-title { font-family: var(--theme-font-display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
@@ -391,7 +387,7 @@ body {
   border: var(--theme-card-border); border-radius: var(--theme-radius);
   padding: 24px; display: flex; flex-direction: column;
   box-shadow: var(--theme-shadow), inset 0 1px 0 var(--theme-top-light); 
-  transition: transform 0.2s, background 0.5s ease, border 0.5s ease;
+  transition: transform 0.2s, background 0.3s ease, border 0.3s ease;
   position: relative; overflow: hidden;
 }
 
@@ -451,7 +447,7 @@ body {
 }
 .stat-expanded {
   max-height: 0; opacity: 0; overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: max-height 0.3s ease, opacity 0.3s ease;
   font-size: 0.85rem; color: var(--text2);
 }
 .expandable-card.expanded .stat-expanded {
@@ -474,50 +470,25 @@ body {
 .c-purple .stat-num { color: var(--purple); }
 
 /* ── COUNTER ANIMATION ── */
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
 .stat-num.counting { animation: countUp 0.4s ease both; }
+@keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ── HEATMAP CALENDAR ── */
 #heatmap-view {
   --cell-size: 28px;
   --cell-gap: 6px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  justify-content: center;
-  padding: 10px 0;
+  display: flex; flex-direction: column; flex: 1; justify-content: center; padding: 10px 0;
 }
-.heatmap-outer { 
-  overflow-x: auto; 
-  padding-bottom: 4px; 
-  -webkit-overflow-scrolling: touch; 
-}
+.heatmap-outer { overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
 .heatmap-inner { display: inline-flex; flex-direction: column; gap: 0; min-width: 100%; }
 .heatmap-months-row { display: flex; align-items: flex-end; margin-bottom: 6px; }
-
 .heatmap-month-spacer { flex-shrink: 0; width: calc(32px + 12px); } 
-
-.heatmap-month-label { 
-  flex-shrink: 0; font-size: 12px; color: var(--text3); 
-  user-select: none; overflow: visible; 
-  width: calc(var(--cell-size) + var(--cell-gap)); 
-}
-
+.heatmap-month-label { flex-shrink: 0; font-size: 12px; color: var(--text3); user-select: none; overflow: visible; width: calc(var(--cell-size) + var(--cell-gap)); }
 .heatmap-day-labels { display: flex; flex-direction: column; gap: var(--cell-gap); margin-right: 12px; padding-top: 0; }
 .heatmap-day-label { font-size: 11px; color: var(--text3); height: var(--cell-size); display: flex; align-items: center; width: 32px; }
-
 .heatmap-grid-area { display: flex; flex-direction: row; gap: var(--cell-gap); }
 .heatmap-week-col { display: flex; flex-direction: column; gap: var(--cell-gap); }
-
-.heatmap-cell {
-  width: var(--cell-size); height: var(--cell-size); border-radius: 6px;
-  background: var(--heatmap-empty); cursor: pointer;
-  transition: transform 0.15s ease, filter 0.15s ease;
-  position: relative; flex-shrink: 0;
-}
+.heatmap-cell { width: var(--cell-size); height: var(--cell-size); border-radius: 6px; background: var(--heatmap-empty); cursor: pointer; transition: transform 0.15s ease, filter 0.15s ease; position: relative; flex-shrink: 0; }
 .heatmap-cell:hover { transform: scale(1.4); z-index: 10; filter: brightness(1.2); }
 .heatmap-cell[data-level="1"] { background: var(--heatmap-1); }
 .heatmap-cell[data-level="2"] { background: var(--heatmap-2); }
@@ -606,9 +577,9 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
   display: grid; grid-template-columns: 1fr 100px 30px auto 100px;
   align-items: center; gap: 16px; padding: 12px 20px;
   background: var(--log-bg); border-radius: var(--btn-radius); margin-bottom: 8px;
-  transition: background .2s, transform .2s; border: var(--theme-card-border);
+  border: var(--theme-card-border);
 }
-.log-entry:hover { background: var(--log-hover); transform: translateX(4px); }
+.log-entry:hover { background: var(--log-hover); }
 .log-name { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
 .log-ts { font-size: .8rem; color: var(--text3); font-weight: 500; }
 .log-price { font-family: monospace; font-size: .85rem; color: var(--text2); text-align: right; font-weight: 600; }
@@ -621,25 +592,16 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 /* ── EXPANDABLE DB CARD ── */
 .db-card-body {
   display: none; 
-  opacity: 0;
 }
 .db-card.expanded .db-card-body {
   display: block;
-  opacity: 1;
   margin-top: 24px;
-  animation: fadeIn 0.3s ease;
 }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
 .db-preview-container {
   display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  opacity: 1; transform: translateY(0);
 }
 .db-card.expanded .db-preview-container {
-  opacity: 0; transform: translateY(-10px);
-  pointer-events: none;
-  position: absolute; visibility: hidden;
+  display: none;
 }
 .db-preview-item {
   display: flex; align-items: center; gap: 8px;
@@ -663,55 +625,24 @@ input[type=file] { display: none; }
 body.share-mode .filter-bar,
 body.share-mode .db-card,
 body.share-mode .header-right,
-body.share-mode .import-screen { 
-  display: none !important; 
-}
-
-body.share-mode .header { 
-  justify-content: center; 
-  background: transparent; 
-  border-bottom: none; 
-  backdrop-filter: none; 
-  -webkit-backdrop-filter: none; 
-}
-
-body.share-mode .main { 
-  max-width: 480px; 
-  padding: 20px 16px 120px 16px; 
-  margin: 0 auto; 
-}
-
+body.share-mode .import-screen { display: none !important; }
+body.share-mode .header { justify-content: center; background: transparent; border-bottom: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+body.share-mode .main { max-width: 480px; padding: 20px 16px 120px 16px; margin: 0 auto; }
 body.share-mode .stats-grid { grid-template-columns: 1fr 1fr; }
 body.share-mode .stat-card.wide { grid-column: 1 / -1; }
-
 body.share-mode .stat-expanded { display: none !important; }
 body.share-mode .expandable-card { cursor: default; }
 body.share-mode .stat-label::after { display: none !important; }
 body.share-mode .stat-num { font-size: 2rem !important; }
-
 body.share-mode .logo-sub::after { content: " • " attr(data-date); }
-
-.share-exit-fab {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.4); color: #ffffff; 
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-family: var(--theme-font-body); font-weight: 600;
-  padding: 10px 24px; border-radius: 100px; 
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  cursor: pointer; z-index: 10000; display: none; align-items: center; gap: 8px; font-size: 0.85rem;
-  transition: all 0.2s ease;
-}
+.share-exit-fab { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.4); color: #ffffff; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); font-family: var(--theme-font-body); font-weight: 600; padding: 10px 24px; border-radius: 100px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); cursor: pointer; z-index: 10000; display: none; align-items: center; gap: 8px; font-size: 0.85rem; transition: all 0.2s ease; }
 .share-exit-fab:hover { background: rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.2); }
 body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 
 @keyframes fadeup { from { opacity: 0; transform: translateY(30px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
 
 /* ── CARD ENTRANCE ANIMATION ── */
-@keyframes cardEntrance {
-  from { opacity: 0; transform: translateY(16px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
+@keyframes cardEntrance { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .stat-card { animation: cardEntrance 0.4s ease both; }
 .stat-card:nth-child(1) { animation-delay: 0.05s; }
 .stat-card:nth-child(2) { animation-delay: 0.10s; }
@@ -728,9 +659,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   .logo-text { font-size: 1.1rem; }
   .pill-badge { padding: 4px 8px; font-size: 0.65rem; }
   .status-chip { padding: 4px 8px; font-size: 0.65rem; }
-  
   #status-text { display: none; }
-  
   .btn-icon { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .btn-icon svg { width: 16px !important; height: 16px !important; }
   .filter-bar { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
@@ -742,13 +671,11 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   .log-price, .log-ts, .log-dot { display: none; }
   .card-header-actions { flex-direction: column; align-items: flex-start !important; gap: 12px; }
   .search-input { max-width: 100%; }
-  
   #heatmap-view { --cell-size: 22px; --cell-gap: 4px; }
   .heatmap-month-spacer { width: calc(32px + 8px); } 
   .heatmap-month-label { width: calc(var(--cell-size) + var(--cell-gap)); font-size: 10px; }
   .heatmap-day-labels { margin-right: 8px; }
   .heatmap-day-label { height: var(--cell-size); font-size: 10px; }
-  
   .db-preview-container { display: none; } 
 }
 @media (max-width: 600px) {
@@ -759,9 +686,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   .crown-jewel-content > div:first-child { flex: 1; min-width: 0; padding-right: 12px; }
   .crown-jewel-content > div:last-child { flex-shrink: 0; }
 }
-@media (max-width: 500px) { 
-  #streak-badge { display: none !important; } 
-}
+@media (max-width: 500px) { #streak-badge { display: none !important; } }
 @media (max-width: 400px) {
   .logo-text { display: none; }
   body.share-mode .logo-text { display: block; } 
@@ -830,7 +755,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   <div class="modal-card card">
     <div class="card-header" style="margin-bottom: 16px;">
       <div style="display:flex; align-items:center; gap:12px;">
-        <img id="item-modal-img" class="item-img" style="width:48px; height:48px;" src="" alt="" onerror="this.style.display='none'">
+        <div style="width:48px; height:48px; border-radius:8px; background:var(--table-row-hover); flex-shrink:0;"></div>
         <div>
           <div class="card-title" id="item-modal-name">Item Name</div>
           <div class="card-meta" id="item-modal-price-display">Current Price: --</div>
@@ -859,26 +784,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
     <div style="display:flex; gap:8px;">
       <input type="number" id="manual-price-input" placeholder="e.g. 15000" style="flex:1; background:var(--table-row); border:1px solid var(--border); color:var(--text); padding:0 16px; border-radius:var(--btn-radius); font-family:var(--theme-font-body); outline:none;">
       <button class="btn btn-primary" onclick="saveManualPrice()">Save Price</button>
-    </div>
-  </div>
-</div>
-
-<div id="chart-modal" class="modal-overlay hidden">
-  <div class="modal-card card">
-    <div class="card-header" style="margin-bottom: 24px;">
-      <span class="card-title">Select Metric</span>
-      <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('chart-modal').classList.add('hidden')">✕</button>
-    </div>
-    <div style="display:flex; flex-direction:column; gap:10px;">
-      <button class="btn chart-btn" data-chart="heatmap" onclick="renderMainChart('heatmap'); document.getElementById('chart-modal').classList.add('hidden')">Feed Activity (Heatmap)</button>
-      <button class="btn chart-btn" data-chart="daily" onclick="renderMainChart('daily'); document.getElementById('chart-modal').classList.add('hidden')">Daily Feeds</button>
-      <button class="btn chart-btn" data-chart="cumul" onclick="renderMainChart('cumul'); document.getElementById('chart-modal').classList.add('hidden')">Cumulative Growth</button>
-      <button class="btn chart-btn" data-chart="np" onclick="renderMainChart('np'); document.getElementById('chart-modal').classList.add('hidden')">NP Spent Tracker</button>
-      <button class="btn chart-btn" data-chart="unique" onclick="renderMainChart('unique'); document.getElementById('chart-modal').classList.add('hidden')">Unique Items Fed</button>
-      <button class="btn chart-btn" data-chart="dow" onclick="renderMainChart('dow'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Day</button>
-      <button class="btn chart-btn" data-chart="hour" onclick="renderMainChart('hour'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Hour</button>
-      <button class="btn chart-btn" data-chart="tiers" onclick="renderMainChart('tiers'); document.getElementById('chart-modal').classList.add('hidden')">Item Price Tiers</button>
-      <button class="btn chart-btn" data-chart="log" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
     </div>
   </div>
 </div>
@@ -984,10 +889,18 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
     <div class="card analytics-card" style="display:flex; flex-direction:column;">
       <div class="card-header" style="margin-bottom:12px; flex-wrap:wrap; gap:12px;">
         <span class="card-title">Analytics</span>
-        <button class="btn" onclick="document.getElementById('chart-modal').classList.remove('hidden')">
-          <svg viewBox="0 0 24 24" style="width:16px; height:16px; margin-right:4px;" fill="currentColor"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></svg>
-          <span id="current-chart-label">Feed Activity (Heatmap)</span>
-        </button>
+        
+        <select id="mobile-chart-select" class="btn" onchange="renderMainChart(this.value)" style="appearance:none; -webkit-appearance:none; padding-right:32px; background-image:url('data:image/svg+xml;utf8,<svg viewBox=\"0 0 24 24\" fill=\"white\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5H7z\"/></svg>'); background-repeat:no-repeat; background-position:right 10px center; cursor:pointer;">
+          <option value="heatmap">Feed Activity (Heatmap)</option>
+          <option value="daily">Daily Feeds</option>
+          <option value="cumul">Cumulative Growth</option>
+          <option value="np">NP Spent Tracker</option>
+          <option value="unique">Unique Items Fed</option>
+          <option value="dow">Activity by Day</option>
+          <option value="hour">Activity by Hour</option>
+          <option value="tiers">Item Price Tiers</option>
+          <option value="log">Raw Feed Log</option>
+        </select>
       </div>
       
       <div class="chart-wrap" style="flex:1;">
@@ -1056,6 +969,36 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 </main>
 
 <script>
+// ─── MEMOIZED DATA PARSING (PREVENTS LAG LOOPS) ───
+const memoizedDates = new Map();
+
+function getMemoizedDateInfo(e) {
+  if (memoizedDates.has(e.timestamp)) return memoizedDates.get(e.timestamp);
+  
+  const ptDate = new Date(new Date(e.timestamp).toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+  const y = ptDate.getFullYear();
+  const m = String(ptDate.getMonth() + 1).padStart(2, '0');
+  const d = String(ptDate.getDate()).padStart(2, '0');
+  
+  const info = {
+    nstDateStr: `${y}-${m}-${d}`,
+    dow: ptDate.getDay(),
+    hour: ptDate.getHours()
+  };
+  
+  memoizedDates.set(e.timestamp, info);
+  return info;
+}
+
+// ─── RENDER DEBOUNCER (PREVENTS EXTENSION SPAM LAG) ───
+let renderTimeout = null;
+function queueRender() {
+  clearTimeout(renderTimeout);
+  renderTimeout = setTimeout(() => {
+    renderWidgets();
+  }, 100); // Wait until 100ms of complete silence before rendering
+}
+
 // ─── BACKGROUND PARALLAX ───
 let parallaxTicking = false;
 document.addEventListener('mousemove', (e) => {
@@ -1156,21 +1099,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  setTimeout(() => { if (feedLog.length > 0) renderWidgets(); }, 50);
+  setTimeout(() => { if (feedLog.length > 0) queueRender(); }, 50);
 });
-
-// ─── MEMOIZED DATA PARSING ───
-// Calculates heavy Date math exactly once per item and saves it to the object
-function getMemoizedDateInfo(e) {
-  if (e.nstDateStr) return e;
-  
-  const ptDate = new Date(new Date(e.timestamp).toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
-  e.nstDateStr = `${ptDate.getFullYear()}-${String(ptDate.getMonth() + 1).padStart(2, '0')}-${String(ptDate.getDate()).padStart(2, '0')}`;
-  e.dow = ptDate.getDay();
-  e.hour = ptDate.getHours();
-  
-  return e;
-}
 
 // ─── ANIMATED COUNTER ───
 let activeCounters = {};
@@ -1265,9 +1195,6 @@ function openItemModal(itemName) {
   const rate = seen > 0 ? Math.round((fed / seen) * 100) : 0;
   const cache = getCached(itemName);
   document.getElementById('item-modal-name').textContent = itemName;
-  document.getElementById('item-modal-img').src = cache.image || '';
-  document.getElementById('item-modal-img').style.display = cache.image ? 'block' : 'none';
-  document.getElementById('item-modal-price-display').textContent = `Current Price: ${cache.price != null ? cache.price.toLocaleString() + ' NP' : 'Unknown'}`;
   document.getElementById('item-modal-rate').textContent = rate + '%';
   document.getElementById('item-modal-seen').textContent = seen;
   document.getElementById('item-modal-fed').textContent = fed + ' Fed';
@@ -1290,7 +1217,7 @@ function saveManualPrice() {
     const cache = getCached(currentOpenItem);
     itemdbCache[currentOpenItem] = { price: val, inflated: false, image: cache.image };
     try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err){}
-    renderWidgets();
+    queueRender();
     closeItemModal();
     toast(`✅ Saved price for ${currentOpenItem}`);
   } else {
@@ -1360,7 +1287,7 @@ document.addEventListener('KadData_ReceivePrices', e => {
   const count = Object.keys(newPrices).filter(k => newPrices[k].price != null).length;
   Object.assign(itemdbCache, newPrices);
   try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
-  renderWidgets();
+  queueRender(); // Use debouncer here to stop mass-render lag
   if (count > 0) toast(`✨ Successfully synced ${count} missing prices`);
   else toast('No new prices found on itemdb.');
 });
@@ -1409,7 +1336,7 @@ function populateMonths() {
     availableMonths.map(m => `<option value="${m}">${m}</option>`).join('');
   select.value = currentMonth; updateFilterStatus();
 }
-function setMonth(val) { currentMonth = val; document.getElementById('month-select').value = val; updateFilterStatus(); renderWidgets(); }
+function setMonth(val) { currentMonth = val; document.getElementById('month-select').value = val; updateFilterStatus(); queueRender(); }
 function changeMonth(dir) {
   if (availableMonths.length === 0) return;
   if (currentMonth === 'all') { setMonth(availableMonths[dir > 0 ? availableMonths.length - 1 : 0]); return; }
@@ -1442,7 +1369,7 @@ function mergeData(entries) {
   populateMonths();
   localStorage.setItem('statdoatie_save', JSON.stringify(feedLog));
   showDashboard();
-  renderWidgets();
+  queueRender();
   return newEntries.length; 
 }
 
@@ -1583,7 +1510,7 @@ function renderHeatmap(data) {
       if (!isFuture) {
          const d = dayData || { fed: 0, sniped: 0 };
          const dateFormatted = day.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-         // Attach string to HTML node, do not instantiate thousands of event listeners
+         // Attach string to HTML node instead of thousands of individual listeners
          cell.setAttribute('data-info', `${dateFormatted} · ${d.fed} fed, ${d.sniped} sniped`);
       }
       weekCol.appendChild(cell);
@@ -1634,7 +1561,7 @@ function prepareChartData(data) {
   let totalFed = 0, totalSniped = 0, totalNP = 0;
   let seenSet = new Set();
   
-  // Data is already presorted
+  // Data is already presorted in mergeData
   data.forEach(e => {
     const entry = getMemoizedDateInfo(e);
     const d = entry.nstDateStr;
@@ -1660,7 +1587,7 @@ function prepareChartData(data) {
     }
   });
   
-  const lbls = Object.keys(dObj).sort(); // Sort date strings alphabetically (fast)
+  const lbls = Object.keys(dObj).sort(); // Fast string alphabetical sort
   window.chartPayload.labelsTime = lbls;
   let runningUnique = 0;
   lbls.forEach(d => {
@@ -1994,7 +1921,7 @@ function renderItemTable(ds) {
   } else {
       previewContainer.innerHTML = topItems.map(x => `
           <div class="db-preview-item">
-              ${x.image ? `<img src="${x.image}" style="width:24px; height:24px; border-radius:100px; background:var(--table-row-hover);">` : `<div style="width:24px; height:24px; background:var(--table-row-hover); border-radius:100px;"></div>`}
+              <div style="width:24px; height:24px; background:var(--table-row-hover); border-radius:100px;"></div>
               <span style="font-size:0.9rem; font-weight:700; color:var(--text); white-space:nowrap; padding-left:4px;">${x.s}x ${x.name}</span>
           </div>
       `).join('');
@@ -2030,7 +1957,7 @@ function renderItemTable(ds) {
     return `<th class="th-sortable ${h.a}" style="${colorStyle}" onclick="handleDbSort('${h.k}')">${h.l} ${arrow}</th>`;
   }).join('') + '</tr>';
 
-  // Enforced Hard Cap to prevent DOM Bloat
+  // Strict DOM cap to prevent GPU blurring lag
   const MAX_ROWS = 15; 
   const isCapped = displayArray.length > MAX_ROWS && !dbSearchTerm;
   const rowsToRender = displayArray.slice(0, MAX_ROWS);
@@ -2078,10 +2005,11 @@ function renderLog(data) {
       : `<span class="log-price no-data">no price</span>`;
     const safeName = e.item.replace(/"/g, '&quot;');
     
-    // Utilize the pre-calculated string from memoize instead of heavy toLocaleString
-    const ptDateStr = new Date(e.timestamp).toLocaleString('en-US', {
-      month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
-    });
+    // Utilize the pre-calculated date info instead of heavy toLocaleString
+    const info = getMemoizedDateInfo(e);
+    const dateObj = new Date(e.timestamp);
+    const timeStr = dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    const ptDateStr = `${MONTHS_SHORT[parseInt(info.nstDateStr.split('-')[1])-1]} ${parseInt(info.nstDateStr.split('-')[2])}, ${timeStr}`;
     
     return `
       <div class="log-entry" style="opacity: ${e.status === 'success' ? '1' : '0.6'}">
