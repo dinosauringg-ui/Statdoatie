@@ -72,18 +72,18 @@
 
 /* ── DISTINCT DARK THEMES ── */
 body.theme-kadoatery {
-  --bg: #14081c; 
+  --bg: #110517; 
   --glass: rgba(45, 10, 50, 0.4); 
   --glass-hover: rgba(65, 15, 75, 0.6);
   --green: #f472b6; 
   --green-glow: rgba(244, 114, 182, 0.4); 
   --red: #64748b; --blue: #c084fc; --amber: #fbbf24; --purple: #e879f9; --teal: #2dd4bf;
-  --theme-card-border: 1px solid #f472b6;
-  --theme-shadow: 0 0 20px rgba(244, 114, 182, 0.15), inset 0 0 10px rgba(192, 132, 252, 0.1);
+  --theme-card-border: 1px solid rgba(244, 114, 182, 0.3);
+  --theme-shadow: 0 10px 40px rgba(192, 132, 252, 0.15), inset 0 0 20px rgba(244, 114, 182, 0.05);
   --theme-top-light: rgba(244, 114, 182, 0.3);
   --theme-glass-edge: inset 0 1px 1px rgba(244, 114, 182, 0.2);
-  --btn-radius: 8px;
-  --theme-radius: 12px;
+  --btn-radius: 12px;
+  --theme-radius: 24px;
   --heatmap-1: rgba(244, 114, 182, 0.2); --heatmap-2: rgba(244, 114, 182, 0.4);
   --heatmap-3: rgba(244, 114, 182, 0.65); --heatmap-4: rgba(244, 114, 182, 1);
   
@@ -92,37 +92,39 @@ body.theme-kadoatery {
 }
 
 body.theme-virtupets {
-  --bg: #000000; 
-  --glass: rgba(0, 30, 10, 0.4); 
-  --glass-hover: rgba(0, 50, 15, 0.6);
+  --bg: #050a05; 
+  --glass: rgba(0, 20, 5, 0.6); 
+  --glass-hover: rgba(0, 40, 10, 0.8);
   --green: #4ade80; 
-  --green-glow: rgba(74, 222, 128, 0.4); 
+  --green-glow: rgba(74, 222, 128, 0.6); 
   --red: #ef4444; --blue: #22c55e; --amber: #facc15; --purple: #16a34a; --teal: #15803d;
   --theme-font-display: 'Courier New', Courier, monospace;
   --theme-font-body: 'Courier New', Courier, monospace;
   --theme-radius: 0px;
   --btn-radius: 0px;
-  --theme-card-border: 1px solid #4ade80;
-  --theme-card-bg: rgba(0, 20, 5, 0.8);
+  --theme-card-border: 1px solid rgba(74, 222, 128, 0.3);
   --theme-shadow: 0 0 15px rgba(74, 222, 128, 0.1);
   --theme-top-light: transparent;
   --theme-glass-edge: none;
-  --header-bg: #000000;
+  --header-bg: #020502;
   --blob-opacity: 0; 
   --heatmap-1: rgba(74, 222, 128, 0.2); --heatmap-2: rgba(74, 222, 128, 0.4);
   --heatmap-3: rgba(74, 222, 128, 0.65); --heatmap-4: rgba(74, 222, 128, 1);
   
-  /* Scanlines */
-  --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 4h20v2H2zM2 8h20v2H2zM2 12h20v2H2zM2 16h20v2H2zM2 20h20v2H2z'/%3E%3C/svg%3E");
+  /* Terminal Prompt */
+  --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 19l-7-7 7-7 1.41 1.41L5.83 12l5.58 5.59L10 19zm8 0h-6v-2h6v2z'/%3E%3C/svg%3E");
 }
 
 body.theme-maraqua {
-  --bg: #06111c; 
+  --bg: #030f1c; 
+  background: radial-gradient(circle at top left, #082f49 0%, #030f1c 100%);
   --glass: rgba(14, 42, 64, 0.4); 
   --glass-hover: rgba(20, 60, 90, 0.6);
   --green: #2dd4bf; 
   --green-glow: rgba(45, 212, 191, 0.4); 
   --red: #fb7185; --blue: #0284c7; --amber: #f59e0b; --purple: #0ea5e9; --teal: #38bdf8;
+  --theme-radius: 28px;
+  --theme-shadow: 0 20px 50px rgba(0,0,0,0.4);
   --heatmap-1: rgba(45, 212, 191, 0.2); --heatmap-2: rgba(45, 212, 191, 0.4);
   --heatmap-3: rgba(45, 212, 191, 0.65); --heatmap-4: rgba(45, 212, 191, 1);
   
@@ -149,8 +151,9 @@ body.theme-moltara {
 /* ── LIGHT THEMES ── */
 body.theme-faerieland {
   --bg: #fdf4ff;
-  --glass: rgba(255, 255, 255, 0.6);
-  --glass-hover: rgba(255, 255, 255, 0.8);
+  background: linear-gradient(180deg, #fff 0%, #fdf4ff 100%);
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-hover: rgba(255, 255, 255, 0.9);
   --border: rgba(216, 180, 254, 0.4);
   --border-strong: rgba(216, 180, 254, 0.8);
   --text: #4a044e; --text2: #701a75; --text3: #86198f; 
@@ -163,15 +166,15 @@ body.theme-faerieland {
   --badge-red-bg: rgba(225, 29, 72, 0.1);
   --badge-red-text: #be123c;
   --c-red-bg: rgba(225, 29, 72, 0.05);
-  --theme-radius: 35px;
+  --theme-radius: 40px;
   --btn-radius: 100px;
-  --theme-card-bg: rgba(255, 255, 255, 0.8);
-  --theme-card-border: 3px solid #fdf4ff;
+  --theme-card-bg: rgba(255, 255, 255, 0.85);
+  --theme-card-border: 2px solid #ffffff;
   --theme-top-light: rgba(255, 255, 255, 0.8);
   --theme-glass-edge: none;
-  --theme-shadow: 0 15px 35px rgba(217, 70, 239, 0.15);
+  --theme-shadow: 0 15px 35px rgba(217, 70, 239, 0.1);
   --chart-empty: rgba(0,0,0,0.05);
-  --chart-line: rgba(0,0,0,0.1);
+  --chart-line: rgba(0,0,0,0.08);
   --heatmap-empty: rgba(0,0,0,0.06);
   --heatmap-1: rgba(5, 150, 105, 0.2); --heatmap-2: rgba(5, 150, 105, 0.45);
   --heatmap-3: rgba(5, 150, 105, 0.7); --heatmap-4: rgba(5, 150, 105, 1);
@@ -410,6 +413,7 @@ body {
 .c-green::before  { background: var(--green); }
 .c-amber::before  { background: var(--amber); }
 .c-blue::before   { background: var(--blue); }
+.c-red::before    { background: var(--red); }
 .c-purple::before { background: var(--purple); }
 
 /* Accent bar at bottom of stat card */
@@ -425,6 +429,7 @@ body {
 .c-green::after  { background: linear-gradient(90deg, transparent, var(--green), transparent); }
 .c-amber::after  { background: linear-gradient(90deg, transparent, var(--amber), transparent); }
 .c-blue::after   { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
+.c-red::after    { background: linear-gradient(90deg, transparent, var(--red), transparent); }
 .c-purple::after { background: linear-gradient(90deg, transparent, var(--purple), transparent); }
 .stat-card:hover::after { opacity: 1; }
 
@@ -462,6 +467,8 @@ body {
 .c-amber .stat-num { color: var(--amber); text-shadow: 0 0 20px rgba(245, 158, 11, 0.3); }
 .c-blue { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
 .c-blue .stat-num { color: var(--blue); }
+.c-red { background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2); }
+.c-red .stat-num { color: var(--text); }
 .c-purple { background: rgba(139, 92, 246, 0.05); border-color: rgba(139, 92, 246, 0.2); }
 .c-purple .stat-num { color: var(--purple); }
 
@@ -488,12 +495,23 @@ body {
 }
 .heatmap-inner { display: inline-flex; flex-direction: column; gap: 0; min-width: 100%; }
 .heatmap-months-row { display: flex; align-items: flex-end; margin-bottom: 6px; }
+
+/* Spacer matches the day-label width + gap */
+.heatmap-month-spacer { flex-shrink: 0; width: 40px; } 
+
+.heatmap-month-label { 
+  flex-shrink: 0; font-size: 11px; color: var(--text3); 
+  user-select: none; overflow: visible; width: 28px; 
+}
+
 .heatmap-day-labels { display: flex; flex-direction: column; gap: 4px; margin-right: 8px; padding-top: 0; }
-.heatmap-day-label { font-size: 11px; color: var(--text3); height: 20px; display: flex; align-items: center; width: 30px; }
+.heatmap-day-label { font-size: 11px; color: var(--text3); height: 24px; display: flex; align-items: center; width: 32px; }
+
 .heatmap-grid-area { display: flex; flex-direction: row; gap: 4px; }
 .heatmap-week-col { display: flex; flex-direction: column; gap: 4px; }
+
 .heatmap-cell {
-  width: 20px; height: 20px; border-radius: 4px;
+  width: 24px; height: 24px; border-radius: 4px;
   background: var(--heatmap-empty); cursor: pointer;
   transition: transform 0.15s ease, filter 0.15s ease;
   position: relative; flex-shrink: 0;
@@ -659,8 +677,10 @@ input[type=file] { display: none; }
   .card-header-actions { flex-direction: column; align-items: flex-start !important; gap: 12px; }
   .search-input { max-width: 100%; }
   
-  .heatmap-cell { width: 16px; height: 16px; }
-  .heatmap-day-label { height: 16px; width: 24px; font-size: 10px; }
+  .heatmap-cell { width: 18px; height: 18px; border-radius: 3px; }
+  .heatmap-day-label { height: 18px; width: 28px; font-size: 10px; }
+  .heatmap-month-label { width: 22px; font-size: 10px; }
+  .heatmap-month-spacer { width: 36px; }
   
   .db-preview-container { display: none; } 
 }
@@ -1321,13 +1341,13 @@ function renderHeatmap(data) {
   monthsRow.className = 'heatmap-months-row';
   
   const spacer = document.createElement('div');
-  spacer.style.cssText = 'width:32px; flex-shrink:0;';
+  spacer.className = 'heatmap-month-spacer';
   monthsRow.appendChild(spacer);
 
   let lastMonth = -1;
   weeks.forEach((week, wi) => {
     const monthLabel = document.createElement('div');
-    monthLabel.style.cssText = `width:17px; flex-shrink:0; font-size:10px; color:var(--text3); user-select:none; overflow:visible;`;
+    monthLabel.className = 'heatmap-month-label';
     const weekMonth = week[0].getMonth();
     
     if (weekMonth !== lastMonth) {
