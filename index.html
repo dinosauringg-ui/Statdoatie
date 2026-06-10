@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -41,8 +41,7 @@
   --theme-card-bg: var(--glass);
   --theme-card-border: 1px solid var(--border);
   --theme-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  --theme-glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  --theme-top-light: rgba(255, 255, 255, 0.12);
+  --theme-glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
   
   --header-bg: var(--glass);
   --header-text: var(--text);
@@ -81,8 +80,7 @@ body.theme-kadoatery {
   --red: #64748b; --blue: #c084fc; --amber: #fbbf24; --purple: #e879f9; --teal: #2dd4bf;
   --theme-card-border: 1px solid rgba(244, 114, 182, 0.3);
   --theme-shadow: 0 10px 40px rgba(192, 132, 252, 0.15), inset 0 0 20px rgba(244, 114, 182, 0.05);
-  --theme-top-light: rgba(244, 114, 182, 0.3);
-  --theme-glass-edge: inset 0 1px 1px rgba(244, 114, 182, 0.2);
+  --theme-glass-edge: inset 0 1px 1px rgba(244, 114, 182, 0.4);
   --btn-radius: 12px;
   --theme-radius: 24px;
   --heatmap-1: rgba(244, 114, 182, 0.2); --heatmap-2: rgba(244, 114, 182, 0.4);
@@ -349,7 +347,6 @@ body {
   min-height: 50vh; text-align: center; border-radius: var(--theme-radius);
   background: var(--theme-card-bg); border: var(--theme-card-border); box-shadow: var(--theme-shadow);
   backdrop-filter: blur(20px); padding: 60px 20px; transition: all 0.5s ease;
-  border-top: 1px solid var(--theme-top-light);
 }
 .import-screen h2 { font-family: var(--theme-font-display); font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
 .import-screen p { font-size: 1rem; color: var(--text2); max-width: 450px; line-height: 1.6; margin-bottom: 32px; }
@@ -1045,13 +1042,13 @@ async function generateShareCard() {
     exportBox.id = "temp-export-box";
     exportBox.className = document.body.className; 
     exportBox.style.cssText = `
-      position: absolute; left: 0; top: 0;
+      position: absolute; left: -9999px; top: 0;
       width: 480px; padding: 32px;
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--theme-font-body);
       display: flex; flex-direction: column; gap: 24px;
-      z-index: -9999; opacity: 0; pointer-events: none;
+      z-index: -9999;
     `;
 
     // Clone blobs for aesthetic
@@ -1059,15 +1056,6 @@ async function generateShareCard() {
     blobs.style.position = 'absolute';
     exportBox.appendChild(blobs);
     
-    // Inject a <style> block to strip out pseudo-elements AND external images to prevent canvas crashing
-    const styleFix = document.createElement('style');
-    styleFix.innerHTML = `
-      .stat-card::before, .analytics-card::before, .db-card::before { display: none !important; }
-      .item-img { display: none !important; }
-      .item-img-placeholder { display: none !important; }
-    `;
-    exportBox.appendChild(styleFix);
-
     // Logo / Title Header
     const header = document.createElement('div');
     header.style.display = 'flex';
@@ -1152,22 +1140,20 @@ async function generateShareCard() {
     analyticsCard.appendChild(chartWrap);
     exportBox.appendChild(analyticsCard);
     
-    // Purge ANY img tags that made it into the clone to prevent silent CORS crashing
-    exportBox.querySelectorAll('img').forEach(img => img.remove());
-    
     document.body.appendChild(exportBox);
-    await new Promise(r => setTimeout(r, 150));
+    
+    // Give fonts and chart conversions a tiny bit of time to settle in the DOM
+    await new Promise(r => setTimeout(r, 300));
 
-    const generatedCanvas = await html2canvas(exportBox, {
+    // Native browser conversion via SVG foreignObject wrapper
+    const dataUrl = await htmlToImage.toPng(exportBox, {
+       pixelRatio: 2,
        backgroundColor: getComputedStyle(document.body).backgroundColor,
-       scale: 2, 
-       useCORS: false, // We've stripped external images, so this is safe now
-       logging: false
+       style: { transform: 'none' } // Prevent scaling issues
     });
 
-    const resultImg = generatedCanvas.toDataURL('image/png');
-    document.getElementById('share-preview-container').innerHTML = `<img src="${resultImg}" style="width:100%; height:auto; display:block;" />`;
-    document.getElementById('share-download-btn').href = resultImg;
+    document.getElementById('share-preview-container').innerHTML = `<img src="${dataUrl}" style="width:100%; height:auto; display:block;" />`;
+    document.getElementById('share-download-btn').href = dataUrl;
     document.getElementById('share-modal').classList.remove('hidden');
     exportBox.remove();
 
