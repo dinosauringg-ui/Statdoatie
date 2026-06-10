@@ -775,6 +775,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   .crown-jewel-content > div:last-child { flex-shrink: 0; }
 }
 @media (max-width: 500px) { 
+  /* Hide the streak badge entirely on tiny screens to declutter */
   #streak-badge { display: none !important; } 
 }
 @media (max-width: 400px) {
@@ -787,8 +788,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 </style>
 </head>
 <body>
-
-<div class="hmap-tooltip" id="hmap-tooltip"></div>
 
 <div class="bg-blobs">
   <div class="blob blob-1"></div>
@@ -1744,8 +1743,8 @@ function renderMainChart(type) {
       data: {
         labels: p.labelsTime,
         datasets: [
-          { label: 'Total Fed', data: p.cumulFed, borderColor: green, backgroundColor: makeGradient(green, 0.35, 0), fill: true, tension: 0.45, pointRadius: 0, borderWidth: 2.5 },
-          { label: 'Total Sniped', data: p.cumulSniped, borderColor: hexToRgba(red, 0.5), fill: false, tension: 0.45, pointRadius: 0, borderWidth: 1.5, borderDash: [6, 4] }
+          { label: 'Total Fed', data: p.cumulFed, borderColor: green, backgroundColor: makeGradient(green, 0.35, 0), fill: true, tension: 0, pointRadius: 0, borderWidth: 2.5 },
+          { label: 'Total Sniped', data: p.cumulSniped, borderColor: hexToRgba(red, 0.5), fill: false, tension: 0, pointRadius: 0, borderWidth: 1.5, borderDash: [6, 4] }
         ]
       },
       options: { ...baseOptions, interaction: { mode: 'index', intersect: false }, plugins: { ...baseOptions.plugins, legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 12, boxHeight: 12, useBorderRadius: true, color: getCssVar('--text2') } } }, scales: commonScales }
@@ -1753,13 +1752,13 @@ function renderMainChart(type) {
   } else if (type === 'np') {
     config = {
       type: 'line',
-      data: { labels: p.labelsTime, datasets: [{ label: 'NP Spent', data: p.cumulNP, borderColor: amber, backgroundColor: makeGradient(amber, 0.4, 0), fill: true, tension: 0.45, pointRadius: 0, borderWidth: 2.5 }] },
+      data: { labels: p.labelsTime, datasets: [{ label: 'NP Spent', data: p.cumulNP, borderColor: amber, backgroundColor: makeGradient(amber, 0.4, 0), fill: true, tension: 0, pointRadius: 0, borderWidth: 2.5 }] },
       options: { ...baseOptions, interaction: { mode: 'index', intersect: false }, plugins: { ...baseOptions.plugins, tooltip: { callbacks: { label: c => `NP Spent: ${c.raw.toLocaleString()} NP` } } }, scales: commonScales }
     };
   } else if (type === 'unique') {
     config = {
       type: 'line',
-      data: { labels: p.labelsTime, datasets: [{ label: 'Unique Items', data: p.cumulUnique, borderColor: purple, backgroundColor: makeGradient(purple, 0.4, 0), fill: true, tension: 0.45, pointRadius: 0, borderWidth: 2.5 }] },
+      data: { labels: p.labelsTime, datasets: [{ label: 'Unique Items', data: p.cumulUnique, borderColor: purple, backgroundColor: makeGradient(purple, 0.4, 0), fill: true, tension: 0, pointRadius: 0, borderWidth: 2.5 }] },
       options: { ...baseOptions, interaction: { mode: 'index', intersect: false }, scales: commonScales }
     };
   } else if (type === 'dow') {
