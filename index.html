@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -363,18 +364,17 @@ body {
 .card-title { font-family: var(--theme-font-display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
 .card-meta { font-size: .8rem; color: var(--text3); font-weight: 500; }
 
-/* Main Feature Cards Tiled Textures */
+/* Static Ghost Watermarks for Analytics and DB Cards */
 .analytics-card, .db-card { position: relative; overflow: hidden; }
 .analytics-card::before, .db-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  width: 100%; height: 100%; opacity: 0.03; pointer-events: none;
-  -webkit-mask-image: var(--theme-shape); -webkit-mask-size: 40px;
-  -webkit-mask-repeat: repeat; -webkit-mask-position: top left;
-  transition: opacity 0.3s ease; z-index: 0;
+  content: ''; position: absolute; top: -30px; right: -30px;
+  width: 150px; height: 150px; opacity: 0.04; pointer-events: none;
+  -webkit-mask-image: var(--theme-shape); -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  z-index: 0;
 }
 .analytics-card::before { background: var(--blue); }
 .db-card::before { background: var(--purple); }
-.analytics-card:hover::before, .db-card:hover::before { opacity: 0.06; }
 .analytics-card > *, .db-card > * { position: relative; z-index: 1; }
 
 /* ── EXPANDABLE STAT CARDS ── */
@@ -391,30 +391,27 @@ body {
   position: relative; overflow: hidden;
 }
 
-/* Tiled Background for Stat Cards */
+/* Static Ghost Watermarks for Stat Cards */
 .stat-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  width: 100%; height: 100%;
-  opacity: 0.05;
+  top: -20px; right: -20px;
+  width: 110px; height: 110px;
+  opacity: 0.08;
   pointer-events: none;
   -webkit-mask-image: var(--theme-shape);
-  -webkit-mask-size: 30px;
-  -webkit-mask-repeat: repeat;
-  -webkit-mask-position: top left;
-  transition: opacity 0.3s ease;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
   z-index: 0;
 }
-
-.stat-card:hover::before { opacity: 0.1; }
-.stat-card > * { position: relative; z-index: 1; }
 
 .c-green::before  { background: var(--green); }
 .c-amber::before  { background: var(--amber); }
 .c-blue::before   { background: var(--blue); }
 .c-red::before    { background: var(--red); }
 .c-purple::before { background: var(--purple); }
+.stat-card > * { position: relative; z-index: 1; }
 
 /* Accent bar at bottom of stat card */
 .stat-card::after {
@@ -558,9 +555,27 @@ body {
 .th-sortable:hover { color: var(--text); }
 
 /* ── TABLE ── */
-.table-wrap { overflow-x: auto; margin: -10px; padding: 10px; -webkit-overflow-scrolling: touch; }
+/* Fixed height and inner scrolling prevents the Glassmorphism footprint from melting the GPU */
+.table-wrap { 
+  max-height: 450px; 
+  overflow-y: auto; 
+  overflow-x: auto; 
+  margin: 10px -10px -10px -10px; 
+  padding: 0 10px 10px 10px; 
+  -webkit-overflow-scrolling: touch; 
+}
 table { width: 100%; border-collapse: separate; border-spacing: 0 8px; min-width: 800px; }
-thead th { text-align: left; font-size: .75rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--text3); padding: 0 16px 8px; }
+
+/* Sticky headers ensure context stays while scrolling */
+#item-table thead th { 
+  position: sticky; 
+  top: 0; 
+  background: var(--bg); /* Opaque background hides scrolling rows behind it */
+  z-index: 10;
+  text-align: left; font-size: .75rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--text3); padding: 8px 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
 tbody tr { background: var(--table-row); transition: transform 0.15s ease, background 0.15s ease; }
 tbody tr td:first-child { border-radius: calc(var(--theme-radius) / 2) 0 0 calc(var(--theme-radius) / 2); }
 tbody tr td:last-child { border-radius: 0 calc(var(--theme-radius) / 2) calc(var(--theme-radius) / 2) 0; }
@@ -608,16 +623,17 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
 
 /* ── EXPANDABLE DB CARD ── */
 .db-card-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin-top 0.4s ease;
+  display: none; /* Instant toggle to prevent layout thrashing lag */
   opacity: 0;
 }
 .db-card.expanded .db-card-body {
-  max-height: 3000px; 
+  display: block;
   opacity: 1;
   margin-top: 24px;
+  animation: fadeIn 0.3s ease;
 }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
 .db-preview-container {
   display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -768,6 +784,8 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 </style>
 </head>
 <body>
+
+<div class="hmap-tooltip" id="hmap-tooltip"></div>
 
 <div class="bg-blobs">
   <div class="blob blob-1"></div>
@@ -1059,7 +1077,6 @@ document.addEventListener('mousemove', (e) => {
       if (blobs) {
         const x = (window.innerWidth / 2 - e.clientX) / 40;
         const y = (window.innerHeight / 2 - e.clientY) / 40;
-        // translate3d forces the browser to calculate this using GPU hardware acceleration
         blobs.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       }
       parallaxTicking = false;
