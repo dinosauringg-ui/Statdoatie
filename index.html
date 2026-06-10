@@ -238,10 +238,11 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
 
-/* ── BACKGROUND BLOBS (No JS Parallax) ── */
+/* ── BACKGROUND BLOBS ── */
 .bg-blobs {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none; z-index: -1; overflow: hidden; filter: blur(100px);
+  will-change: transform;
 }
 .blob { position: absolute; border-radius: 50%; opacity: var(--blob-opacity); animation: float 20s infinite alternate ease-in-out; transition: opacity 0.5s ease, background 0.8s ease; }
 .blob-1 { width: 40vw; height: 40vw; background: var(--blue); top: -10%; left: -10%; animation-duration: 25s; }
@@ -362,17 +363,22 @@ body {
 .card-title { font-family: var(--theme-font-display); font-size: 1.2rem; font-weight: 700; color: var(--text); }
 .card-meta { font-size: .8rem; color: var(--text3); font-weight: 500; }
 
-/* Static Ghost Watermarks for Analytics and DB Cards */
+/* Main Feature Cards Static Shapes */
 .analytics-card, .db-card { position: relative; overflow: hidden; }
 .analytics-card::before, .db-card::before {
-  content: ''; position: absolute; top: -30px; right: -30px;
-  width: 150px; height: 150px; opacity: 0.04; pointer-events: none;
-  -webkit-mask-image: var(--theme-shape); -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
+  content: ''; position: absolute; 
+  top: 20px; right: 20px;
+  width: 120px; height: 120px; 
+  opacity: 0.04; pointer-events: none;
+  -webkit-mask-image: var(--theme-shape); 
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat; 
+  -webkit-mask-position: top right;
   z-index: 0;
 }
 .analytics-card::before { background: var(--blue); }
 .db-card::before { background: var(--purple); }
+.analytics-card:hover::before, .db-card:hover::before { opacity: 0.08; }
 .analytics-card > *, .db-card > * { position: relative; z-index: 1; }
 
 /* ── EXPANDABLE STAT CARDS ── */
@@ -393,14 +399,14 @@ body {
 .stat-card::before {
   content: '';
   position: absolute;
-  top: -20px; right: -20px;
-  width: 110px; height: 110px;
+  top: 16px; right: 16px;
+  width: 75px; height: 75px;
   opacity: 0.08;
   pointer-events: none;
   -webkit-mask-image: var(--theme-shape);
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
+  -webkit-mask-position: top right;
   z-index: 0;
 }
 
@@ -781,8 +787,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 </head>
 <body>
 
-<div class="hmap-tooltip" id="hmap-tooltip"></div>
-
 <div class="bg-blobs">
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
@@ -1064,6 +1068,23 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 </main>
 
 <script>
+// ─── BACKGROUND PARALLAX ───
+let parallaxTicking = false;
+document.addEventListener('mousemove', (e) => {
+  if (!parallaxTicking) {
+    window.requestAnimationFrame(() => {
+      const blobs = document.querySelector('.bg-blobs');
+      if (blobs) {
+        const x = (window.innerWidth / 2 - e.clientX) / 40;
+        const y = (window.innerHeight / 2 - e.clientY) / 40;
+        blobs.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      }
+      parallaxTicking = false;
+    });
+    parallaxTicking = true;
+  }
+});
+
 // ─── PURE CSS SHARE MODE ───
 function toggleShareMode() {
   document.body.classList.toggle('share-mode');
@@ -1228,6 +1249,9 @@ function openItemModal(itemName) {
   const rate = seen > 0 ? Math.round((fed / seen) * 100) : 0;
   const cache = getCached(itemName);
   document.getElementById('item-modal-name').textContent = itemName;
+  document.getElementById('item-modal-img').src = cache.image || '';
+  document.getElementById('item-modal-img').style.display = cache.image ? 'block' : 'none';
+  document.getElementById('item-modal-price-display').textContent = `Current Price: ${cache.price != null ? cache.price.toLocaleString() + ' NP' : 'Unknown'}`;
   document.getElementById('item-modal-rate').textContent = rate + '%';
   document.getElementById('item-modal-seen').textContent = seen;
   document.getElementById('item-modal-fed').textContent = fed + ' Fed';
@@ -1983,7 +2007,7 @@ function renderItemTable(ds) {
     return `<th class="th-sortable ${h.a}" style="${colorStyle}" onclick="handleDbSort('${h.k}')">${h.l} ${arrow}</th>`;
   }).join('') + '</tr>';
 
-  const MAX_ROWS = 20; // Hard cap on database rows to prevent DOM bloat
+  const MAX_ROWS = 100;
   const isCapped = displayArray.length > MAX_ROWS && !dbSearchTerm;
   const rowsToRender = displayArray.slice(0, MAX_ROWS);
 
