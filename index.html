@@ -205,29 +205,29 @@ body {
   color: var(--header-text);
   transition: background 0.5s ease, color 0.5s ease;
 }
-.logo { display: flex; align-items: center; gap: 12px; }
+.logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .logo-icon {
   width: 32px; height: 32px; background: linear-gradient(135deg, var(--blue), var(--purple));
   border-radius: var(--theme-radius); display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); flex-shrink: 0;
 }
 .logo-icon svg { width: 18px; height: 18px; fill: #ffffff; }
-.logo-text { font-family: var(--theme-font-display); font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; user-select: none; }
-.logo-sub { font-size: .75rem; font-weight: 500; opacity: 0.7; }
+.logo-text { font-family: var(--theme-font-display); font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; user-select: none; white-space: nowrap; }
+.logo-sub { font-size: .75rem; font-weight: 500; opacity: 0.7; white-space: nowrap; }
 .header-right { display: flex; align-items: center; gap: 10px; }
 
 .pill-badge {
   display: inline-flex; align-items: center; gap: 6px; font-size: .75rem;
   font-weight: 600; color: #fff; background: linear-gradient(135deg, #f59e0b, #ef4444);
   padding: 6px 16px; border-radius: var(--btn-radius); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-  white-space: nowrap;
+  white-space: nowrap; flex-shrink: 0;
 }
 .pulse {
   width: 8px; height: 8px; border-radius: 50%; background: var(--green);
   box-shadow: 0 0 10px var(--green); flex-shrink: 0; animation: pulsing 2s infinite;
 }
 @keyframes pulsing { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
-.status-chip { display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--header-text); font-weight: 600; background: var(--glass); padding: 6px 16px; border-radius: var(--btn-radius); border: 1px solid var(--border); white-space: nowrap; }
+.status-chip { display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--header-text); font-weight: 600; background: var(--glass); padding: 6px 16px; border-radius: var(--btn-radius); border: 1px solid var(--border); white-space: nowrap; flex-shrink: 0; }
 
 /* ── BUTTONS ── */
 .btn {
@@ -238,11 +238,12 @@ body {
   display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
 }
 .btn:hover { background: var(--glass-hover); border-color: var(--border-strong); transform: translateY(-1px); }
-.btn-icon { padding: 0; width: 40px; justify-content: center; font-size: 1.2rem; color: inherit; }
+.btn-icon { padding: 0; width: 40px; justify-content: center; font-size: 1.2rem; color: inherit; flex-shrink: 0; }
 .btn-primary { background: var(--text); color: var(--bg); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .btn-primary:hover { background: var(--text2); border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
-.header-btn-text { margin-left: 4px; }
+/* Prevent the import button from being squished */
+.import-feeds-btn { padding: 0 16px; white-space: nowrap; flex-shrink: 0; }
 
 /* ── MODALS ── */
 .modal-overlay {
@@ -450,15 +451,15 @@ input[type=file] { display: none; }
   .header { padding: 0 16px; height: 56px; flex-wrap: nowrap; }
   .header-right { margin-top: 0; width: auto; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
   
-  .header-btn-text { display: none; }
-  .header-sync-btn { padding: 0 !important; width: 32px; height: 32px; justify-content: center; }
+  /* Adjusted button styles so it stays readable on mobile */
+  .import-feeds-btn { padding: 0 12px !important; font-size: 0.85rem !important; flex-shrink: 0; }
 
   .logo-sub { display: none; }
   .logo-text { font-size: 1.1rem; }
   .pill-badge { padding: 4px 8px; font-size: 0.65rem; }
   .status-chip { padding: 4px 8px; font-size: 0.65rem; }
   
-  .btn-icon { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; }
+  .btn-icon { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .btn-icon svg { width: 16px !important; height: 16px !important; }
   
   .filter-bar { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
@@ -483,6 +484,11 @@ input[type=file] { display: none; }
   .crown-jewel-content .stat-label { font-size: 0.6rem !important; white-space: normal; }
   .crown-jewel-content > div:first-child { flex: 1; min-width: 0; padding-right: 12px; }
   .crown-jewel-content > div:last-child { flex-shrink: 0; }
+}
+
+@media (max-width: 500px) {
+  /* Hide the Awaiting Data status chip to guarantee the Import button has room */
+  .status-chip { display: none !important; }
 }
 
 @media (max-width: 400px) {
@@ -519,7 +525,7 @@ input[type=file] { display: none; }
       <span id="status-text">Awaiting Data</span>
     </div>
     
-    <button class="btn btn-primary header-sync-btn" onclick="triggerExtensionSync()" title="Import Feeds">
+    <button class="btn btn-primary import-feeds-btn" onclick="triggerExtensionSync()" title="Import Feeds">
       Import Feeds
     </button>
 
@@ -753,7 +759,6 @@ let absoluteMostExpensiveItem = '';
 const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 let currentMainChartType = 'daily';
 
-// The new unified payload object for the main dynamic chart
 window.chartPayload = {
   labelsTime: [],
   dailyFed: [],
