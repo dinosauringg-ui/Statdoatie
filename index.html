@@ -41,7 +41,7 @@
   --theme-card-bg: var(--glass);
   --theme-card-border: 1px solid var(--border);
   --theme-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  --theme-top-light: rgba(255, 255, 255, 0.12);
+  --theme-glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
   
   --header-bg: var(--glass);
   --header-text: var(--text);
@@ -80,11 +80,13 @@ body.theme-kadoatery {
   --red: #64748b; --blue: #c084fc; --amber: #fbbf24; --purple: #e879f9; --teal: #2dd4bf;
   --theme-card-border: 1px solid rgba(244, 114, 182, 0.3);
   --theme-shadow: 0 10px 40px rgba(192, 132, 252, 0.15), inset 0 0 20px rgba(244, 114, 182, 0.05);
-  --theme-top-light: rgba(244, 114, 182, 0.4);
+  --theme-glass-edge: inset 0 1px 1px rgba(244, 114, 182, 0.4);
   --btn-radius: 12px;
   --theme-radius: 24px;
   --heatmap-1: rgba(244, 114, 182, 0.2); --heatmap-2: rgba(244, 114, 182, 0.4);
   --heatmap-3: rgba(244, 114, 182, 0.65); --heatmap-4: rgba(244, 114, 182, 1);
+  
+  /* Heart */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
 }
 
@@ -102,7 +104,7 @@ body.theme-virtupets {
   --theme-card-border: 1px solid #4ade80;
   --theme-card-bg: rgba(0, 20, 5, 0.8);
   --theme-shadow: 0 0 15px rgba(74, 222, 128, 0.1);
-  --theme-top-light: transparent;
+  --theme-glass-edge: none;
   --header-bg: #000000;
   --blob-opacity: 0; 
   --theme-shape: none;
@@ -128,6 +130,8 @@ body.theme-maraqua {
   --theme-shadow: 0 20px 50px rgba(0,0,0,0.4);
   --heatmap-1: rgba(45, 212, 191, 0.2); --heatmap-2: rgba(45, 212, 191, 0.4);
   --heatmap-3: rgba(45, 212, 191, 0.65); --heatmap-4: rgba(45, 212, 191, 1);
+  
+  /* Water Drop */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2c0 0-8 8.61-8 13a8 8 0 0016 0c0-4.39-8-13-8-13z'/%3E%3C/svg%3E");
 }
 
@@ -139,9 +143,11 @@ body.theme-moltara {
   --green-glow: rgba(249, 115, 22, 0.4); 
   --red: #ef4444; --blue: #f59e0b; --amber: #fbbf24; --purple: #dc2626; --teal: #ea580c;
   --theme-card-border: 1px solid rgba(249, 115, 22, 0.3);
-  --theme-top-light: rgba(249, 115, 22, 0.3);
+  --theme-glass-edge: inset 0 1px 1px rgba(249, 115, 22, 0.2);
   --heatmap-1: rgba(249, 115, 22, 0.2); --heatmap-2: rgba(249, 115, 22, 0.4);
   --heatmap-3: rgba(249, 115, 22, 0.65); --heatmap-4: rgba(249, 115, 22, 1);
+  
+  /* Fire */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M11.66 22.05c-3.15 0-5.83-1.89-6.9-4.71-1.04-2.73-.55-5.61.64-7.53.51-.83 1.62-.97 2.22-.26.54.64.67 1.48.51 2.25-.26 1.25.04 2.51.81 3.46.74.93 1.95 1.34 3.01 1.09.77-.18 1.41-.69 1.76-1.38.38-.76.38-1.63.02-2.38-.41-.85-.98-1.61-1.68-2.22-1.74-1.51-2.9-3.7-2.9-6.09 0-1.5.47-2.94 1.34-4.14.49-.68 1.5-.7 2.05-.09C17.51 5.3 21 10.45 21 14.86c0 3.94-3.19 7.19-7.14 7.19h-2.2z'/%3E%3C/svg%3E");
 }
 
@@ -167,13 +173,15 @@ body.theme-faerieland {
   --btn-radius: 100px;
   --theme-card-bg: rgba(255, 255, 255, 0.85);
   --theme-card-border: 2px solid #ffffff;
-  --theme-top-light: rgba(255, 255, 255, 0.9);
+  --theme-glass-edge: none;
   --theme-shadow: 0 15px 35px rgba(217, 70, 239, 0.1);
   --chart-empty: rgba(0,0,0,0.05);
   --chart-line: rgba(0,0,0,0.08);
   --heatmap-empty: rgba(0,0,0,0.06);
   --heatmap-1: rgba(5, 150, 105, 0.2); --heatmap-2: rgba(5, 150, 105, 0.45);
   --heatmap-3: rgba(5, 150, 105, 0.7); --heatmap-4: rgba(5, 150, 105, 1);
+  
+  /* Cloud */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z'/%3E%3C/svg%3E");
 }
 
@@ -194,7 +202,7 @@ body.theme-classic {
   --btn-radius: 0px;
   --theme-card-bg: #f6f6f6;
   --theme-card-border: 1px solid #000000;
-  --theme-top-light: transparent;
+  --theme-glass-edge: none;
   --theme-shadow: 3px 3px 0px rgba(0,0,0,0.15); 
   --blob-opacity: 0;
   --table-row: #ffffff;
@@ -209,6 +217,8 @@ body.theme-classic {
   --heatmap-empty: rgba(0,0,0,0.08);
   --heatmap-1: rgba(0, 128, 0, 0.2); --heatmap-2: rgba(0, 128, 0, 0.45);
   --heatmap-3: rgba(0, 128, 0, 0.7); --heatmap-4: rgba(0, 128, 0, 1);
+  
+  /* Star */
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
 }
 
@@ -676,6 +686,7 @@ input[type=file] { display: none; }
 @media (max-width: 900px) {
   .header { padding: 0 16px; height: 56px; flex-wrap: nowrap; }
   .header-right { margin-top: 0; width: auto; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
+  .import-feeds-btn { padding: 0 12px !important; font-size: 0.85rem !important; flex-shrink: 0; }
   .logo-sub { display: none; }
   .logo-text { font-size: 1.1rem; }
   .pill-badge { padding: 4px 8px; font-size: 0.65rem; }
@@ -917,8 +928,6 @@ input[type=file] { display: none; }
   </div>
 </div>
 
-<div class="hmap-tooltip" id="hmap-tooltip"></div>
-
 <main class="main">
   <div id="import-screen" class="import-screen">
     <div class="import-icon-wrap">
@@ -1031,28 +1040,18 @@ document.addEventListener('mousemove', (e) => {
 function openShareModal() {
   toast("Preparing Statdoatie Card...");
   const preview = document.getElementById('share-preview-container');
-  preview.innerHTML = ''; // clear
+  preview.innerHTML = ''; 
 
-  // Build the clean HTML card visibly inside the modal
   const card = document.createElement('div');
-  card.className = document.body.className; // inherit theme colors
+  card.className = document.body.className; 
   card.style.cssText = `
-    width: 100%;
-    margin: 0 auto;
-    background-color: var(--bg);
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    position: relative;
-    z-index: 1;
-    text-align: left;
-    border-radius: 12px;
-    color: var(--text);
-    font-family: var(--theme-font-body);
+    width: 100%; margin: 0 auto;
+    background-color: var(--bg); padding: 32px;
+    display: flex; flex-direction: column; gap: 20px;
+    position: relative; z-index: 1; text-align: left;
+    border-radius: 12px; color: var(--text); font-family: var(--theme-font-body);
   `;
 
-  // Inject a <style> block to absolutely guarantee no SVG masks or external images crash the screenshot
   const styleFix = document.createElement('style');
   styleFix.innerHTML = `
     #share-preview-container .stat-card { animation: none !important; transform: none !important; box-shadow: none !important; border: 1px solid var(--border-strong) !important; background: var(--table-row) !important; padding: 16px; }
@@ -1062,17 +1061,15 @@ function openShareModal() {
     #share-preview-container .stat-label::after { display: none !important; }
     #share-preview-container .heatmap-cell { animation: none !important; transition: none !important; }
     #share-preview-container .bg-blobs { opacity: 0.5; }
-    #share-preview-container img { display: none !important; } /* Nuke external images for safety */
+    #share-preview-container img { display: none !important; } 
   `;
   card.appendChild(styleFix);
 
-  // Background Blobs
   const blobs = document.querySelector('.bg-blobs').cloneNode(true);
   blobs.style.position = 'absolute';
   blobs.style.top = '0'; blobs.style.left = '0';
   card.appendChild(blobs);
 
-  // Header (Logo + Date)
   const header = document.createElement('div');
   header.style.display = 'flex';
   header.style.justifyContent = 'space-between';
@@ -1091,7 +1088,6 @@ function openShareModal() {
   `;
   card.appendChild(header);
 
-  // Stats Grid (2x2 layout for the top 4 stats)
   const statsRow = document.createElement('div');
   statsRow.style.display = 'grid';
   statsRow.style.gridTemplateColumns = '1fr 1fr';
@@ -1107,7 +1103,6 @@ function openShareModal() {
   });
   card.appendChild(statsRow);
 
-  // Chart Area
   const chartArea = document.createElement('div');
   chartArea.style.background = 'var(--table-row)';
   chartArea.style.border = '1px solid var(--border-strong)';
@@ -1127,9 +1122,7 @@ function openShareModal() {
      const hmClone = document.getElementById('heatmap-view').cloneNode(true);
      hmClone.classList.remove('hidden');
      const outer = hmClone.querySelector('.heatmap-outer');
-     if (outer) {
-         outer.style.overflow = 'hidden'; 
-     }
+     if (outer) outer.style.overflow = 'hidden'; 
      chartArea.appendChild(hmClone);
   } else if (currentMainChartType === 'log') {
      const logClone = document.getElementById('log-view').cloneNode(true);
@@ -1143,7 +1136,6 @@ function openShareModal() {
      img.src = canvas.toDataURL('image/png');
      img.style.width = '100%';
      img.style.height = 'auto';
-     // Override the universal img display block just for this dataURL chart
      img.style.setProperty('display', 'block', 'important'); 
      chartArea.appendChild(img);
   }
@@ -1152,7 +1144,6 @@ function openShareModal() {
   preview.appendChild(card);
   document.getElementById('share-modal').classList.remove('hidden');
 
-  // Trigger html2canvas on the visible card
   const dlBtn = document.getElementById('share-download-btn');
   dlBtn.textContent = "Processing Image...";
   dlBtn.style.opacity = '0.5';
@@ -1886,7 +1877,7 @@ function renderMainChart(type) {
     };
   }
 
-  charts.main = new Chart(ctx, config);
+  charts.main = new Chart(document.getElementById('mainChart'), config);
 }
 
 // ─── RENDER PIPELINE ───
