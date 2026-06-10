@@ -702,7 +702,7 @@ input[type=file] { display: none; }
       <button class="btn" onclick="renderMainChart('dow'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Day</button>
       <button class="btn" onclick="renderMainChart('hour'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Hour</button>
       <button class="btn" onclick="renderMainChart('tiers'); document.getElementById('chart-modal').classList.add('hidden')">Item Price Tiers</button>
-      <button class="btn" style="border-color: var(--blue); color: var(--blue);" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
+      <button class="btn" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
     </div>
   </div>
 </div>
@@ -1283,17 +1283,7 @@ function renderHeatmap(data) {
   // Main layout: day labels + grid
   const mainRow = document.createElement('div');
   mainRow.style.cssText = 'display:flex; flex-direction:row; align-items:flex-start;';
-
-  // Day labels (Mon, Wed, Fri)
-  const dayLabels = document.createElement('div');
-  dayLabels.className = 'heatmap-day-labels';
-  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach((day, i) => {
-    const lbl = document.createElement('div');
-    lbl.className = 'heatmap-day-label';
-    lbl.textContent = (i % 2 === 1) ? day : '';
-    dayLabels.appendChild(lbl);
-  });
-  mainRow.appendChild(dayLabels);
+  
 
   // Grid of weeks
   const gridArea = document.createElement('div');
