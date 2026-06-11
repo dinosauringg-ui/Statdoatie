@@ -2262,7 +2262,7 @@ async function submitToKadmmunity() {
   try {
     const stats = computeWeekStats();
     console.log('[Kadmmunity] Submitting:', JSON.stringify({ username: kadUsername.toLowerCase(), ...stats }));
-    const res = await fetch(`${SUPA_URL}/rest/v1/kadmmunity`, {
+    const res = await fetch(`${SUPA_URL}/rest/v1/kadmmunity?on_conflict=username`, {
       method: 'POST',
       headers: {
         'apikey': SUPA_KEY,
