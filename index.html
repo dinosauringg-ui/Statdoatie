@@ -761,7 +761,29 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
 }
 .kad-empty strong { color: var(--text2); display: block; margin-bottom: 6px; font-size: 1rem; }
 
-.kad-refresh-btn {
+.kad-hour-grid {
+  display: grid; grid-template-columns: repeat(24, 1fr); gap: 4px;
+  margin-bottom: 4px;
+}
+.kad-hour-cell {
+  height: 36px; border-radius: 6px; background: var(--heatmap-empty);
+  cursor: default; transition: transform 0.15s, filter 0.15s;
+}
+.kad-hour-cell:hover { transform: scaleY(1.15); filter: brightness(1.2); }
+.kad-hour-cell[data-level="1"] { background: var(--heatmap-1); }
+.kad-hour-cell[data-level="2"] { background: var(--heatmap-2); }
+.kad-hour-cell[data-level="3"] { background: var(--heatmap-3); }
+.kad-hour-cell[data-level="4"] { background: var(--heatmap-4); }
+.kad-hour-labels {
+  display: grid; grid-template-columns: repeat(24, 1fr); gap: 4px;
+}
+.kad-hour-label {
+  font-size: .6rem; color: var(--text3); text-align: center;
+  white-space: nowrap; overflow: visible;
+}
+@media (max-width: 900px) {
+  .kad-hour-label { font-size: .55rem; }
+}
   font-size: .75rem; color: var(--text3); background: none; border: none;
   cursor: pointer; font-family: var(--theme-font-body); padding: 0;
   text-decoration: underline; text-underline-offset: 3px;
@@ -2184,16 +2206,20 @@ function computeWeekStats() {
   let sniped_week = 0, sniped_alltime = 0;
   let np_spent_week = 0, np_spent_alltime = 0;
   const uniqueSet = new Set();
+  const hour_counts = {}; // { "0": n, "14": n, ... } — all-time, NST hours
 
   for (const e of feedLog) {
     const ts = new Date(e.timestamp).getTime();
     const isWeek = ts >= weekStart;
     const price = getCached(e.item).price ?? 0;
+    const info = getMemoizedDateInfo(e);
+    const h = String(info.hour);
 
     if (e.status === 'success') {
       feeds_alltime++;
       np_spent_alltime += price;
       uniqueSet.add(e.item);
+      hour_counts[h] = (hour_counts[h] || 0) + 1;
       if (isWeek) { feeds_week++; np_spent_week += price; }
     } else {
       sniped_alltime++;
@@ -2209,7 +2235,8 @@ function computeWeekStats() {
     sniped_week, sniped_alltime,
     np_spent_week, np_spent_alltime,
     unique_items: uniqueSet.size,
-    win_rate_pct
+    win_rate_pct,
+    hour_counts
   };
 }
 
@@ -2280,15 +2307,19 @@ async function loadKadmmunity() {
     const bySnipedWeek  = [...rows].sort((a,b) => b.sniped_week - a.sniped_week);
     const byNPAlltime   = [...rows].sort((a,b) => b.np_spent_alltime - a.np_spent_alltime);
     const byFeedsAll    = [...rows].sort((a,b) => b.feeds_alltime - a.feeds_alltime);
-    const byUniqueItems = [...rows].sort((a,b) => b.unique_items - a.unique_items);
     const byWinRate     = [...rows]
       .filter(r => r.feeds_alltime >= 50)
       .sort((a,b) => b.win_rate_pct - a.win_rate_pct);
 
-    // Aggregate top items: we don't have per-item community data in this schema,
-    // so we pull from everyone's unique_items as a proxy stand-in,
-    // and surface the top global items from the local feedLog enriched by community feed counts
-    // (full per-item community aggregation would need a separate table — noted for v2)
+    // Aggregate hour_counts across all users into a 24-element array
+    const globalHours = Array(24).fill(0);
+    for (const r of rows) {
+      if (r.hour_counts && typeof r.hour_counts === 'object') {
+        for (let h = 0; h < 24; h++) {
+          globalHours[h] += r.hour_counts[String(h)] || 0;
+        }
+      }
+    }
 
     // Top feeder this week (hero card)
     const topFeeder = byFeedsWeek[0];
@@ -2325,10 +2356,7 @@ async function loadKadmmunity() {
           sub: 'kads fed'
         }))}
 
-        ${buildBoard('🌟 Unique Items', 'Distinct items fed', byUniqueItems, me, r => ({
-          primary: r.unique_items.toLocaleString(),
-          sub: 'unique items'
-        }))}
+        ${buildHourHeatmap(globalHours, rows.length)}
 
         ${byWinRate.length > 0 ? buildBoard('🎲 Win Rate', 'Min. 50 feeds', byWinRate, me, r => ({
           primary: r.win_rate_pct + '%',
@@ -2356,6 +2384,65 @@ function rankClass(i) {
   if (i === 1) return 'silver';
   if (i === 2) return 'bronze';
   return '';
+}
+
+function buildHourHeatmap(globalHours, playerCount) {
+  const max = Math.max(1, ...globalHours);
+  const totalFeeds = globalHours.reduce((a, b) => a + b, 0);
+
+  // Find the peak hour
+  const peakHour = globalHours.indexOf(max);
+  const fmtHour = h => {
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    return `${h % 12 || 12}${ampm}`;
+  };
+
+  const cells = globalHours.map((count, h) => {
+    const ratio = count / max;
+    // 5 intensity levels
+    let level = 0;
+    if (ratio > 0)    level = 1;
+    if (ratio >= 0.25) level = 2;
+    if (ratio >= 0.50) level = 3;
+    if (ratio >= 0.75) level = 4;
+
+    const pct = totalFeeds > 0 ? Math.round(count / totalFeeds * 100) : 0;
+    const label = `${fmtHour(h)} NST · ${count.toLocaleString()} feeds (${pct}%)`;
+
+    return `<div class="kad-hour-cell" data-level="${level}" data-tip="${label}" title="${label}"></div>`;
+  }).join('');
+
+  // Hour labels — show every 3 hours
+  const labels = Array.from({length: 24}, (_, h) => {
+    if (h % 3 !== 0) return `<div class="kad-hour-label"></div>`;
+    return `<div class="kad-hour-label">${fmtHour(h)}</div>`;
+  }).join('');
+
+  return `
+    <div class="kad-board-card" style="grid-column: 1 / -1;">
+      <div class="kad-board-header">
+        <div>
+          <div class="kad-board-title">🕐 Community Activity by Hour</div>
+          <div style="font-size:.75rem; color:var(--text3); margin-top:2px;">NST timezone · all-time · ${playerCount} players</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:.75rem; color:var(--text3);">Peak hour</div>
+          <div style="font-family:var(--theme-font-display); font-weight:800; font-size:1.1rem; color:var(--green);">${fmtHour(peakHour)} NST</div>
+        </div>
+      </div>
+      <div class="kad-hour-grid">${cells}</div>
+      <div class="kad-hour-labels">${labels}</div>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+        <span style="font-size:.72rem; color:var(--text3);">Hover cells for details</span>
+        <div style="display:flex; align-items:center; gap:5px; font-size:.72rem; color:var(--text3);">
+          <span>Less</span>
+          <div style="display:flex; gap:3px;">
+            ${[0,1,2,3,4].map(l => `<div style="width:12px; height:12px; border-radius:3px; background:${l === 0 ? 'var(--heatmap-empty)' : `var(--heatmap-${l})`};"></div>`).join('')}
+          </div>
+          <span>More</span>
+        </div>
+      </div>
+    </div>`;
 }
 
 function buildBoard(title, subtitle, rows, me, valueFn, limit = 10) {
