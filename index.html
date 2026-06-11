@@ -599,7 +599,7 @@ body.share-mode .expandable-card { cursor: default; }
 body.share-mode .stat-label::after { display: none !important; }
 body.share-mode .stat-num { font-size: 2rem !important; }
 body.share-mode .logo-sub::after { content: " • " attr(data-date); }
-.share-exit-fab { position: fixed; bottom: 24px; left: 10%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.4); color: #ffffff; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); font-family: var(--theme-font-body); font-weight: 600; padding: 10px 24px; border-radius: 100px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); cursor: pointer; z-index: 10000; display: none; align-items: center; gap: 8px; font-size: 0.85rem; transition: all 0.2s ease; }
+.share-exit-fab { position: fixed; bottom: 24px; left: 15%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.4); color: #ffffff; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); font-family: var(--theme-font-body); font-weight: 600; padding: 10px 24px; border-radius: 100px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); cursor: pointer; z-index: 10000; display: none; align-items: center; gap: 8px; font-size: 0.85rem; transition: all 0.2s ease; }
 .share-exit-fab:hover { background: rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.2); }
 body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 
@@ -980,7 +980,7 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
 
 <button class="share-exit-fab" onclick="toggleShareMode()">
   <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-  Exit Share Mode
+  
 </button>
 
 <div class="toast" id="toast"></div>
