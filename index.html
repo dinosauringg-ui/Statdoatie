@@ -344,6 +344,10 @@ body {
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat; 
   -webkit-mask-position: top right;
+  mask-image: var(--theme-shape);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: top right;
   z-index: 0;
 }
 .analytics-card::before { background: var(--blue); }
@@ -367,22 +371,28 @@ body {
 .stat-card::before {
   content: '';
   position: absolute;
-  top: 16px; right: 16px;
-  width: 75px; height: 75px;
-  opacity: 0.08;
+  bottom: -20px; right: -20px;
+  width: 110px; height: 110px;
+  opacity: 0.13;
   pointer-events: none;
   -webkit-mask-image: var(--theme-shape);
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: top right;
+  -webkit-mask-position: bottom right;
+  mask-image: var(--theme-shape);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: bottom right;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   z-index: 0;
 }
+.stat-card:hover::before { opacity: 0.22; transform: scale(1.08); }
 
-.c-green::before  { background: var(--green); }
-.c-amber::before  { background: var(--amber); }
-.c-blue::before   { background: var(--blue); }
-.c-red::before    { background: var(--red); }
-.c-purple::before { background: var(--purple); }
+.c-green::before  { background: radial-gradient(circle at 70% 70%, var(--green), transparent 75%); }
+.c-amber::before  { background: radial-gradient(circle at 70% 70%, var(--amber), transparent 75%); }
+.c-blue::before   { background: radial-gradient(circle at 70% 70%, var(--blue), transparent 75%); }
+.c-red::before    { background: radial-gradient(circle at 70% 70%, var(--red), transparent 75%); }
+.c-purple::before { background: radial-gradient(circle at 70% 70%, var(--purple), transparent 75%); }
 .stat-card > * { position: relative; z-index: 1; }
 
 .stat-card::after {
@@ -784,11 +794,14 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
 @media (max-width: 900px) {
   .kad-hour-label { font-size: .55rem; }
 }
-  font-size: .75rem; color: var(--text3); background: none; border: none;
-  cursor: pointer; font-family: var(--theme-font-body); padding: 0;
-  text-decoration: underline; text-underline-offset: 3px;
+.kad-refresh-btn {
+  font-family: var(--theme-font-body); font-size: .8rem; font-weight: 600;
+  color: var(--text2); background: var(--glass); border: var(--theme-card-border);
+  padding: 6px 14px; border-radius: var(--btn-radius);
+  cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s;
+  white-space: nowrap; backdrop-filter: blur(10px);
 }
-.kad-refresh-btn:hover { color: var(--text); }
+.kad-refresh-btn:hover { background: var(--glass-hover); color: var(--text); border-color: var(--border-strong); }
 
 @media (max-width: 900px) {
   .tab-nav { width: 100%; }
