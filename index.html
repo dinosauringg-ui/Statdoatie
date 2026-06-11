@@ -646,6 +646,133 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   .stats-grid { grid-template-columns: 1fr; }
   body.share-mode .stats-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* ── TAB NAV ── */
+.tab-nav {
+  display: flex; gap: 4px; padding: 4px;
+  background: var(--glass); border: var(--theme-card-border);
+  border-radius: calc(var(--theme-radius) + 4px);
+  backdrop-filter: blur(12px); width: fit-content;
+}
+.tab-btn {
+  font-family: var(--theme-font-body); font-size: .85rem; font-weight: 600;
+  padding: 8px 20px; border-radius: var(--theme-radius); border: none;
+  background: transparent; color: var(--text2); cursor: pointer;
+  transition: background 0.2s, color 0.2s; white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text); background: var(--glass-hover); }
+.tab-btn.active { background: var(--text); color: var(--bg); }
+body.theme-virtupets .tab-btn.active { background: var(--green); color: #000; }
+body.theme-faerieland .tab-btn.active,
+body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); }
+
+/* ── KADMMUNITY ── */
+.kad-section-label {
+  font-size: .7rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 12px;
+}
+.kad-board {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.kad-row {
+  display: grid; grid-template-columns: 28px 1fr auto;
+  align-items: center; gap: 12px;
+  padding: 10px 16px; border-radius: calc(var(--theme-radius) / 1.5);
+  background: var(--table-row); border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+.kad-row:hover { background: var(--table-row-hover); border-color: var(--border); }
+.kad-row.kad-you { border-color: var(--green); background: var(--green-glow); }
+.kad-rank {
+  font-family: var(--theme-font-display); font-size: .85rem;
+  font-weight: 800; color: var(--text3); text-align: center;
+}
+.kad-rank.gold   { color: #f59e0b; }
+.kad-rank.silver { color: #94a3b8; }
+.kad-rank.bronze { color: #b45309; }
+.kad-username { font-size: .95rem; font-weight: 600; color: var(--text); }
+.kad-username .you-tag {
+  font-size: .65rem; font-weight: 700; letter-spacing: .05em;
+  background: var(--green); color: #000; padding: 2px 6px;
+  border-radius: 100px; margin-left: 6px; vertical-align: middle;
+}
+.kad-value {
+  font-family: var(--theme-font-display); font-size: .95rem;
+  font-weight: 700; color: var(--text); text-align: right;
+}
+.kad-value-sub { font-size: .72rem; color: var(--text3); font-weight: 500; font-family: var(--theme-font-body); }
+.kad-boards-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.kad-board-card {
+  background: var(--theme-card-bg); border: var(--theme-card-border);
+  border-radius: var(--theme-radius); padding: 24px;
+  box-shadow: var(--theme-shadow);
+}
+.kad-board-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.kad-board-title {
+  font-family: var(--theme-font-display); font-size: 1rem;
+  font-weight: 700; color: var(--text);
+}
+.kad-board-icon { font-size: 1.2rem; }
+.kad-items-list { display: flex; flex-direction: column; gap: 6px; }
+.kad-item-row {
+  display: grid; grid-template-columns: 20px 1fr auto;
+  align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: calc(var(--theme-radius) / 2);
+  background: var(--table-row);
+}
+.kad-item-rank { font-size: .75rem; font-weight: 700; color: var(--text3); text-align: center; }
+.kad-item-name { font-size: .85rem; font-weight: 600; color: var(--text); }
+.kad-item-count { font-size: .85rem; font-weight: 700; color: var(--green); font-family: var(--theme-font-display); }
+
+.kad-hero {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 20px 24px; border-radius: var(--theme-radius);
+  background: var(--green-glow); border: 1px solid var(--green);
+  margin-bottom: 24px;
+}
+.kad-hero-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--green); }
+.kad-hero-name { font-family: var(--theme-font-display); font-size: 1.6rem; font-weight: 800; color: var(--text); }
+.kad-hero-sub { font-size: .85rem; color: var(--text2); }
+
+.kad-username-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.kad-username-input {
+  background: var(--table-row); border: 1px solid var(--border); color: var(--text);
+  padding: 8px 16px; border-radius: var(--btn-radius);
+  font-family: var(--theme-font-body); outline: none; font-size: 0.9rem;
+  flex: 1; min-width: 160px; max-width: 260px;
+}
+.kad-username-input:focus { border-color: var(--green); }
+.kad-status {
+  font-size: .8rem; color: var(--text3); display: flex; align-items: center; gap: 6px;
+}
+.kad-status.live { color: var(--green); }
+
+.kad-empty {
+  text-align: center; padding: 40px 20px; color: var(--text3);
+  font-size: .9rem; line-height: 1.6;
+}
+.kad-empty strong { color: var(--text2); display: block; margin-bottom: 6px; font-size: 1rem; }
+
+.kad-refresh-btn {
+  font-size: .75rem; color: var(--text3); background: none; border: none;
+  cursor: pointer; font-family: var(--theme-font-body); padding: 0;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.kad-refresh-btn:hover { color: var(--text); }
+
+@media (max-width: 900px) {
+  .tab-nav { width: 100%; }
+  .tab-btn { flex: 1; justify-content: center; padding: 8px 10px; font-size: .78rem; }
+  .kad-boards-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -797,6 +924,15 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
       </div>
     </div>
     <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
+    <div style="margin-bottom: 24px;">
+      <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">KADMMUNITY</div>
+      <div style="font-size:0.85rem; color:var(--text2); margin-bottom:12px; line-height:1.5;">Appear on the community leaderboard. Enter your Neopets username and your stats will be submitted on your next sync.</div>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="kad-username-setting" placeholder="Your Neopets username" class="kad-username-input" style="max-width:100%; flex:1;" oninput="saveKadUsername(this.value)">
+      </div>
+      <div style="margin-top:8px; font-size:0.78rem; color:var(--text3);">Leave blank to opt out. Honor system — use your real username!</div>
+    </div>
+    <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
     <div>
       <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">RESOURCES</div>
       <a href="https://greasyfork.org/en/scripts/581360-statdoatie-analytics-sync" target="_blank" class="btn" style="width: 100%; justify-content: center; background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; border: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
@@ -835,82 +971,110 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   </div>
 
   <div id="dashboard" class="hidden" style="display:flex; flex-direction:column; gap:32px;">
-    
-    <div class="stats-grid" id="stats-grid"></div>
 
-    <div class="card analytics-card" style="display:flex; flex-direction:column;">
-      <div class="card-header" style="margin-bottom:12px; flex-wrap:wrap; gap:12px;">
-        <span class="card-title">Analytics</span>
-        
-        <select id="mobile-chart-select" class="btn" onchange="renderMainChart(this.value)" style="appearance:none; -webkit-appearance:none; padding-right:32px; background-image:url('data:image/svg+xml;utf8,<svg viewBox=\"0 0 24 24\" fill=\"white\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5H7z\"/></svg>'); background-repeat:no-repeat; background-position:right 10px center; cursor:pointer;">
-          <option value="heatmap">Feed Activity (Heatmap)</option>
-          <option value="daily">Daily Feeds</option>
-          <option value="cumul">Cumulative Growth</option>
-          <option value="np">NP Spent Tracker</option>
-          <option value="unique">Unique Items Fed</option>
-          <option value="dow">Activity by Day</option>
-          <option value="hour">Activity by Hour</option>
-          <option value="tiers">Item Price Tiers</option>
-          <option value="log">Raw Feed Log</option>
-        </select>
-      </div>
-      
-      <div class="chart-wrap" style="flex:1;">
-        <div id="canvas-view" style="width:100%; min-height:350px;" class="hidden">
-           <canvas id="mainChart" role="img" aria-label="Main metrics chart"></canvas>
-        </div>
-        
-        <div id="log-view" class="hidden" style="max-height:400px; overflow-y:auto; padding-right:10px;">
-           <div id="log-count-label" style="font-size:0.8rem; color:var(--text3); margin-bottom:10px; font-weight:600;"></div>
-           <div id="log-list"></div>
-        </div>
+    <!-- TAB NAV -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('my-stats')">My Stats</button>
+      <button class="tab-btn" onclick="switchTab('kadmmunity')">Kadmmunity</button>
+    </div>
 
-        <div id="heatmap-view">
-          <div class="heatmap-header" style="display:flex; justify-content:flex-end;">
-            <span class="heatmap-meta" id="heatmap-meta"></span>
+    <!-- MY STATS TAB -->
+    <div id="tab-my-stats">
+      <div class="stats-grid" id="stats-grid" style="margin-bottom:32px;"></div>
+
+      <div class="card analytics-card" style="display:flex; flex-direction:column; margin-bottom:32px;">
+        <div class="card-header" style="margin-bottom:12px; flex-wrap:wrap; gap:12px;">
+          <span class="card-title">Analytics</span>
+          <select id="mobile-chart-select" class="btn" onchange="renderMainChart(this.value)" style="appearance:none; -webkit-appearance:none; padding-right:32px; background-image:url('data:image/svg+xml;utf8,<svg viewBox=\"0 0 24 24\" fill=\"white\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5H7z\"/></svg>'); background-repeat:no-repeat; background-position:right 10px center; cursor:pointer;">
+            <option value="heatmap">Feed Activity (Heatmap)</option>
+            <option value="daily">Daily Feeds</option>
+            <option value="cumul">Cumulative Growth</option>
+            <option value="np">NP Spent Tracker</option>
+            <option value="unique">Unique Items Fed</option>
+            <option value="dow">Activity by Day</option>
+            <option value="hour">Activity by Hour</option>
+            <option value="tiers">Item Price Tiers</option>
+            <option value="log">Raw Feed Log</option>
+          </select>
+        </div>
+        <div class="chart-wrap" style="flex:1;">
+          <div id="canvas-view" style="width:100%; min-height:350px;" class="hidden">
+            <canvas id="mainChart" role="img" aria-label="Main metrics chart"></canvas>
           </div>
-          <div class="heatmap-outer">
-            <div class="heatmap-inner" id="heatmap-inner"></div>
+          <div id="log-view" class="hidden" style="max-height:400px; overflow-y:auto; padding-right:10px;">
+            <div id="log-count-label" style="font-size:0.8rem; color:var(--text3); margin-bottom:10px; font-weight:600;"></div>
+            <div id="log-list"></div>
           </div>
-          <div class="heatmap-footer">
-            <span style="font-size:.75rem; color:var(--text3);">NST timezone · hover for details</span>
-            <div class="heatmap-legend">
-              <span>Less</span>
-              <div class="heatmap-legend-cells">
-                <div class="heatmap-legend-cell" style="background:var(--heatmap-empty)"></div>
-                <div class="heatmap-legend-cell" style="background:var(--heatmap-1)"></div>
-                <div class="heatmap-legend-cell" style="background:var(--heatmap-2)"></div>
-                <div class="heatmap-legend-cell" style="background:var(--heatmap-3)"></div>
-                <div class="heatmap-legend-cell" style="background:var(--heatmap-4)"></div>
-              </div>
-              <span>More</span>
+          <div id="heatmap-view">
+            <div class="heatmap-header" style="display:flex; justify-content:flex-end;">
+              <span class="heatmap-meta" id="heatmap-meta"></span>
             </div>
+            <div class="heatmap-outer">
+              <div class="heatmap-inner" id="heatmap-inner"></div>
+            </div>
+            <div class="heatmap-footer">
+              <span style="font-size:.75rem; color:var(--text3);">NST timezone · hover for details</span>
+              <div class="heatmap-legend">
+                <span>Less</span>
+                <div class="heatmap-legend-cells">
+                  <div class="heatmap-legend-cell" style="background:var(--heatmap-empty)"></div>
+                  <div class="heatmap-legend-cell" style="background:var(--heatmap-1)"></div>
+                  <div class="heatmap-legend-cell" style="background:var(--heatmap-2)"></div>
+                  <div class="heatmap-legend-cell" style="background:var(--heatmap-3)"></div>
+                  <div class="heatmap-legend-cell" style="background:var(--heatmap-4)"></div>
+                </div>
+                <span>More</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card db-card" id="db-card" style="padding:0;">
+        <div class="card-header" style="cursor:pointer; margin:0; padding:28px;" onclick="document.getElementById('db-card').classList.toggle('expanded')">
+          <div style="display:flex; flex-direction:column; gap:16px; width:100%;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="card-title">Item Value DB <span style="font-size:0.6em; margin-left:8px; opacity:0.6;">▼</span></span>
+              <span class="card-meta" id="item-count">0 Items</span>
+            </div>
+            <div id="db-preview" class="db-preview-container"></div>
+          </div>
+        </div>
+        <div class="db-card-body">
+          <div style="padding: 0 28px; margin-bottom: 16px;">
+            <input type="text" class="search-input" id="db-search" placeholder="Search items..." oninput="handleDbSearch(this.value)" onclick="event.stopPropagation();">
+          </div>
+          <div class="table-wrap">
+            <table id="item-table">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card db-card" id="db-card" style="padding:0;">
-      <div class="card-header" style="cursor:pointer; margin:0; padding:28px;" onclick="document.getElementById('db-card').classList.toggle('expanded')">
-        <div style="display:flex; flex-direction:column; gap:16px; width:100%;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span class="card-title">Item Value DB <span style="font-size:0.6em; margin-left:8px; opacity:0.6;">▼</span></span>
-            <span class="card-meta" id="item-count">0 Items</span>
+    <!-- KADMMUNITY TAB -->
+    <div id="tab-kadmmunity" class="hidden">
+
+      <!-- username / submit bar -->
+      <div class="card" style="margin-bottom:24px; padding:20px 24px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; flex:1;">
+            <span style="font-family:var(--theme-font-display); font-weight:700; font-size:1rem; white-space:nowrap;">Your username</span>
+            <input type="text" id="kad-username-bar" class="kad-username-input" placeholder="Enter Neopets username..." oninput="saveKadUsername(this.value)">
           </div>
-          <div id="db-preview" class="db-preview-container"></div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span class="kad-status" id="kad-submit-status">—</span>
+            <button class="btn btn-primary" onclick="submitToKadmmunity()" id="kad-submit-btn" style="white-space:nowrap;">Submit My Stats</button>
+            <button class="kad-refresh-btn" onclick="loadKadmmunity()">Refresh leaderboard</button>
+          </div>
         </div>
       </div>
-      
-      <div class="db-card-body">
-        <div style="padding: 0 28px; margin-bottom: 16px;">
-          <input type="text" class="search-input" id="db-search" placeholder="Search items..." oninput="handleDbSearch(this.value)" onclick="event.stopPropagation();">
-        </div>
-        <div class="table-wrap">
-          <table id="item-table">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
-        </div>
+
+      <!-- leaderboard content -->
+      <div id="kad-content">
+        <div class="kad-empty"><strong>Loading Kadmmunity...</strong>Fetching the latest standings.</div>
       </div>
     </div>
 
@@ -1092,6 +1256,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  initKadUsernameFields();
   setTimeout(() => { if (feedLog.length > 0) queueRender(); }, 50);
 });
 
@@ -1950,6 +2115,283 @@ function renderStreak() {
   const b = document.getElementById('streak-badge');
   document.getElementById('streak-val').textContent = streak;
   b.classList.toggle('hidden', streak === 0 || currentMonth !== 'all');
+}
+
+
+// ─── SUPABASE CONFIG ───
+const SUPA_URL = 'https://bxevxfrsilqefwlhhmei.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4ZXZ4ZnJzaWxxZWZ3bGhobWVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMzgwNDgsImV4cCI6MjA5NjcxNDA0OH0.nVq3-Tvf7_iltPTOnwyN-1WvXypZbeGiO6x2d7ziHrQ';
+
+async function supaFetch(path, options = {}) {
+  const res = await fetch(`${SUPA_URL}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      'apikey': SUPA_KEY,
+      'Authorization': `Bearer ${SUPA_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal',
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Supabase error ${res.status}: ${err}`);
+  }
+  // 204 No Content on upserts
+  if (res.status === 204 || res.headers.get('content-length') === '0') return null;
+  return res.json();
+}
+
+// ─── TAB SWITCHING ───
+let activeTab = 'my-stats';
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tab-btn[onclick="switchTab('${tab}')"]`).classList.add('active');
+  document.getElementById('tab-my-stats').classList.toggle('hidden', tab !== 'my-stats');
+  document.getElementById('tab-kadmmunity').classList.toggle('hidden', tab !== 'kadmmunity');
+  document.getElementById('filter-bar').classList.toggle('hidden', tab !== 'my-stats');
+  if (tab === 'kadmmunity') loadKadmmunity();
+}
+
+// ─── USERNAME PERSISTENCE ───
+let kadUsername = localStorage.getItem('statdoatie_kad_username') || '';
+
+function saveKadUsername(val) {
+  kadUsername = val.trim();
+  localStorage.setItem('statdoatie_kad_username', kadUsername);
+  // keep both inputs in sync
+  const bar     = document.getElementById('kad-username-bar');
+  const setting = document.getElementById('kad-username-setting');
+  if (bar     && bar.value !== kadUsername) bar.value = kadUsername;
+  if (setting && setting.value !== kadUsername) setting.value = kadUsername;
+}
+
+function initKadUsernameFields() {
+  const bar     = document.getElementById('kad-username-bar');
+  const setting = document.getElementById('kad-username-setting');
+  if (bar)     bar.value     = kadUsername;
+  if (setting) setting.value = kadUsername;
+}
+
+// ─── COMPUTE WEEK STATS FROM FEEDLOG ───
+function computeWeekStats() {
+  const now = Date.now();
+  const weekMs = 7 * 24 * 60 * 60 * 1000;
+  const weekStart = now - weekMs;
+
+  let feeds_week = 0, feeds_alltime = 0;
+  let sniped_week = 0, sniped_alltime = 0;
+  let np_spent_week = 0, np_spent_alltime = 0;
+  const uniqueSet = new Set();
+
+  for (const e of feedLog) {
+    const ts = new Date(e.timestamp).getTime();
+    const isWeek = ts >= weekStart;
+    const price = getCached(e.item).price ?? 0;
+
+    if (e.status === 'success') {
+      feeds_alltime++;
+      np_spent_alltime += price;
+      uniqueSet.add(e.item);
+      if (isWeek) { feeds_week++; np_spent_week += price; }
+    } else {
+      sniped_alltime++;
+      if (isWeek) sniped_week++;
+    }
+  }
+
+  const total = feeds_alltime + sniped_alltime;
+  const win_rate_pct = total > 0 ? Math.round(feeds_alltime / total * 100) : 0;
+
+  return {
+    feeds_week, feeds_alltime,
+    sniped_week, sniped_alltime,
+    np_spent_week, np_spent_alltime,
+    unique_items: uniqueSet.size,
+    win_rate_pct
+  };
+}
+
+// ─── SUBMIT TO KADMMUNITY ───
+async function submitToKadmmunity() {
+  if (!kadUsername) {
+    toast('Enter your Neopets username first!');
+    document.getElementById('kad-username-bar').focus();
+    return;
+  }
+  if (feedLog.length === 0) {
+    toast('No feed data to submit yet.');
+    return;
+  }
+
+  const btn    = document.getElementById('kad-submit-btn');
+  const status = document.getElementById('kad-submit-status');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+  status.textContent = '';
+  status.className = 'kad-status';
+
+  try {
+    const stats = computeWeekStats();
+    await supaFetch('kadmmunity', {
+      method: 'POST',
+      headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({
+        username: kadUsername.toLowerCase(),
+        submitted_at: new Date().toISOString(),
+        ...stats
+      })
+    });
+    status.textContent = '✓ Submitted!';
+    status.className = 'kad-status live';
+    toast(`✨ Stats submitted for ${kadUsername}!`);
+    loadKadmmunity();
+  } catch (err) {
+    console.error(err);
+    status.textContent = 'Submit failed';
+    status.className = 'kad-status';
+    toast('Could not reach Kadmmunity. Check your connection.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit My Stats';
+  }
+}
+
+// ─── LOAD LEADERBOARD ───
+async function loadKadmmunity() {
+  const container = document.getElementById('kad-content');
+  container.innerHTML = '<div class="kad-empty"><strong>Loading...</strong>Fetching the latest standings.</div>';
+
+  try {
+    const rows = await supaFetch('kadmmunity?select=*&order=feeds_week.desc&limit=200', {
+      headers: { 'Prefer': '' }
+    });
+
+    if (!rows || rows.length === 0) {
+      container.innerHTML = `<div class="kad-empty"><strong>No data yet!</strong>Be the first to submit your stats.</div>`;
+      return;
+    }
+
+    const me = kadUsername.toLowerCase();
+
+    // Sort variants
+    const byFeedsWeek   = [...rows].sort((a,b) => b.feeds_week - a.feeds_week);
+    const bySnipedWeek  = [...rows].sort((a,b) => b.sniped_week - a.sniped_week);
+    const byNPAlltime   = [...rows].sort((a,b) => b.np_spent_alltime - a.np_spent_alltime);
+    const byFeedsAll    = [...rows].sort((a,b) => b.feeds_alltime - a.feeds_alltime);
+    const byUniqueItems = [...rows].sort((a,b) => b.unique_items - a.unique_items);
+    const byWinRate     = [...rows]
+      .filter(r => r.feeds_alltime >= 50)
+      .sort((a,b) => b.win_rate_pct - a.win_rate_pct);
+
+    // Aggregate top items: we don't have per-item community data in this schema,
+    // so we pull from everyone's unique_items as a proxy stand-in,
+    // and surface the top global items from the local feedLog enriched by community feed counts
+    // (full per-item community aggregation would need a separate table — noted for v2)
+
+    // Top feeder this week (hero card)
+    const topFeeder = byFeedsWeek[0];
+
+    container.innerHTML = `
+      ${topFeeder ? `
+      <div class="kad-hero">
+        <div class="kad-hero-label">🏆 Top Feeder This Week</div>
+        <div class="kad-hero-name">${escKad(topFeeder.username)}</div>
+        <div class="kad-hero-sub">${topFeeder.feeds_week.toLocaleString()} kads fed · ${topFeeder.win_rate_pct}% win rate</div>
+      </div>` : ''}
+
+      <div class="kad-boards-grid">
+
+        ${buildBoard('🐾 Top Feeders', 'This week\'s feeds', byFeedsWeek, me, r => ({
+          primary: r.feeds_week.toLocaleString(),
+          sub: 'kads fed'
+        }))}
+
+        ${buildBoard('😬 Bottom Feeders', 'This week\'s snipes', bySnipedWeek, me, r => ({
+          primary: r.sniped_week.toLocaleString(),
+          sub: 'times sniped'
+        }))}
+
+        ${buildBoard('💰 NP Spent', 'All-time', byNPAlltime, me, r => ({
+          primary: r.np_spent_alltime >= 1000000
+            ? (r.np_spent_alltime / 1000000).toFixed(1) + 'M'
+            : Math.round(r.np_spent_alltime / 1000) + 'k',
+          sub: 'NP spent'
+        }))}
+
+        ${buildBoard('🎯 All-Time Feeders', 'Total kads fed', byFeedsAll, me, r => ({
+          primary: r.feeds_alltime.toLocaleString(),
+          sub: 'kads fed'
+        }))}
+
+        ${buildBoard('🌟 Unique Items', 'Distinct items fed', byUniqueItems, me, r => ({
+          primary: r.unique_items.toLocaleString(),
+          sub: 'unique items'
+        }))}
+
+        ${byWinRate.length > 0 ? buildBoard('🎲 Win Rate', 'Min. 50 feeds', byWinRate, me, r => ({
+          primary: r.win_rate_pct + '%',
+          sub: `${r.feeds_alltime} feeds`
+        })) : ''}
+
+      </div>
+
+      <div style="text-align:center; margin-top:20px; font-size:.75rem; color:var(--text3);">
+        ${rows.length} players on the board · <button class="kad-refresh-btn" onclick="loadKadmmunity()">Refresh</button>
+      </div>
+    `;
+  } catch(err) {
+    console.error(err);
+    container.innerHTML = `<div class="kad-empty"><strong>Couldn't load leaderboard.</strong>Check your connection and try again.</div>`;
+  }
+}
+
+function escKad(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function rankClass(i) {
+  if (i === 0) return 'gold';
+  if (i === 1) return 'silver';
+  if (i === 2) return 'bronze';
+  return '';
+}
+
+function buildBoard(title, subtitle, rows, me, valueFn, limit = 10) {
+  const visible = rows.slice(0, limit);
+  // Check if "me" falls outside top limit
+  const myIdx = rows.findIndex(r => r.username === me);
+  const myRowOutside = myIdx >= limit ? rows[myIdx] : null;
+
+  return `
+    <div class="kad-board-card">
+      <div class="kad-board-header">
+        <div>
+          <div class="kad-board-title">${title}</div>
+          <div style="font-size:.75rem; color:var(--text3); margin-top:2px;">${subtitle}</div>
+        </div>
+      </div>
+      <div class="kad-board">
+        ${visible.map((r, i) => {
+          const isMe = r.username === me;
+          const val = valueFn(r);
+          return `
+            <div class="kad-row${isMe ? ' kad-you' : ''}">
+              <div class="kad-rank ${rankClass(i)}">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
+              <div class="kad-username">${escKad(r.username)}${isMe ? '<span class="you-tag">YOU</span>' : ''}</div>
+              <div class="kad-value">${val.primary}<div class="kad-value-sub">${val.sub}</div></div>
+            </div>`;
+        }).join('')}
+        ${myRowOutside ? `
+          <div style="text-align:center; font-size:.75rem; color:var(--text3); padding:6px 0;">· · ·</div>
+          <div class="kad-row kad-you">
+            <div class="kad-rank">${myIdx + 1}</div>
+            <div class="kad-username">${escKad(myRowOutside.username)}<span class="you-tag">YOU</span></div>
+            <div class="kad-value">${valueFn(myRowOutside).primary}<div class="kad-value-sub">${valueFn(myRowOutside).sub}</div></div>
+          </div>` : ''}
+      </div>
+    </div>`;
 }
 
 function renderLog(data) {
