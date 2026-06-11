@@ -2391,7 +2391,7 @@ function buildHourHeatmap(globalHours, playerCount) {
   const totalFeeds = globalHours.reduce((a, b) => a + b, 0);
 
   // Find the peak hour
-  const peakHour = globalHours.indexOf(max);
+  const peakHour = totalFeeds > 0 ? globalHours.indexOf(max) : null;
   const fmtHour = h => {
     const ampm = h >= 12 ? 'PM' : 'AM';
     return `${h % 12 || 12}${ampm}`;
@@ -2427,7 +2427,7 @@ function buildHourHeatmap(globalHours, playerCount) {
         </div>
         <div style="text-align:right;">
           <div style="font-size:.75rem; color:var(--text3);">Peak hour</div>
-          <div style="font-family:var(--theme-font-display); font-weight:800; font-size:1.1rem; color:var(--green);">${fmtHour(peakHour)} NST</div>
+          <div style="font-family:var(--theme-font-display); font-weight:800; font-size:1.1rem; color:var(--green);">${peakHour !== null ? fmtHour(peakHour) + ' NST' : '—'}</div>
         </div>
       </div>
       <div class="kad-hour-grid">${cells}</div>
