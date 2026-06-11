@@ -2261,24 +2261,34 @@ async function submitToKadmmunity() {
 
   try {
     const stats = computeWeekStats();
-    await supaFetch('kadmmunity', {
+    console.log('[Kadmmunity] Submitting:', JSON.stringify({ username: kadUsername.toLowerCase(), ...stats }));
+    const res = await fetch(`${SUPA_URL}/rest/v1/kadmmunity`, {
       method: 'POST',
-      headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates,return=minimal'
+      },
       body: JSON.stringify({
         username: kadUsername.toLowerCase(),
         submitted_at: new Date().toISOString(),
         ...stats
       })
     });
+    console.log('[Kadmmunity] Response status:', res.status);
+    const body = await res.text();
+    console.log('[Kadmmunity] Response body:', body);
+    if (!res.ok) throw new Error(`${res.status}: ${body}`);
     status.textContent = '✓ Submitted!';
     status.className = 'kad-status live';
     toast(`✨ Stats submitted for ${kadUsername}!`);
     loadKadmmunity();
   } catch (err) {
-    console.error(err);
+    const msg = err.message || String(err);
     status.textContent = 'Submit failed';
     status.className = 'kad-status';
-    toast('Could not reach Kadmmunity. Check your connection.');
+    toast(`Error: ${msg.slice(0, 120)}`);
   } finally {
     btn.disabled = false;
     btn.textContent = 'Submit My Stats';
