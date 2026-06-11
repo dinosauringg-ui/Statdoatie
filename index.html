@@ -732,10 +732,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
     <button class="btn btn-icon" onclick="triggerExtensionSync()" title="Sync Extension Data" style="background: var(--text); color: var(--bg);">
       <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
     </button>
-    
-    <button class="btn btn-icon" onclick="openKadmmunity()" title="Kadmmunity Leaderboard">
-      <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-    </button>
 
     <button class="btn btn-icon" onclick="toggleShareMode()" title="Share Stat Card">
       <svg viewBox="0 0 24 24" style="width:16px; height:16px;" fill="currentColor"><path d="M4 4h3l2-2h6l2 2h3c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm8 3c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
@@ -757,28 +753,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
     <span class="status-chip" id="filter-status" style="margin-left: 10px;">Filter: Off</span>
   </div>
   <button class="btn" onclick="resetFilters()">Reset View</button>
-</div>
-
-<div id="kadmmunity-modal" class="modal-overlay hidden">
-  <div class="modal-card card">
-    <div class="card-header" style="margin-bottom: 16px;">
-      <span class="card-title">Kadmmunity Leaderboard</span>
-      <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('kadmmunity-modal').classList.add('hidden')">✕</button>
-    </div>
-    
-    <div style="margin-bottom: 24px; padding: 16px; background: var(--table-row); border-radius: var(--theme-radius); border: 1px solid var(--border);">
-       <div style="font-size: 0.85rem; color: var(--text2); margin-bottom: 8px; font-weight: 600;">SUBMIT YOUR STATS</div>
-       <div style="display: flex; gap: 8px;">
-          <input type="text" id="kad-username-input" placeholder="Neopets Username" class="search-input" style="flex: 1;">
-          <button class="btn btn-primary" onclick="submitKadmmunityStats()">Submit</button>
-       </div>
-    </div>
-
-    <div style="font-size: 0.85rem; color: var(--text2); margin-bottom: 8px; font-weight: 600;">GLOBAL TOP 10 (ALL-TIME FEEDS)</div>
-    <div id="kadmmunity-leaderboard" style="display: flex; flex-direction: column; gap: 8px;">
-       <div style="text-align:center; padding: 20px; color: var(--text3);">Loading leaderboard...</div>
-    </div>
-  </div>
 </div>
 
 <div id="item-modal" class="modal-overlay hidden">
@@ -814,26 +788,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
     <div style="display:flex; gap:8px;">
       <input type="number" id="manual-price-input" placeholder="e.g. 15000" style="flex:1; background:var(--table-row); border:1px solid var(--border); color:var(--text); padding:0 16px; border-radius:var(--btn-radius); font-family:var(--theme-font-body); outline:none;">
       <button class="btn btn-primary" onclick="saveManualPrice()">Save Price</button>
-    </div>
-  </div>
-</div>
-
-<div id="chart-modal" class="modal-overlay hidden">
-  <div class="modal-card card">
-    <div class="card-header" style="margin-bottom: 24px;">
-      <span class="card-title">Select Metric</span>
-      <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('chart-modal').classList.add('hidden')">✕</button>
-    </div>
-    <div style="display:flex; flex-direction:column; gap:10px;">
-      <button class="btn chart-btn" data-chart="heatmap" onclick="renderMainChart('heatmap'); document.getElementById('chart-modal').classList.add('hidden')">Feed Activity (Heatmap)</button>
-      <button class="btn chart-btn" data-chart="daily" onclick="renderMainChart('daily'); document.getElementById('chart-modal').classList.add('hidden')">Daily Feeds</button>
-      <button class="btn chart-btn" data-chart="cumul" onclick="renderMainChart('cumul'); document.getElementById('chart-modal').classList.add('hidden')">Cumulative Growth</button>
-      <button class="btn chart-btn" data-chart="np" onclick="renderMainChart('np'); document.getElementById('chart-modal').classList.add('hidden')">NP Spent Tracker</button>
-      <button class="btn chart-btn" data-chart="unique" onclick="renderMainChart('unique'); document.getElementById('chart-modal').classList.add('hidden')">Unique Items Fed</button>
-      <button class="btn chart-btn" data-chart="dow" onclick="renderMainChart('dow'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Day</button>
-      <button class="btn chart-btn" data-chart="hour" onclick="renderMainChart('hour'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Hour</button>
-      <button class="btn chart-btn" data-chart="tiers" onclick="renderMainChart('tiers'); document.getElementById('chart-modal').classList.add('hidden')">Item Price Tiers</button>
-      <button class="btn chart-btn" data-chart="log" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
     </div>
   </div>
 </div>
@@ -1019,135 +973,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 </main>
 
 <script>
-// ─── SUPABASE INTEGRATION (KADMMUNITY) ───
-const SUPABASE_URL = 'https://bxevxfrsilqefwlhhmei.supabase.co/rest/v1/kadmmunity';
-const SUPABASE_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4ZXZ4ZnJzaWxxZWZ3bGhobWVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMzgwNDgsImV4cCI6MjA5NjcxNDA0OH0.nVq3-Tvf7_iltPTOnwyN-1WvXypZbeGiO6x2d7ziHrQ';
-
-async function openKadmmunity() {
-    document.getElementById('kadmmunity-modal').classList.remove('hidden');
-    
-    // Auto-fill their saved username so they don't have to re-type it
-    const savedName = localStorage.getItem('statdoatie_username');
-    if (savedName) {
-        document.getElementById('kad-username-input').value = savedName;
-    }
-    
-    fetchKadmmunityLeaderboard();
-}
-
-async function fetchKadmmunityLeaderboard() {
-    const container = document.getElementById('kadmmunity-leaderboard');
-    if (!SUPABASE_KEY || SUPABASE_KEY === 'PASTE_YOUR_ANON_KEY_HERE') {
-        container.innerHTML = '<div style="color:var(--amber); text-align:center; padding:10px;">⚠️ Supabase Anon Key missing in HTML.</div>';
-        return;
-    }
-    
-    try {
-        const res = await fetch(`${SUPABASE_URL}?select=username,feeds_alltime,win_rate_pct&order=feeds_alltime.desc&limit=10`, {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        const data = await res.json();
-        
-        if (data.length === 0) {
-            container.innerHTML = '<div style="color:var(--text3); text-align:center; padding:10px;">No stats submitted yet. Be the first!</div>';
-            return;
-        }
-
-        container.innerHTML = data.map((user, i) => `
-            <div style="display: flex; align-items: center; justify-content: space-between; background: var(--table-row); padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border);">
-                <div style="display:flex; align-items:center; gap: 12px;">
-                    <span style="font-family:var(--theme-font-display); font-weight:800; color:${i===0 ? 'var(--amber)' : 'var(--text3)'}; font-size:1.2rem;">#${i+1}</span>
-                    <span style="font-weight:700; color:var(--text);">${user.username}</span>
-                </div>
-                <div style="text-align: right;">
-                    <div style="font-weight:800; color:var(--green);">${user.feeds_alltime.toLocaleString()} Fed</div>
-                    <div style="font-size:0.75rem; color:var(--text3);">${user.win_rate_pct}% WR</div>
-                </div>
-            </div>
-        `).join('');
-    } catch(e) {
-        container.innerHTML = '<div style="color:var(--red); text-align:center; padding:10px;">Failed to load leaderboard. Check console.</div>';
-        console.error("Supabase Fetch Error:", e);
-    }
-}
-
-async function submitKadmmunityStats() {
-    const usernameInput = document.getElementById('kad-username-input').value.trim();
-    if (!usernameInput) return toast('⚠️ Please enter a username first.');
-    if (feedLog.length === 0) return toast('⚠️ No feeds to submit!');
-
-    // Permanently save their username locally so it's always ready to go
-    localStorage.setItem('statdoatie_username', usernameInput);
-
-    toast('Calculating & Submitting...');
-
-    const now = new Date();
-    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    
-    let fW = 0, fA = 0, sW = 0, sA = 0, npW = 0, npA = 0;
-    let uniqueSet = new Set();
-
-    feedLog.forEach(e => {
-        const d = new Date(e.timestamp);
-        const isThisWeek = d >= oneWeekAgo;
-        const price = getCached(e.item).price || 0;
-
-        if (e.status === 'success') {
-            fA++;
-            npA += price;
-            uniqueSet.add(e.item);
-            if (isThisWeek) { fW++; npW += price; }
-        } else {
-            sA++;
-            if (isThisWeek) sW++;
-        }
-    });
-
-    const totalSeen = fA + sA;
-    const wr = totalSeen > 0 ? Math.round((fA / totalSeen) * 100) : 0;
-
-    const payload = {
-        username: usernameInput,
-        feeds_week: fW, feeds_alltime: fA,
-        sniped_week: sW, sniped_alltime: sA,
-        np_spent_week: npW, np_spent_alltime: npA,
-        unique_items: uniqueSet.size,
-        win_rate_pct: wr
-    };
-
-    try {
-        const response = await fetch(`${SUPABASE_URL}?on_conflict=username`, {
-            method: 'POST',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'resolution=merge-duplicates'
-            },
-            body: JSON.stringify(payload)
-        });
-
-        if (response.ok) {
-            toast('🏆 Stats successfully submitted to Kadmmunity!');
-            fetchKadmmunityLeaderboard(); 
-        } else {
-            console.error(await response.text());
-            toast('⚠️ Failed to submit to database. Double check console.');
-        }
-    } catch (err) {
-        console.error(err);
-        toast('⚠️ Network error connecting to Supabase.');
-    }
-}
-
 // ─── MEMOIZED DATA PARSING (PREVENTS LAG LOOPS) ───
-const nstFormatter = new Intl.DateTimeFormat('en-US', {
-  timeZone: 'America/Los_Angeles',
-  year: 'numeric', month: '2-digit', day: '2-digit',
-  hour: 'numeric', minute: '2-digit', second: '2-digit',
-  hour12: false
-});
-
 const memoizedDates = new Map();
 
 function getMemoizedDateInfo(e) {
@@ -1155,25 +981,31 @@ function getMemoizedDateInfo(e) {
   
   const d = new Date(e.timestamp);
   
+  // Safety check for invalid dates causing crash loops
   if (isNaN(d.getTime())) {
     const fallback = { nstDateStr: '1970-01-01', dow: 0, hour: 0 };
     memoizedDates.set(e.timestamp, fallback);
     return fallback;
   }
 
-  const parts = nstFormatter.formatToParts(d);
-  const p = {};
-  parts.forEach(part => { p[part.type] = part.value; });
+  // Cross-browser safe timezone parsing
+  const ptDate = new Date(d.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
   
-  let hour = parseInt(p.hour, 10);
-  if (hour === 24) hour = 0;
-
-  const safeDateForDow = new Date(Date.UTC(parseInt(p.year, 10), parseInt(p.month, 10) - 1, parseInt(p.day, 10)));
+  // If the browser STILL fails to parse it (looking at you, Safari)
+  if (isNaN(ptDate.getTime())) {
+    const fallback = { nstDateStr: '1970-01-01', dow: 0, hour: 0 };
+    memoizedDates.set(e.timestamp, fallback);
+    return fallback;
+  }
+  
+  const y = ptDate.getFullYear();
+  const m = String(ptDate.getMonth() + 1).padStart(2, '0');
+  const day = String(ptDate.getDate()).padStart(2, '0');
   
   const info = {
-    nstDateStr: `${p.year}-${p.month}-${p.day}`,
-    dow: safeDateForDow.getUTCDay(),
-    hour: hour
+    nstDateStr: `${y}-${m}-${day}`,
+    dow: ptDate.getDay(),
+    hour: ptDate.getHours()
   };
   
   memoizedDates.set(e.timestamp, info);
@@ -1219,6 +1051,15 @@ const DAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 let currentMainChartType = 'heatmap';
 
+window.chartPayload = {
+  labelsTime: [], dailyFed: [], dailySniped: [],
+  cumulFed: [], cumulSniped: [], cumulNP: [], cumulUnique: [],
+  labelsDow: [...DAYS],
+  dowFed: Array(7).fill(0), dowSniped: Array(7).fill(0),
+  hourFed: Array(24).fill(0), hourSniped: Array(24).fill(0),
+  tierCounts: [0, 0, 0, 0]
+};
+
 let currentThemeKey = localStorage.getItem('statdoatie_theme') || 'default';
 
 // ─── INIT ───
@@ -1233,6 +1074,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const parsed = JSON.parse(saved);
       if (parsed.length > 0) {
+        // Strip out any corrupted dates immediately on load so they don't crash the heatmap
         feedLog = parsed.filter(e => {
             const d = new Date(e.timestamp);
             return !isNaN(d.getTime());
@@ -1241,6 +1083,28 @@ document.addEventListener('DOMContentLoaded', () => {
         showDashboard();
       }
     } catch (e) { console.error("Failed to parse local storage", e); }
+  }
+  
+  const heatmapGrid = document.getElementById('heatmap-inner');
+  const tooltip = document.getElementById('hmap-tooltip');
+  if(heatmapGrid && tooltip) {
+    heatmapGrid.addEventListener('mouseover', e => {
+       if(e.target.classList.contains('heatmap-cell') && e.target.dataset.info) {
+          tooltip.textContent = e.target.dataset.info;
+          tooltip.classList.add('visible');
+       }
+    });
+    heatmapGrid.addEventListener('mousemove', e => {
+       if(e.target.classList.contains('heatmap-cell')) {
+          tooltip.style.left = (e.clientX + 14) + 'px';
+          tooltip.style.top  = (e.clientY - 32) + 'px';
+       }
+    });
+    heatmapGrid.addEventListener('mouseout', e => {
+       if(e.target.classList.contains('heatmap-cell')) {
+          tooltip.classList.remove('visible');
+       }
+    });
   }
   
   setTimeout(() => { if (feedLog.length > 0) queueRender(); }, 50);
@@ -1339,6 +1203,9 @@ function openItemModal(itemName) {
   const rate = seen > 0 ? Math.round((fed / seen) * 100) : 0;
   const cache = getCached(itemName);
   document.getElementById('item-modal-name').textContent = itemName;
+  document.getElementById('item-modal-img').src = cache.image || '';
+  document.getElementById('item-modal-img').style.display = cache.image ? 'block' : 'none';
+  document.getElementById('item-modal-price-display').textContent = `Current Price: ${cache.price != null ? cache.price.toLocaleString() + ' NP' : 'Unknown'}`;
   document.getElementById('item-modal-rate').textContent = rate + '%';
   document.getElementById('item-modal-seen').textContent = seen;
   document.getElementById('item-modal-fed').textContent = fed + ' Fed';
@@ -1396,6 +1263,7 @@ document.addEventListener('KadData_ExtToPage', e => {
     
     const addedCount = mergeData(records);
     
+    // Tell the extension we've securely saved the data so it can clear its own log!
     document.dispatchEvent(new CustomEvent('KadData_SyncComplete'));
     
     if(addedCount > 0) toast(`✨ Synced: ${addedCount} new records.`);
@@ -1505,6 +1373,7 @@ function mergeData(entries) {
   
   for(let e of entries) {
     if(!ex.has(e.timestamp + '|' + e.item)) {
+       // Only accept valid timestamps
        const d = new Date(e.timestamp);
        if(!isNaN(d.getTime())) {
            getMemoizedDateInfo(e);
@@ -1538,7 +1407,7 @@ function loadDemoData() {
   toast(`Simulated ${addedCount} new feeds`);
 }
 
-// ─── HEATMAP CALENDAR (STRICT 52 WEEK CAP) ───
+// ─── HEATMAP CALENDAR (CAPPED TO EXACTLY 52 WEEKS TO PREVENT DOM LEAKS) ───
 function renderHeatmap(data) {
   const container = document.getElementById('heatmap-inner');
   if (!container) return;
@@ -1558,14 +1427,17 @@ function renderHeatmap(data) {
 
   const maxFed = Math.max(1, ...Object.values(dayMap).map(v => v.fed));
 
+  // Anchor the end date to today
   const todayNSTStr = getMemoizedDateInfo({timestamp: new Date().toISOString()}).nstDateStr;
   const [tY, tM, tD] = todayNSTStr.split('-').map(Number);
   const todayNST = new Date(tY, tM - 1, tD);
 
   let endDate = new Date(todayNST);
+  // Roll forward to Saturday (end of week)
   endDate.setDate(endDate.getDate() + (6 - endDate.getDay())); 
 
   let startDate = new Date(endDate);
+  // Roll backwards EXACTLY 52 weeks (51 weeks + 6 days to hit Sunday)
   startDate.setDate(startDate.getDate() - (51 * 7) - 6); 
 
   const weeks = [];
@@ -1621,6 +1493,8 @@ function renderHeatmap(data) {
 
   const gridArea = document.createElement('div');
   gridArea.className = 'heatmap-grid-area';
+
+  const tooltip = document.getElementById('hmap-tooltip');
 
   weeks.forEach(week => {
     const weekCol = document.createElement('div');
