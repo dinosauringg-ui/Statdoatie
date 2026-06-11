@@ -249,7 +249,7 @@ body {
 .blob-2 { width: 60vw; height: 60vw; background: var(--purple); bottom: -20%; right: -10%; }
 .blob-3 { width: 45vw; height: 45vw; background: var(--teal); top: 30%; left: 40%; }
 
-/* ── HEADER & NAVIGATION TABS ── */
+/* ── HEADER ── */
 .header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 24px; height: 60px; background: var(--header-bg);
@@ -258,7 +258,7 @@ body {
   color: var(--header-text);
   transition: background 0.5s ease, color 0.5s ease, justify-content 0.3s ease;
 }
-.logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; width: 200px; }
+.logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .logo-icon {
   width: 32px; height: 32px; background: linear-gradient(135deg, var(--blue), var(--purple));
   border-radius: var(--theme-radius); display: flex; align-items: center; justify-content: center;
@@ -267,20 +267,7 @@ body {
 .logo-icon svg { width: 18px; height: 18px; fill: #ffffff; }
 .logo-text { font-family: var(--theme-font-display); font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; user-select: none; white-space: nowrap; }
 .logo-sub { font-size: .75rem; font-weight: 500; opacity: 0.7; white-space: nowrap; }
-
-/* The new Center Tab Switcher */
-.header-center {
-  display: flex; background: rgba(0,0,0,0.2); border-radius: 100px; padding: 4px;
-}
-.nav-tab {
-  background: transparent; border: none; color: var(--text3); font-family: var(--theme-font-body);
-  font-size: 0.85rem; font-weight: 700; padding: 6px 16px; border-radius: 100px; cursor: pointer;
-  transition: all 0.2s ease;
-}
-.nav-tab:hover { color: var(--text); }
-.nav-tab.active { background: var(--text); color: var(--bg); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-
-.header-right { display: flex; align-items: center; gap: 10px; width: 200px; justify-content: flex-end; }
+.header-right { display: flex; align-items: center; gap: 10px; }
 
 .pill-badge {
   display: inline-flex; align-items: center; gap: 6px; font-size: .75rem;
@@ -626,21 +613,6 @@ tbody td { padding: 12px 16px; font-size: .9rem; color: var(--text2); border: 1p
   border-radius: 100px; border: 1px solid var(--border);
 }
 
-/* ── KADMMUNITY HUB ── */
-.kadmmunity-leaderboard-list {
-  display: flex; flex-direction: column; gap: 8px;
-}
-.lb-row {
-  display: flex; align-items: center; justify-content: space-between; background: var(--table-row); 
-  padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border);
-}
-.lb-rank {
-  font-family: var(--theme-font-display); font-weight: 800; font-size: 1.4rem; min-width: 40px; color: var(--text3);
-}
-.lb-rank.gold { color: var(--amber); }
-.lb-rank.silver { color: #94a3b8; }
-.lb-rank.bronze { color: #b45309; }
-
 /* ── TOAST ── */
 .toast {
   position: fixed; bottom: 32px; right: 32px; background: var(--text);
@@ -657,7 +629,6 @@ input[type=file] { display: none; }
 body.share-mode .filter-bar,
 body.share-mode .db-card,
 body.share-mode .header-right,
-body.share-mode .header-center,
 body.share-mode .import-screen { display: none !important; }
 body.share-mode .header { justify-content: center; background: transparent; border-bottom: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
 body.share-mode .main { max-width: 480px; padding: 20px 16px 120px 16px; margin: 0 auto; }
@@ -689,11 +660,10 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
   .header-right { margin-top: 0; width: auto; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
   .logo-sub { display: none; }
   body.share-mode .logo-sub { display: block; }
-  .logo { width: auto; }
-  .header-right { width: auto; }
-  .logo-text { display: none; }
+  .logo-text { font-size: 1.1rem; }
   .pill-badge { padding: 4px 8px; font-size: 0.65rem; }
-  .status-chip { display: none; } /* Hide on mobile to save header space for the center toggle */
+  .status-chip { padding: 4px 8px; font-size: 0.65rem; }
+  #status-text { display: none; }
   .btn-icon { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .btn-icon svg { width: 16px !important; height: 16px !important; }
   .filter-bar { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
@@ -722,7 +692,9 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 }
 @media (max-width: 500px) { #streak-badge { display: none !important; } }
 @media (max-width: 400px) {
+  .logo-text { display: none; }
   body.share-mode .logo-text { display: block; } 
+  .logo-icon { margin-right: 4px; }
   .stats-grid { grid-template-columns: 1fr; }
   body.share-mode .stats-grid { grid-template-columns: 1fr 1fr; }
 }
@@ -750,12 +722,6 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
       <div class="logo-sub" id="logo-sub-text">Tracker</div>
     </div>
   </div>
-  
-  <div class="header-center">
-    <button class="nav-tab active" id="tab-personal" onclick="switchTab('personal')">My Stats</button>
-    <button class="nav-tab" id="tab-community" onclick="switchTab('community')">Kadmmunity</button>
-  </div>
-
   <div class="header-right">
     <span id="streak-badge" class="pill-badge hidden"><span id="streak-val">0</span> Day Streak</span>
     <div id="status-chip" class="status-chip">
@@ -765,6 +731,10 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
     
     <button class="btn btn-icon" onclick="triggerExtensionSync()" title="Sync Extension Data" style="background: var(--text); color: var(--bg);">
       <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+    </button>
+    
+    <button class="btn btn-icon" onclick="openKadmmunity()" title="Kadmmunity Leaderboard">
+      <svg viewBox="0 0 24 24" style="width:18px; height:18px;" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
     </button>
 
     <button class="btn btn-icon" onclick="toggleShareMode()" title="Share Stat Card">
@@ -787,6 +757,28 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
     <span class="status-chip" id="filter-status" style="margin-left: 10px;">Filter: Off</span>
   </div>
   <button class="btn" onclick="resetFilters()">Reset View</button>
+</div>
+
+<div id="kadmmunity-modal" class="modal-overlay hidden">
+  <div class="modal-card card">
+    <div class="card-header" style="margin-bottom: 16px;">
+      <span class="card-title">Kadmmunity Leaderboard</span>
+      <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('kadmmunity-modal').classList.add('hidden')">✕</button>
+    </div>
+    
+    <div style="margin-bottom: 24px; padding: 16px; background: var(--table-row); border-radius: var(--theme-radius); border: 1px solid var(--border);">
+       <div style="font-size: 0.85rem; color: var(--text2); margin-bottom: 8px; font-weight: 600;">SUBMIT YOUR STATS</div>
+       <div style="display: flex; gap: 8px;">
+          <input type="text" id="kad-username-input" placeholder="Neopets Username" class="search-input" style="flex: 1;">
+          <button class="btn btn-primary" onclick="submitKadmmunityStats()">Submit</button>
+       </div>
+    </div>
+
+    <div style="font-size: 0.85rem; color: var(--text2); margin-bottom: 8px; font-weight: 600;">GLOBAL TOP 10 (ALL-TIME FEEDS)</div>
+    <div id="kadmmunity-leaderboard" style="display: flex; flex-direction: column; gap: 8px;">
+       <div style="text-align:center; padding: 20px; color: var(--text3);">Loading leaderboard...</div>
+    </div>
+  </div>
 </div>
 
 <div id="item-modal" class="modal-overlay hidden">
@@ -822,6 +814,26 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
     <div style="display:flex; gap:8px;">
       <input type="number" id="manual-price-input" placeholder="e.g. 15000" style="flex:1; background:var(--table-row); border:1px solid var(--border); color:var(--text); padding:0 16px; border-radius:var(--btn-radius); font-family:var(--theme-font-body); outline:none;">
       <button class="btn btn-primary" onclick="saveManualPrice()">Save Price</button>
+    </div>
+  </div>
+</div>
+
+<div id="chart-modal" class="modal-overlay hidden">
+  <div class="modal-card card">
+    <div class="card-header" style="margin-bottom: 24px;">
+      <span class="card-title">Select Metric</span>
+      <button class="btn btn-icon" style="height:32px; width:32px;" onclick="document.getElementById('chart-modal').classList.add('hidden')">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button class="btn chart-btn" data-chart="heatmap" onclick="renderMainChart('heatmap'); document.getElementById('chart-modal').classList.add('hidden')">Feed Activity (Heatmap)</button>
+      <button class="btn chart-btn" data-chart="daily" onclick="renderMainChart('daily'); document.getElementById('chart-modal').classList.add('hidden')">Daily Feeds</button>
+      <button class="btn chart-btn" data-chart="cumul" onclick="renderMainChart('cumul'); document.getElementById('chart-modal').classList.add('hidden')">Cumulative Growth</button>
+      <button class="btn chart-btn" data-chart="np" onclick="renderMainChart('np'); document.getElementById('chart-modal').classList.add('hidden')">NP Spent Tracker</button>
+      <button class="btn chart-btn" data-chart="unique" onclick="renderMainChart('unique'); document.getElementById('chart-modal').classList.add('hidden')">Unique Items Fed</button>
+      <button class="btn chart-btn" data-chart="dow" onclick="renderMainChart('dow'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Day</button>
+      <button class="btn chart-btn" data-chart="hour" onclick="renderMainChart('hour'); document.getElementById('chart-modal').classList.add('hidden')">Activity by Hour</button>
+      <button class="btn chart-btn" data-chart="tiers" onclick="renderMainChart('tiers'); document.getElementById('chart-modal').classList.add('hidden')">Item Price Tiers</button>
+      <button class="btn chart-btn" data-chart="log" onclick="renderMainChart('log'); document.getElementById('chart-modal').classList.add('hidden')">Raw Feed Log</button>
     </div>
   </div>
 </div>
@@ -882,6 +894,14 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
         <button class="btn" onclick="clearData(); closeSettings();" style="justify-content:center; color:var(--red); border-color:var(--red-muted);">Wipe Dashboard Data</button>
       </div>
     </div>
+    <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
+    <div>
+      <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">RESOURCES</div>
+      <a href="https://greasyfork.org/en/scripts/581360-statdoatie-analytics-sync" target="_blank" class="btn" style="width: 100%; justify-content: center; background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; border: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
+        <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:currentColor; margin-right:8px;"><path d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"/></svg>
+        Get Tracker Extension
+      </a>
+    </div>
   </div>
 </div>
 
@@ -892,7 +912,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
 
 <div class="toast" id="toast"></div>
 
-<main class="main" id="view-personal">
+<main class="main">
   <div id="import-screen" class="import-screen">
     <div class="import-icon-wrap">
       <svg viewBox="0 0 24 24" fill="currentColor">
@@ -919,6 +939,7 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
     <div class="card analytics-card" style="display:flex; flex-direction:column;">
       <div class="card-header" style="margin-bottom:12px; flex-wrap:wrap; gap:12px;">
         <span class="card-title">Analytics</span>
+        
         <select id="mobile-chart-select" class="btn" onchange="renderMainChart(this.value)" style="appearance:none; -webkit-appearance:none; padding-right:32px; background-image:url('data:image/svg+xml;utf8,<svg viewBox=\"0 0 24 24\" fill=\"white\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5H7z\"/></svg>'); background-repeat:no-repeat; background-position:right 10px center; cursor:pointer;">
           <option value="heatmap">Feed Activity (Heatmap)</option>
           <option value="daily">Daily Feeds</option>
@@ -936,16 +957,19 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
         <div id="canvas-view" style="width:100%; min-height:350px;" class="hidden">
            <canvas id="mainChart" role="img" aria-label="Main metrics chart"></canvas>
         </div>
+        
         <div id="log-view" class="hidden" style="max-height:400px; overflow-y:auto; padding-right:10px;">
            <div id="log-count-label" style="font-size:0.8rem; color:var(--text3); margin-bottom:10px; font-weight:600;"></div>
            <div id="log-list"></div>
         </div>
+
         <div id="heatmap-view">
           <div class="heatmap-header" style="display:flex; justify-content:flex-end;">
             <span class="heatmap-meta" id="heatmap-meta"></span>
           </div>
           <div class="heatmap-outer">
-            <div class="heatmap-inner" id="heatmap-inner"></div>
+            <div class="heatmap-inner" id="heatmap-inner">
+              </div>
           </div>
           <div class="heatmap-footer">
             <span style="font-size:.75rem; color:var(--text3);">NST timezone · hover for details</span>
@@ -972,7 +996,8 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
             <span class="card-title">Item Value DB <span style="font-size:0.6em; margin-left:8px; opacity:0.6;">▼</span></span>
             <span class="card-meta" id="item-count">0 Items</span>
           </div>
-          <div id="db-preview" class="db-preview-container"></div>
+          <div id="db-preview" class="db-preview-container">
+             </div>
         </div>
       </div>
       
@@ -982,146 +1007,78 @@ body.share-mode .share-exit-fab { display: flex; animation: fadeup 0.4s ease; }
         </div>
         <div class="table-wrap">
           <table id="item-table">
-            <thead></thead>
+            <thead>
+              </thead>
             <tbody></tbody>
           </table>
         </div>
       </div>
     </div>
+
   </div>
 </main>
 
-<main class="main hidden" id="view-community">
-    
-    <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 20px;">
-        <h2 style="font-family: var(--theme-font-display); font-size: 2rem; font-weight: 800; margin-bottom: 12px; color: var(--text);">Contribute to the Hive Mind</h2>
-        <p style="font-size: 0.9rem; color: var(--text2); max-width: 400px; margin-bottom: 24px; line-height: 1.5;">
-            Update your personal stats to automatically climb the leaderboards and add your feeds to the global community tracker.
-        </p>
-        <div style="display: flex; gap: 8px; width: 100%; max-width: 350px;">
-            <input type="text" id="kad-username-input" placeholder="Neopets Username" class="search-input" style="flex: 1; text-align: center; font-size: 1rem; font-weight: 600;">
-            <button class="btn btn-primary" onclick="submitKadmmunityStats()">Sync</button>
-        </div>
-    </div>
-
-    <div class="card c-purple stat-card" style="text-align: center; padding: 40px 20px; border-color: var(--purple);">
-        <div class="stat-label" style="justify-content: center; color: var(--text);">TOTAL COMMUNITY FEEDS</div>
-        <div class="stat-num" id="global-total-feeds" style="font-size: 4rem; color: var(--purple); text-shadow: 0 0 30px rgba(139, 92, 246, 0.4);">0</div>
-        <div style="font-size: 0.85rem; color: var(--text2); margin-top: 8px;">Kads fed collectively by all Statdoatie users</div>
-    </div>
-
-    <div class="stats-grid">
-        <div class="card">
-            <div class="card-header" style="margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
-                <span class="card-title" style="color: var(--green);">Top Feeders</span>
-                <span class="card-meta">This Week</span>
-            </div>
-            <div id="lb-top-feeders" class="kadmmunity-leaderboard-list">
-                <div style="text-align:center; padding: 20px; color: var(--text3);">Loading...</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header" style="margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
-                <span class="card-title" style="color: var(--red);">Bottom Feeders</span>
-                <span class="card-meta">Most Snipes (This Week)</span>
-            </div>
-            <div id="lb-bottom-feeders" class="kadmmunity-leaderboard-list">
-                <div style="text-align:center; padding: 20px; color: var(--text3);">Loading...</div>
-            </div>
-        </div>
-        
-        <div class="card wide">
-            <div class="card-header" style="margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
-                <span class="card-title" style="color: var(--amber);">High Rollers</span>
-                <span class="card-meta">Most NP Spent (All Time)</span>
-            </div>
-            <div id="lb-high-rollers" class="kadmmunity-leaderboard-list">
-                <div style="text-align:center; padding: 20px; color: var(--text3);">Loading...</div>
-            </div>
-        </div>
-    </div>
-</main>
-
-
 <script>
-// ─── TAB NAVIGATION ───
-function switchTab(tabId) {
-    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-    document.getElementById(`tab-${tabId}`).classList.add('active');
-    
-    if (tabId === 'personal') {
-        document.getElementById('view-community').classList.add('hidden');
-        if (feedLog.length > 0) {
-            document.getElementById('dashboard').classList.remove('hidden');
-            document.getElementById('filter-bar').classList.remove('hidden');
-        } else {
-            document.getElementById('import-screen').classList.remove('hidden');
-        }
-    } else if (tabId === 'community') {
-        document.getElementById('import-screen').classList.add('hidden');
-        document.getElementById('dashboard').classList.add('hidden');
-        document.getElementById('filter-bar').classList.add('hidden');
-        document.getElementById('view-community').classList.remove('hidden');
-        
-        const savedName = localStorage.getItem('statdoatie_username');
-        if (savedName) document.getElementById('kad-username-input').value = savedName;
-        
-        fetchKadmmunityLeaderboards();
-    }
-}
-
 // ─── SUPABASE INTEGRATION (KADMMUNITY) ───
 const SUPABASE_URL = 'https://bxevxfrsilqefwlhhmei.supabase.co/rest/v1/kadmmunity';
 const SUPABASE_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4ZXZ4ZnJzaWxxZWZ3bGhobWVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMzgwNDgsImV4cCI6MjA5NjcxNDA0OH0.nVq3-Tvf7_iltPTOnwyN-1WvXypZbeGiO6x2d7ziHrQ';
 
-async function fetchKadmmunityLeaderboards() {
-    // Top Feeders (Weekly)
-    fetch(`${SUPABASE_URL}?select=username,feeds_week&order=feeds_week.desc&limit=10`, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } })
-        .then(r => r.json()).then(data => renderLeaderboardList('lb-top-feeders', data, 'feeds_week', 'Fed'));
-        
-    // Bottom Feeders (Weekly Snipes)
-    fetch(`${SUPABASE_URL}?select=username,sniped_week&order=sniped_week.desc&limit=10`, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } })
-        .then(r => r.json()).then(data => renderLeaderboardList('lb-bottom-feeders', data, 'sniped_week', 'Sniped'));
-
-    // High Rollers (All-Time NP)
-    fetch(`${SUPABASE_URL}?select=username,np_spent_alltime&order=np_spent_alltime.desc&limit=5`, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } })
-        .then(r => r.json()).then(data => renderLeaderboardList('lb-high-rollers', data, 'np_spent_alltime', 'NP'));
-
-    // Global Feed Counter
-    fetch(`${SUPABASE_URL}?select=feeds_alltime`, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } })
-        .then(r => r.json()).then(data => {
-            const sum = data.reduce((acc, row) => acc + (row.feeds_alltime || 0), 0);
-            animateCounter(document.getElementById('global-total-feeds'), sum, 1500);
-        });
+async function openKadmmunity() {
+    document.getElementById('kadmmunity-modal').classList.remove('hidden');
+    
+    // Auto-fill their saved username so they don't have to re-type it
+    const savedName = localStorage.getItem('statdoatie_username');
+    if (savedName) {
+        document.getElementById('kad-username-input').value = savedName;
+    }
+    
+    fetchKadmmunityLeaderboard();
 }
 
-function renderLeaderboardList(elementId, data, valKey, suffix) {
-    const el = document.getElementById(elementId);
-    if (!data || data.length === 0) {
-        el.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--text3);">No stats submitted yet.</div>';
+async function fetchKadmmunityLeaderboard() {
+    const container = document.getElementById('kadmmunity-leaderboard');
+    if (!SUPABASE_KEY || SUPABASE_KEY === 'PASTE_YOUR_ANON_KEY_HERE') {
+        container.innerHTML = '<div style="color:var(--amber); text-align:center; padding:10px;">⚠️ Supabase Anon Key missing in HTML.</div>';
         return;
     }
-    el.innerHTML = data.map((user, i) => {
-        let rankClass = '';
-        if(i===0) rankClass = 'gold'; else if(i===1) rankClass = 'silver'; else if(i===2) rankClass = 'bronze';
-        return `
-        <div class="lb-row">
-            <div style="display:flex; align-items:center; gap: 12px;">
-                <span class="lb-rank ${rankClass}">#${i+1}</span>
-                <span style="font-weight:700; color:var(--text);">${user.username}</span>
+    
+    try {
+        const res = await fetch(`${SUPABASE_URL}?select=username,feeds_alltime,win_rate_pct&order=feeds_alltime.desc&limit=10`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const data = await res.json();
+        
+        if (data.length === 0) {
+            container.innerHTML = '<div style="color:var(--text3); text-align:center; padding:10px;">No stats submitted yet. Be the first!</div>';
+            return;
+        }
+
+        container.innerHTML = data.map((user, i) => `
+            <div style="display: flex; align-items: center; justify-content: space-between; background: var(--table-row); padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border);">
+                <div style="display:flex; align-items:center; gap: 12px;">
+                    <span style="font-family:var(--theme-font-display); font-weight:800; color:${i===0 ? 'var(--amber)' : 'var(--text3)'}; font-size:1.2rem;">#${i+1}</span>
+                    <span style="font-weight:700; color:var(--text);">${user.username}</span>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-weight:800; color:var(--green);">${user.feeds_alltime.toLocaleString()} Fed</div>
+                    <div style="font-size:0.75rem; color:var(--text3);">${user.win_rate_pct}% WR</div>
+                </div>
             </div>
-            <div style="font-weight:800; color:var(--text);">${(user[valKey]||0).toLocaleString()} <span style="font-size:0.75rem; color:var(--text3); font-weight:600;">${suffix}</span></div>
-        </div>`;
-    }).join('');
+        `).join('');
+    } catch(e) {
+        container.innerHTML = '<div style="color:var(--red); text-align:center; padding:10px;">Failed to load leaderboard. Check console.</div>';
+        console.error("Supabase Fetch Error:", e);
+    }
 }
 
 async function submitKadmmunityStats() {
     const usernameInput = document.getElementById('kad-username-input').value.trim();
     if (!usernameInput) return toast('⚠️ Please enter a username first.');
-    if (feedLog.length === 0) return toast('⚠️ You need local feed data to submit!');
+    if (feedLog.length === 0) return toast('⚠️ No feeds to submit!');
 
+    // Permanently save their username locally so it's always ready to go
     localStorage.setItem('statdoatie_username', usernameInput);
+
     toast('Calculating & Submitting...');
 
     const now = new Date();
@@ -1136,7 +1093,9 @@ async function submitKadmmunityStats() {
         const price = getCached(e.item).price || 0;
 
         if (e.status === 'success') {
-            fA++; npA += price; uniqueSet.add(e.item);
+            fA++;
+            npA += price;
+            uniqueSet.add(e.item);
             if (isThisWeek) { fW++; npW += price; }
         } else {
             sA++;
@@ -1157,34 +1116,23 @@ async function submitKadmmunityStats() {
     };
 
     try {
-        // FOOLPROOF UPSERT: Manually check if user exists to bypass any broken SQL unique constraints
-        const urlWithUsername = `${SUPABASE_URL}?username=eq.${encodeURIComponent(usernameInput)}`;
-        const existingCheck = await fetch(urlWithUsername, {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        }).then(r => r.json());
+        const response = await fetch(`${SUPABASE_URL}?on_conflict=username`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(payload)
+        });
 
-        let res;
-        if (existingCheck && existingCheck.length > 0) {
-            // Update existing user
-            res = await fetch(urlWithUsername, {
-                method: 'PATCH',
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-        } else {
-            // Insert new user
-            res = await fetch(SUPABASE_URL, {
-                method: 'POST',
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-                body: JSON.stringify(payload)
-            });
-        }
-
-        if (res.ok) {
+        if (response.ok) {
             toast('🏆 Stats successfully submitted to Kadmmunity!');
-            fetchKadmmunityLeaderboards(); 
+            fetchKadmmunityLeaderboard(); 
         } else {
-            toast('⚠️ Failed to submit. Supabase rejected the payload.');
+            console.error(await response.text());
+            toast('⚠️ Failed to submit to database. Double check console.');
         }
     } catch (err) {
         console.error(err);
@@ -1241,6 +1189,21 @@ function queueRender() {
   }, 100); 
 }
 
+// ─── PURE CSS SHARE MODE ───
+function toggleShareMode() {
+  document.body.classList.toggle('share-mode');
+  
+  if (document.body.classList.contains('share-mode')) {
+    const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    document.getElementById('logo-sub-text').setAttribute('data-date', dateStr);
+    toast("Ready for screenshot! 📸");
+  }
+  
+  if(charts.main) {
+    setTimeout(() => { charts.main.resize(); }, 350); 
+  }
+}
+
 // ─── STATE ───
 let feedLog = [];
 let charts  = {};
@@ -1283,7 +1246,30 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => { if (feedLog.length > 0) queueRender(); }, 50);
 });
 
+// ─── ANIMATED COUNTER ───
+let activeCounters = {};
+function animateCounter(el, target, duration, formatter) {
+  if (!el) return;
+  const id = el.id;
+  if (activeCounters[id]) cancelAnimationFrame(activeCounters[id]);
+  
+  const startTime = performance.now();
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function tick(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const current = Math.round(easeOut(progress) * target);
+    el.textContent = formatter ? formatter(current) : current.toLocaleString();
+    if (progress < 1) activeCounters[id] = requestAnimationFrame(tick);
+    else el.textContent = formatter ? formatter(target) : (typeof target === 'string' ? target : target.toLocaleString());
+  }
+  activeCounters[id] = requestAnimationFrame(tick);
+}
+
 // ─── THEME ───
+function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
+function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
 function getCssVar(name) {
   return getComputedStyle(document.body).getPropertyValue(name).trim();
 }
@@ -1313,20 +1299,15 @@ function setTheme(key) {
 }
 
 // ─── UTILS ───
-function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
-function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
 function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg; el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 3000);
 }
 function showDashboard() {
-  // Only show dashboard if we are on the Personal tab
-  if (document.getElementById('tab-personal').classList.contains('active')) {
-      document.getElementById('import-screen').classList.add('hidden');
-      document.getElementById('dashboard').classList.remove('hidden');
-      document.getElementById('filter-bar').classList.remove('hidden');
-  }
+  document.getElementById('import-screen').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('filter-bar').classList.remove('hidden');
   document.getElementById('pulse-dot').style.display = '';
 }
 function getCached(name) {
@@ -1344,12 +1325,30 @@ function handleDbSort(key) {
   renderItemTable(getFilteredData());
 }
 
-function copyModalItemName() {
-  if (!currentOpenItem) return;
-  navigator.clipboard.writeText(currentOpenItem);
-  toast(`📋 Copied: ${currentOpenItem}`);
+// ─── ITEM CONTEXT MODAL ───
+document.addEventListener('click', e => {
+  const target = e.target.closest('.item-clickable');
+  if (target) openItemModal(target.dataset.name);
+});
+function openItemModal(itemName) {
+  currentOpenItem = itemName;
+  const allData = getFilteredData().filter(e => e.item === itemName);
+  const fed = allData.filter(e => e.status === 'success').length;
+  const missed = allData.filter(e => e.status === 'sniped').length;
+  const seen = fed + missed;
+  const rate = seen > 0 ? Math.round((fed / seen) * 100) : 0;
+  const cache = getCached(itemName);
+  document.getElementById('item-modal-name').textContent = itemName;
+  document.getElementById('item-modal-rate').textContent = rate + '%';
+  document.getElementById('item-modal-seen').textContent = seen;
+  document.getElementById('item-modal-fed').textContent = fed + ' Fed';
+  document.getElementById('item-modal-missed').textContent = missed + ' Missed';
+  const itemdbSlug = itemName.toLowerCase().replace(/['']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  document.getElementById('link-itemdb').href = `https://itemdb.com.br/item/${itemdbSlug}`;
+  document.getElementById('link-sdb').href = `https://www.neopets.com/safetydeposit.phtml?obj_name=${encodeURIComponent(itemName)}&exact_match=1`;
+  document.getElementById('manual-price-input').value = cache.price || '';
+  document.getElementById('item-modal').classList.remove('hidden');
 }
-
 function closeItemModal() {
   document.getElementById('item-modal').classList.add('hidden');
   currentOpenItem = null;
@@ -1369,16 +1368,21 @@ function saveManualPrice() {
     toast('⚠️ Please enter a valid number');
   }
 }
+function copyModalItemName() {
+  if (!currentOpenItem) return;
+  navigator.clipboard.writeText(currentOpenItem);
+  toast(`📋 Copied: ${currentOpenItem}`);
+}
 
 // ─── DATA SYNC ───
-let extTimeout;
+let syncTimeout;
 document.addEventListener('KadData_ExtAck', () => {
-  clearTimeout(extTimeout);
+  clearTimeout(syncTimeout);
   toast('Extension connected! Checking for new items...');
 });
 
 document.addEventListener('KadData_ExtToPage', e => {
-  clearTimeout(extTimeout);
+  clearTimeout(syncTimeout);
   let payload;
   try { payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   const records = Array.isArray(payload) ? payload : (payload.records || []);
@@ -1407,8 +1411,8 @@ document.addEventListener('KadData_ExtToPage', e => {
   }
 });
 function triggerExtensionSync() {
-  clearTimeout(extTimeout);
-  extTimeout = setTimeout(() => {
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(() => {
     toast('No active extension detected. Make sure it is installed and enabled!');
   }, 1500);
   toast('Requesting data from extension...');
@@ -1481,7 +1485,6 @@ function populateMonths() {
     availableMonths.map(m => `<option value="${m}">${m}</option>`).join('');
   select.value = currentMonth; updateFilterStatus();
 }
-
 function setMonth(val) { currentMonth = val; document.getElementById('month-select').value = val; updateFilterStatus(); queueRender(); }
 function changeMonth(dir) {
   if (availableMonths.length === 0) return;
@@ -1741,6 +1744,13 @@ function prepareChartData(data) {
 
 function renderMainChart(type) {
   currentMainChartType = type;
+  const chartNames = {
+    'daily': 'Daily Feeds', 'cumul': 'Cumulative Growth',
+    'np': 'NP Spent Tracker', 'unique': 'Unique Items Fed',
+    'dow': 'Activity by Day', 'hour': 'Activity by Hour',
+    'tiers': 'Item Price Tiers', 'heatmap': 'Feed Activity (Heatmap)', 'log': 'Raw Feed Log'
+  };
+  document.getElementById('current-chart-label').textContent = chartNames[type];
   document.getElementById('mobile-chart-select').value = type;
   
   document.querySelectorAll('.chart-btn').forEach(btn => {
@@ -2137,4 +2147,20 @@ function renderLog(data) {
     const m = new Date(e.timestamp).getMinutes().toString().padStart(2, '0');
     const dStr = info.nstDateStr.split('-');
     
-    const ptDateStr = `${MONTHS_SHORT[parseInt(dStr[1])-1]} ${parseInt(dStr[2])}, ${h}:${m}
+    const ptDateStr = `${MONTHS_SHORT[parseInt(dStr[1])-1]} ${parseInt(dStr[2])}, ${h}:${m} ${ampm}`;
+    
+    return `
+      <div class="log-entry" style="opacity: ${e.status === 'success' ? '1' : '0.6'}">
+        <div><div class="log-name item-clickable item-underline" data-name="${safeName}">${e.item}</div><div class="log-ts">${ptDateStr}</div></div>
+        ${priceHtml}
+        <span class="log-dot ${e.status}"></span>
+        <span></span>
+        <div class="log-status"><span class="badge ${e.status==='success'?'badge-green':'badge-red'}">${e.status==='success'?'Fed':'Sniped'}</span></div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('log-list').innerHTML = html;
+}
+</script>
+</body>
+</html>
