@@ -829,7 +829,7 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
     </div>
     <div>
       <div class="logo-text">Statdoatie</div>
-      <div class="logo-sub" id="logo-sub-text">Tracker</div>
+      <div class="logo-sub" id="logo-sub-text">by ext1nct</div>
     </div>
   </div>
   <div class="header-right">
@@ -994,6 +994,7 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
     </div>
     <h2>It's quiet in here...</h2>
     <p>Connect your <a href="https://greasyfork.org/en/scripts/581360-statdoatie-analytics-sync" target="_blank" style="color:var(--blue); text-decoration:none; font-weight:700;">Tampermonkey extension</a>, drop in a JSON save file, or load up some dummy data to see the dashboard in action.</p>
+    <p style="font-size:.8rem; color:var(--text3); margin-top:-20px; margin-bottom:32px;">Made with 💛 by <strong style="color:var(--text2);">ext1nct</strong></p>
     <div class="import-btns">
       <button class="btn btn-primary" id="empty-import-btn" onclick="triggerExtensionSync()">
         <svg viewBox="0 0 24 24" style="width:18px; height:18px; margin-right:6px;" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
@@ -1517,11 +1518,19 @@ function exportData() {
 function clearData() {
   if (!confirm('Wipe all dashboard data?')) return;
   feedLog = []; currentMonth = 'all'; derived = null;
+  memoizedDates.clear();
+  heatmapDataKey = null;
   if (charts.main) { try { charts.main.destroy(); } catch {} }
   charts = {};
   localStorage.removeItem('statdoatie_save');
   localStorage.removeItem('statdoatie_prices');
   itemdbCache = {};
+  // Reset tab back to My Stats
+  activeTab = 'my-stats';
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.tab-btn[onclick="switchTab(\'my-stats\')"]').classList.add('active');
+  document.getElementById('tab-my-stats').classList.remove('hidden');
+  document.getElementById('tab-kadmmunity').classList.add('hidden');
   document.getElementById('dashboard').classList.add('hidden');
   document.getElementById('filter-bar').classList.add('hidden');
   document.getElementById('import-screen').classList.remove('hidden');
