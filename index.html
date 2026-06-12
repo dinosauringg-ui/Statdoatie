@@ -1647,6 +1647,7 @@ async function syncCloud() {
   statusMsg.style.color = 'var(--text3)';
 
   try {
+    // 1. PULL FROM CLOUD
     const pullRes = await fetch(`${SUPA_URL}/rest/v1/rpc/pull_cloud_save`, {
       method: 'POST',
       headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json' },
@@ -1654,19 +1655,41 @@ async function syncCloud() {
     });
     
     if (!pullRes.ok) throw new Error('Pull failed');
-    const cloudData = await pullRes.json();
+    const cloudDataObj = await pullRes.json();
 
-    let added = 0;
-    if (cloudData && Array.isArray(cloudData) && cloudData.length > 0) {
-      added = mergeData(cloudData); 
+    let cloudLog = [];
+    let cloudTotal = 0;
+
+    // Graceful fallback just in case it catches an old sync format
+    if (Array.isArray(cloudDataObj)) {
+      cloudLog = cloudDataObj;
+    } else if (cloudDataObj && cloudDataObj.feed_log) {
+      cloudLog = cloudDataObj.feed_log;
+      cloudTotal = cloudDataObj.total_feeds || 0;
     }
 
-    if (feedLog.length > 0) {
+    // 2. MERGE TOTAL FEEDS
+    const localTotal = parseInt(localStorage.getItem('statdoatie_total_feeds') || '0', 10);
+    const bestTotal = Math.max(localTotal, cloudTotal);
+    localStorage.setItem('statdoatie_total_feeds', bestTotal);
+
+    // 3. MERGE FEED DATA
+    let added = 0;
+    if (cloudLog && Array.isArray(cloudLog) && cloudLog.length > 0) {
+      added = mergeData(cloudLog); 
+    }
+
+    // 4. PUSH COMBINED DATA BACK TO CLOUD
+    if (feedLog.length > 0 || bestTotal > 0) {
       statusMsg.textContent = 'Updating cloud save...';
       const pushRes = await fetch(`${SUPA_URL}/rest/v1/rpc/push_cloud_save`, {
         method: 'POST',
         headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ p_sync_key: syncKey, p_feed_log: feedLog })
+        body: JSON.stringify({ 
+          p_sync_key: syncKey, 
+          p_feed_log: feedLog,
+          p_total_feeds: bestTotal 
+        })
       });
       if (!pushRes.ok) throw new Error('Push failed');
     }
@@ -1674,6 +1697,9 @@ async function syncCloud() {
     statusMsg.textContent = `✓ Synced! Grabbed ${added} missing feeds from cloud.`;
     statusMsg.style.color = 'var(--green)';
     toast('Cloud sync complete!');
+    
+    // Force a UI refresh so the Total Feeds number ticks up instantly
+    queueRender();
 
   } catch (err) {
     statusMsg.textContent = 'Sync failed. Check your connection.';
@@ -1684,6 +1710,7 @@ async function syncCloud() {
     btn.textContent = 'Sync Devices ☁️';
   }
 }
+
 
 // ─── HEATMAP ───
 let heatmapDataKey = null;
