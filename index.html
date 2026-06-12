@@ -1465,11 +1465,13 @@ function copyModalItemName() {
 
 // ─── DATA SYNC ───
 let syncTimeout;
-document.addEventListener('KadData_ExtAck', () => {
+
+window.addEventListener('KadData_ExtAck', () => {
   clearTimeout(syncTimeout);
   toast('Extension connected! Checking for new items...');
 });
-document.addEventListener('KadData_ExtToPage', e => {
+
+window.addEventListener('KadData_ExtToPage', e => {
   clearTimeout(syncTimeout);
   let payload;
   try { payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
@@ -1488,8 +1490,7 @@ document.addEventListener('KadData_ExtToPage', e => {
     const totallyNewItems = newNames.filter(item => !(item in itemdbCache));
 
     const addedCount = mergeData(records);
-    
-    document.dispatchEvent(new CustomEvent('KadData_SyncComplete'));
+    window.dispatchEvent(new CustomEvent('KadData_SyncComplete'));
 
     if (addedCount > 0) toast(`✨ Synced: ${addedCount} new records. Extension cache wiped.`);
     else toast(`No new feeds since last sync.`);
@@ -1497,7 +1498,7 @@ document.addEventListener('KadData_ExtToPage', e => {
     if (totallyNewItems.length > 0) {
       const estimatedSeconds = Math.ceil(totallyNewItems.length / 25) * 2;
       toast(`Fetching prices for ${totallyNewItems.length} new items... (~${estimatedSeconds}s)`);
-      document.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: JSON.stringify(totallyNewItems) }));
+      window.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: JSON.stringify(totallyNewItems) }));
     }
   } else {
     toast('No new data found in extension');
@@ -1505,12 +1506,19 @@ document.addEventListener('KadData_ExtToPage', e => {
 });
 
 function triggerExtensionSync() {
+  // Fail-fast check to see if the DOM tag was injected
+  if (document.documentElement.getAttribute('data-extension-installed') !== 'true') {
+    toast('Extension not detected! Make sure Tampermonkey is running and the script is enabled.');
+    return;
+  }
+
   clearTimeout(syncTimeout);
   syncTimeout = setTimeout(() => {
-    toast('No active extension detected. Make sure it is installed and enabled!');
-  }, 1500);
+    toast('Extension is sleeping or blocked. Try reloading the page.');
+  }, 2000);
+  
   toast('Requesting data from extension...');
-  document.dispatchEvent(new CustomEvent('KadData_PageToExt'));
+  window.dispatchEvent(new CustomEvent('KadData_PageToExt'));
   try { closeSettings(); } catch(e) {}
 }
 
@@ -1521,12 +1529,13 @@ function fetchMissingPrices() {
     return !cached || cached.price == null;
   });
   if (missingItems.length === 0) { toast('No missing prices to fetch! Everything is up to date.'); return; }
+  
   const estimatedSeconds = Math.ceil(missingItems.length / 25) * 2;
   toast(`Syncing ${missingItems.length} items. This may take ~${estimatedSeconds} seconds...`);
-  document.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: JSON.stringify(missingItems) }));
+  window.dispatchEvent(new CustomEvent('KadData_RequestPrices', { detail: JSON.stringify(missingItems) }));
 }
 
-document.addEventListener('KadData_ReceivePrices', e => {
+window.addEventListener('KadData_ReceivePrices', e => {
   let newPrices;
   try { newPrices = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   const count = Object.keys(newPrices).filter(k => newPrices[k].price != null).length;
@@ -1536,19 +1545,7 @@ document.addEventListener('KadData_ReceivePrices', e => {
   if (count > 0) toast(`✨ Successfully synced ${count} missing prices`);
   else toast('No new prices found on itemdb.');
 });
-function handleFileLoad(e) {
-  const file = e.target.files[0]; if (!file) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    try {
-      const d = JSON.parse(ev.target.result);
-      if (Array.isArray(d)) { const addedCount = mergeData(d); toast(`Loaded JSON: ${addedCount} new records added`); }
-      else toast('Invalid format');
-    } catch { toast('Could not parse file'); }
-  };
-  r.readAsText(file);
-  e.target.value = '';
-}
+
 
 function exportData() {
   if (feedLog.length === 0) return toast('Nothing to export');
