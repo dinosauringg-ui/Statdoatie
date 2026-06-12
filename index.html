@@ -2139,16 +2139,23 @@ function renderStats(d) {
       </div>
     </div>
   `;
-  requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
     const fedEl  = document.getElementById('sn-fed');
     const rateEl = document.getElementById('sn-rate');
     const npEl   = document.getElementById('sn-np');
     const daysEl = document.getElementById('sn-days');
+    
     if (fedEl)  animateCounter(fedEl, d.totalHistoricalFed, 900);
     if (rateEl) animateCounter(rateEl, d.rate, 900, v => v + '%');
-    if (npEl && d.hasAnyPrice) animateCounter(npEl, Math.round(d.totalNP / 1000), 900, v => v.toLocaleString() + 'k');
+    if (npEl && d.hasAnyPrice) {
+      animateCounter(npEl, d.totalNP, 900, v => {
+        if (v >= 1000000) return (v / 1000000).toFixed(2).replace(/\.00$/, '') + 'm';
+        return Math.floor(v / 1000).toLocaleString() + 'k';
+      });
+    }
     if (daysEl) animateCounter(daysEl, d.days, 900);
   });
+
 }
 
 function renderItemTableFromDerived(d) {
