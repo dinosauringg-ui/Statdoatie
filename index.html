@@ -992,6 +992,19 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
         <button class="btn" onclick="clearData(); closeSettings();" style="justify-content:center; color:var(--red); border-color:var(--red-muted);">Wipe Dashboard Data</button>
       </div>
     </div>
+    
+    <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
+    <div>
+      <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">SECURE CLOUD SYNC</div>
+      <div style="font-size:0.85rem; color:var(--text2); margin-bottom:12px; line-height:1.5;">Enter a secret passphrase to merge your data across devices. Your local feeds and cloud feeds will be combined safely.</div>
+      
+      <div style="display:flex; gap:8px;">
+        <input type="password" id="sync-passphrase" placeholder="e.g. my-secret-kad-code" class="search-input" style="flex:1;">
+        <button class="btn btn-primary" onclick="syncCloud()" id="btn-cloud-sync" style="background:var(--blue); color:#fff; white-space:nowrap;">Sync Devices ☁️</button>
+      </div>
+      <div id="sync-status-msg" style="font-size:0.8rem; color:var(--text3); margin-top:8px;"></div>
+    </div>
+
     <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
     <div style="margin-bottom: 24px;">
       <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">KADMMUNITY</div>
@@ -1041,11 +1054,13 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
 
   <div id="dashboard" class="hidden" style="display:flex; flex-direction:column; gap:32px;">
 
+    <!-- TAB NAV -->
     <div class="tab-nav">
       <button class="tab-btn active" onclick="switchTab('my-stats')">My Stats</button>
       <button class="tab-btn" onclick="switchTab('kadmmunity')">Kadmmunity</button>
     </div>
 
+    <!-- MY STATS TAB -->
     <div id="tab-my-stats">
       <div class="stats-grid" id="stats-grid" style="margin-bottom:32px;"></div>
 
@@ -1121,8 +1136,10 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
       </div>
     </div>
 
+    <!-- KADMMUNITY TAB -->
     <div id="tab-kadmmunity" class="hidden">
 
+      <!-- username / submit bar -->
       <div class="card" style="margin-bottom:24px; padding:20px 24px;">
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; flex:1;">
@@ -1137,6 +1154,7 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
         </div>
       </div>
 
+      <!-- leaderboard content -->
       <div id="kad-content">
         <div class="kad-empty"><strong>Loading Kadmmunity...</strong>Fetching the latest standings.</div>
       </div>
@@ -1616,6 +1634,61 @@ function mergeData(entries) {
   showDashboard();
   queueRender();
   return newEntries.length;
+}
+
+// ─── 2-WAY CLOUD SYNC ───
+async function syncCloud() {
+  const syncKey = document.getElementById('sync-passphrase').value.trim();
+  const statusMsg = document.getElementById('sync-status-msg');
+  const btn = document.getElementById('btn-cloud-sync');
+
+  if (!syncKey) return toast('Please enter a sync passphrase first!');
+
+  btn.disabled = true;
+  btn.textContent = 'Syncing...';
+  statusMsg.textContent = 'Contacting cloud...';
+  statusMsg.style.color = 'var(--text3)';
+
+  try {
+    // 1. PULL FROM CLOUD
+    const pullRes = await fetch(`${SUPA_URL}/rest/v1/rpc/pull_cloud_save`, {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_sync_key: syncKey })
+    });
+    
+    if (!pullRes.ok) throw new Error('Pull failed');
+    const cloudData = await pullRes.json();
+
+    // 2. MERGE DATA
+    let added = 0;
+    if (cloudData && Array.isArray(cloudData) && cloudData.length > 0) {
+      added = mergeData(cloudData); 
+    }
+
+    // 3. PUSH COMBINED DATA BACK TO CLOUD
+    if (feedLog.length > 0) {
+      statusMsg.textContent = 'Updating cloud save...';
+      const pushRes = await fetch(`${SUPA_URL}/rest/v1/rpc/push_cloud_save`, {
+        method: 'POST',
+        headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p_sync_key: syncKey, p_feed_log: feedLog })
+      });
+      if (!pushRes.ok) throw new Error('Push failed');
+    }
+
+    statusMsg.textContent = `✓ Synced! Grabbed ${added} missing feeds from cloud.`;
+    statusMsg.style.color = 'var(--green)';
+    toast('Cloud sync complete!');
+
+  } catch (err) {
+    statusMsg.textContent = 'Sync failed. Check your connection.';
+    statusMsg.style.color = 'var(--red)';
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Sync Devices ☁️';
+  }
 }
 
 // ─── HEATMAP ───
