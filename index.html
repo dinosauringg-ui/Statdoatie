@@ -268,7 +268,7 @@ body {
   box-shadow: 0 0 10px var(--green); flex-shrink: 0; animation: pulsing 2s infinite;
 }
 @keyframes pulsing { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
-.status-chip { display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--header-text);
+.status-chip { inline-flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--header-text);
   font-weight: 600; background: var(--glass); padding: 6px 16px; border-radius: var(--btn-radius); border: 1px solid var(--border); white-space: nowrap; flex-shrink: 0;
 }
 
@@ -999,7 +999,7 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
       <div style="font-size:0.85rem; color:var(--text2); margin-bottom:12px; line-height:1.5;">Enter a secret passphrase to merge your data across devices. Your local feeds and cloud feeds will be combined safely.</div>
       
       <div style="display:flex; gap:8px;">
-        <input type="password" id="sync-passphrase" placeholder="e.g. my-secret-kad-code" class="search-input" style="flex:1;">
+        <input type="password" id="sync-passphrase" placeholder="e.g. my-secret-kad-code" class="search-input" style="flex:1;" oninput="saveSyncPassphrase(this.value)">
         <button class="btn btn-primary" onclick="syncCloud()" id="btn-cloud-sync" style="background:var(--blue); color:#fff; white-space:nowrap;">Sync Devices ☁️</button>
       </div>
       <div id="sync-status-msg" style="font-size:0.8rem; color:var(--text3); margin-top:8px;"></div>
@@ -1054,13 +1054,11 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
 
   <div id="dashboard" class="hidden" style="display:flex; flex-direction:column; gap:32px;">
 
-    <!-- TAB NAV -->
     <div class="tab-nav">
       <button class="tab-btn active" onclick="switchTab('my-stats')">My Stats</button>
       <button class="tab-btn" onclick="switchTab('kadmmunity')">Kadmmunity</button>
     </div>
 
-    <!-- MY STATS TAB -->
     <div id="tab-my-stats">
       <div class="stats-grid" id="stats-grid" style="margin-bottom:32px;"></div>
 
@@ -1136,10 +1134,8 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
       </div>
     </div>
 
-    <!-- KADMMUNITY TAB -->
     <div id="tab-kadmmunity" class="hidden">
 
-      <!-- username / submit bar -->
       <div class="card" style="margin-bottom:24px; padding:20px 24px;">
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; flex:1;">
@@ -1154,7 +1150,6 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
         </div>
       </div>
 
-      <!-- leaderboard content -->
       <div id="kad-content">
         <div class="kad-empty"><strong>Loading Kadmmunity...</strong>Fetching the latest standings.</div>
       </div>
@@ -1224,8 +1219,6 @@ const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct
 let currentMainChartType = 'heatmap';
 
 // ─── DERIVED DATA CACHE ───
-// Single shared object computed once per renderWidgets() call.
-// Both renderStats() and renderItemTable() read from this — no double passes.
 let derived = null;
 function computeDerived(data) {
   const itemMap = {};   // name -> { s, n }
@@ -1249,13 +1242,11 @@ function computeDerived(data) {
     }
   }
 
-  // Build rawArray once — used by both stats and table
   const rawArray = Object.entries(itemMap).map(([name, { s, n }]) => {
     const { price, inflated, image } = getCached(name);
     const spent = price != null ? price * s : null;
     return { name, price, inflated, image, spent, t: s + n, s, n, rate: Math.round(s / (s + n) * 100) };
   });
-  // Top 3 for preview (computed once here, not again in renderItemTable)
   const topItems = [...rawArray]
     .filter(x => x.s > 0)
     .sort((a, b) => b.s !== a.s ? b.s - a.s : (b.price || 0) - (a.price || 0))
@@ -1267,11 +1258,9 @@ function computeDerived(data) {
   const avgCost = totalFed > 0 ? Math.round(totalNP / totalFed) : 0;
   const hasAnyPrice = data.some(e => getCached(e.item).price != null);
 
-  // Get total historical feeds from local storage
   const savedTotalFeeds = parseInt(localStorage.getItem('statdoatie_total_feeds') || '0', 10);
   const totalHistoricalFed = Math.max(totalFed, savedTotalFeeds);
 
-  // Most fed item
   let mostFedItem = 'None', mostFedCount = 0;
   for (const { name, s } of rawArray) {
     if (s > mostFedCount) { mostFedCount = s; mostFedItem = name; }
@@ -1337,6 +1326,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   initKadUsernameFields();
+  initSyncPassphraseField(); // Pull stored password out on load
   setTimeout(() => { if (feedLog.length > 0) queueRender(); }, 50);
 });
 
@@ -1413,7 +1403,6 @@ function getCached(name) {
 // ─── TABLE SEARCH & SORT ───
 function handleDbSearch(val) {
   dbSearchTerm = val.toLowerCase();
-  // Search only needs to re-filter+render the table body — no full renderWidgets
   if (derived) renderItemTableFromDerived(derived);
 }
 function handleDbSort(key) {
@@ -1487,7 +1476,6 @@ document.addEventListener('KadData_ExtToPage', e => {
   const records = Array.isArray(payload) ? payload : (payload.records || []);
   const prices = payload.prices || {};
 
-  // Capture total feeds from extension
   if (payload.total_feeds) {
       localStorage.setItem('statdoatie_total_feeds', payload.total_feeds);
   }
@@ -1544,7 +1532,6 @@ document.addEventListener('KadData_ReceivePrices', e => {
   const count = Object.keys(newPrices).filter(k => newPrices[k].price != null).length;
   Object.assign(itemdbCache, newPrices);
   try { localStorage.setItem('statdoatie_prices', JSON.stringify(itemdbCache)); } catch(err) {}
-  // queueRender here — the 400ms debounce collapses rapid batch returns into one render
   queueRender();
   if (count > 0) toast(`✨ Successfully synced ${count} missing prices`);
   else toast('No new prices found on itemdb.');
@@ -1580,8 +1567,8 @@ function clearData() {
   charts = {};
   localStorage.removeItem('statdoatie_save');
   localStorage.removeItem('statdoatie_prices');
+  localStorage.removeItem('statdoatie_cloud_passphrase');
   itemdbCache = {};
-  // Reset tab back to My Stats
   activeTab = 'my-stats';
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('.tab-btn[onclick="switchTab(\'my-stats\')"]').classList.add('active');
@@ -1636,6 +1623,19 @@ function mergeData(entries) {
   return newEntries.length;
 }
 
+// ─── PASSPHRASE PERSISTENCE ───
+let syncPassphrase = localStorage.getItem('statdoatie_cloud_passphrase') || '';
+
+function saveSyncPassphrase(val) {
+  syncPassphrase = val.trim();
+  localStorage.setItem('statdoatie_cloud_passphrase', syncPassphrase);
+}
+
+function initSyncPassphraseField() {
+  const field = document.getElementById('sync-passphrase');
+  if (field) field.value = syncPassphrase;
+}
+
 // ─── 2-WAY CLOUD SYNC ───
 async function syncCloud() {
   const syncKey = document.getElementById('sync-passphrase').value.trim();
@@ -1650,7 +1650,6 @@ async function syncCloud() {
   statusMsg.style.color = 'var(--text3)';
 
   try {
-    // 1. PULL FROM CLOUD
     const pullRes = await fetch(`${SUPA_URL}/rest/v1/rpc/pull_cloud_save`, {
       method: 'POST',
       headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json' },
@@ -1660,13 +1659,11 @@ async function syncCloud() {
     if (!pullRes.ok) throw new Error('Pull failed');
     const cloudData = await pullRes.json();
 
-    // 2. MERGE DATA
     let added = 0;
     if (cloudData && Array.isArray(cloudData) && cloudData.length > 0) {
       added = mergeData(cloudData); 
     }
 
-    // 3. PUSH COMBINED DATA BACK TO CLOUD
     if (feedLog.length > 0) {
       statusMsg.textContent = 'Updating cloud save...';
       const pushRes = await fetch(`${SUPA_URL}/rest/v1/rpc/push_cloud_save`, {
@@ -1692,16 +1689,12 @@ async function syncCloud() {
 }
 
 // ─── HEATMAP ───
-// Dirty flag: only rebuild if data actually changed (not just sort/search)
 let heatmapDataKey = null;
 function renderHeatmap(data) {
   const container = document.getElementById('heatmap-inner');
   if (!container) return;
-  // Build a cheap fingerprint: total length + last timestamp
-  const key = data.length + '|'
-    + (data.length > 0 ? data[data.length - 1].timestamp : '');
+  const key = data.length + '|' + (data.length > 0 ? data[data.length - 1].timestamp : '');
   if (key === heatmapDataKey) return;
-  // nothing changed, skip the 364-node rebuild
   heatmapDataKey = key;
   if (!data || data.length === 0) { container.innerHTML = ''; return; }
 
@@ -1739,7 +1732,6 @@ function renderHeatmap(data) {
     weeks.push(week);
   }
 
-  // Build DOM via DocumentFragment to minimise reflows
   const frag = document.createDocumentFragment();
 
   const monthsRow = document.createElement('div');
@@ -1947,12 +1939,9 @@ function renderMainChart(type) {
       tooltip: { mode: 'index', intersect: false, padding: 10, cornerRadius: 8 }
     }
   };
-  // ── CHART REUSE: update data in place instead of destroy+recreate ──
-  // Only destroy when the chart *type* changes (different dataset shape).
   const existingType = charts.main ? charts.main.config.type : null;
 
   let newConfig = null;
-  // will be set if we need a fresh chart
 
   if (type === 'daily') {
     const datasets = [
@@ -2048,7 +2037,6 @@ function renderMainChart(type) {
       return g;
     });
     const datasets = [{ data: p.tierCounts, backgroundColor: makeTierGradients(), borderRadius: 6, borderSkipped: false }];
-    // Tiers is a horizontal bar — always recreate if prev type differs
     if (existingType === 'bar' && charts.main && charts.main.config.options.indexAxis === 'y') {
       charts.main.data.datasets[0].data = p.tierCounts;
       charts.main.data.datasets[0].backgroundColor = makeTierGradients();
@@ -2065,11 +2053,9 @@ function renderMainChart(type) {
 }
 
 // ─── RENDER PIPELINE ───
-// One pass over the data, results shared across all sub-renders.
 function renderWidgets() {
   const data = getFilteredData();
   document.getElementById('status-text').textContent = `${data.length.toLocaleString()} Tracked`;
-  // Single computation pass — replaces the separate loops in renderStats + renderItemTable
   derived = computeDerived(data);
 
   renderStreak();
@@ -2141,10 +2127,8 @@ function renderStats(d) {
   });
 }
 
-// ─── TABLE RENDER (reads from derived, no extra passes) ───
 function renderItemTableFromDerived(d) {
   const { rawArray, topItems, crownJewelName } = d;
-  // Preview — only update if visible
   const previewContainer = document.getElementById('db-preview');
   if (topItems.length === 0) {
     previewContainer.innerHTML = '<span style="color:var(--text3)">No feeds yet...</span>';
@@ -2168,7 +2152,6 @@ function renderItemTableFromDerived(d) {
   });
   document.getElementById('item-count').textContent = displayArray.length + ' Items';
 
-  // ── Only rebuild thead when sort state changes ──
   if (dbSortKey !== dbSortKeyPrev || dbSortDir !== dbSortDirPrev) {
     const hdrs = [
       { k: 'name',  l: 'Item',         a: '' },
@@ -2223,7 +2206,6 @@ function renderItemTableFromDerived(d) {
   document.querySelector('#item-table tbody').innerHTML = tbodyHtml;
 }
 
-// Keep old name as alias so any external callers still work
 function renderItemTable(ds) {
   if (derived) renderItemTableFromDerived(derived);
 }
@@ -2269,7 +2251,6 @@ async function supaFetch(path, options = {}) {
     const err = await res.text();
     throw new Error(`Supabase error ${res.status}: ${err}`);
   }
-  // 204 No Content on upserts
   if (res.status === 204 || res.headers.get('content-length') === '0') return null;
   return res.json();
 }
@@ -2292,7 +2273,6 @@ let kadUsername = localStorage.getItem('statdoatie_kad_username') || '';
 function saveKadUsername(val) {
   kadUsername = val.trim();
   localStorage.setItem('statdoatie_kad_username', kadUsername);
-  // keep both inputs in sync
   const bar     = document.getElementById('kad-username-bar');
   const setting = document.getElementById('kad-username-setting');
   if (bar     && bar.value !== kadUsername) bar.value = kadUsername;
@@ -2316,7 +2296,6 @@ function computeWeekStats() {
   let np_spent_week = 0, np_spent_alltime = 0;
   const uniqueSet = new Set();
   const hour_counts = {};
-  // { "0": n, "14": n, ... } — all-time, NST hours
 
   for (const e of feedLog) {
     const ts = new Date(e.timestamp).getTime();
@@ -2336,18 +2315,16 @@ function computeWeekStats() {
     }
   }
 
-  // Win rate strictly based on tracked data to keep it honest
   const total_tracked = tracked_feeds + sniped_alltime;
   const win_rate_pct = total_tracked > 0 ? Math.round(tracked_feeds / total_tracked * 100) : 0;
   
-  // Calculate true historical feeds
   const savedTotalFeeds = parseInt(localStorage.getItem('statdoatie_total_feeds') || '0', 10);
   const true_alltime_feeds = Math.max(tracked_feeds, savedTotalFeeds);
 
   return {
     feeds_week, 
-    feeds_alltime: true_alltime_feeds, // Supabase gets the real total!
-    tracked_feeds: tracked_feeds,      // Save the tracked feeds for accurate win rate rendering
+    feeds_alltime: true_alltime_feeds, 
+    tracked_feeds: tracked_feeds,      
     sniped_week, sniped_alltime,
     np_spent_week, np_spent_alltime,
     unique_items: uniqueSet.size,
@@ -2377,7 +2354,6 @@ async function submitToKadmmunity() {
 
   try {
     const stats = computeWeekStats();
-    console.log('[Kadmmunity] Submitting:', JSON.stringify({ username: kadUsername.toLowerCase(), ...stats }));
     const res = await fetch(`${SUPA_URL}/rest/v1/kadmmunity?on_conflict=username`, {
       method: 'POST',
       headers: {
@@ -2392,19 +2368,15 @@ async function submitToKadmmunity() {
         ...stats
       })
     });
-    console.log('[Kadmmunity] Response status:', res.status);
-    const body = await res.text();
-    console.log('[Kadmmunity] Response body:', body);
-    if (!res.ok) throw new Error(`${res.status}: ${body}`);
+    if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
     status.textContent = '✓ Submitted!';
     status.className = 'kad-status live';
     toast(`✨ Stats submitted for ${kadUsername}!`);
     loadKadmmunity();
   } catch (err) {
-    const msg = err.message || String(err);
     status.textContent = 'Submit failed';
     status.className = 'kad-status';
-    toast(`Error: ${msg.slice(0, 120)}`);
+    toast(`Error: ${err.message || String(err)}`);
   } finally {
     btn.disabled = false;
     btn.textContent = 'Submit My Stats';
@@ -2426,16 +2398,14 @@ async function loadKadmmunity() {
 
     const me = kadUsername.toLowerCase();
 
-    // Sort variants
     const byFeedsWeek   = [...rows].sort((a,b) => b.feeds_week - a.feeds_week);
     const bySnipedWeek  = [...rows].sort((a,b) => b.sniped_week - a.sniped_week);
     const byNPAlltime   = [...rows].sort((a,b) => b.np_spent_alltime - a.np_spent_alltime);
     const byFeedsAll    = [...rows].sort((a,b) => b.feeds_alltime - a.feeds_alltime);
     const byWinRate     = [...rows]
-      .filter(r => (r.tracked_feeds || r.feeds_alltime) >= 50) // Fallback for old rows
+      .filter(r => (r.tracked_feeds || r.feeds_alltime) >= 50) 
       .sort((a,b) => b.win_rate_pct - a.win_rate_pct);
       
-    // Aggregate hour_counts across all users into a 24-element array
     const globalHours = Array(24).fill(0);
     for (const r of rows) {
       if (r.hour_counts && typeof r.hour_counts === 'object') {
@@ -2445,7 +2415,6 @@ async function loadKadmmunity() {
       }
     }
 
-    // Top feeder this week (hero card)
     const topFeeder = byFeedsWeek[0];
     container.innerHTML = `
       ${topFeeder ? `
@@ -2456,38 +2425,13 @@ async function loadKadmmunity() {
       </div>` : ''}
 
       <div class="kad-boards-grid">
-
-        ${buildBoard('🐾 Top Feeders', 'This week\'s feeds', byFeedsWeek, me, r => ({
-          primary: r.feeds_week.toLocaleString(),
-          sub: 'kads fed'
-        }))}
-
-        ${buildBoard('😬 Bottom Feeders', 'This week\'s snipes', bySnipedWeek, me, r => ({
-          primary: r.sniped_week.toLocaleString(),
-          sub: 'times sniped'
-        }))}
-
-        ${buildBoard('💰 NP Spent', 'All-time', byNPAlltime, me, r => ({
-          primary: r.np_spent_alltime >= 1000000
-            ? (r.np_spent_alltime / 1000000).toFixed(1) + 'M'
-            : Math.round(r.np_spent_alltime / 1000) + 'k',
-          sub: 'NP spent'
-        }))}
-
-        ${buildBoard('🎯 All-Time Feeders', 'Total kads fed', byFeedsAll, me, r => ({
-          primary: r.feeds_alltime.toLocaleString(),
-          sub: 'kads fed'
-        }))}
-
+        ${buildBoard('🐾 Top Feeders', 'This week\'s feeds', byFeedsWeek, me, r => ({ primary: r.feeds_week.toLocaleString(), sub: 'kads fed' }))}
+        ${buildBoard('😬 Bottom Feeders', 'This week\'s snipes', bySnipedWeek, me, r => ({ primary: r.sniped_week.toLocaleString(), sub: 'times sniped' }))}
+        ${buildBoard('💰 NP Spent', 'All-time', byNPAlltime, me, r => ({ primary: r.np_spent_alltime >= 1000000 ? (r.np_spent_alltime / 1000000).toFixed(1) + 'M' : Math.round(r.np_spent_alltime / 1000) + 'k', sub: 'NP spent' }))}
+        ${buildBoard('🎯 All-Time Feeders', 'Total kads fed', byFeedsAll, me, r => ({ primary: r.feeds_alltime.toLocaleString(), sub: 'kads fed' }))}
         ${buildHourHeatmap(globalHours, rows.length)}
-
-        ${byWinRate.length > 0 ? buildBoard('🎲 Win Rate', 'Min. 50 tracked feeds', byWinRate, me, r => ({
-          primary: r.win_rate_pct + '%',
-          sub: `${r.tracked_feeds || r.feeds_alltime} tracked`
-        })) : ''}
-
+        ${byWinRate.length > 0 ? buildBoard('🎲 Win Rate', 'Min. 50 tracked feeds', byWinRate, me, r => ({ primary: r.win_rate_pct + '%', sub: `${r.tracked_feeds || r.feeds_alltime} tracked` })) : ''}
       </div>
-
       <div style="text-align:center; margin-top:20px; font-size:.75rem; color:var(--text3);">
         ${rows.length} players on the board · <button class="kad-refresh-btn" onclick="loadKadmmunity()">Refresh</button>
       </div>
@@ -2498,46 +2442,28 @@ async function loadKadmmunity() {
   }
 }
 
-function escKad(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function rankClass(i) {
-  if (i === 0) return 'gold';
-  if (i === 1) return 'silver';
-  if (i === 2) return 'bronze';
-  return '';
-}
+function escKad(str) { return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function rankClass(i) { if (i === 0) return 'gold'; if (i === 1) return 'silver'; if (i === 2) return 'bronze'; return ''; }
 
 function buildHourHeatmap(globalHours, playerCount) {
   const max = Math.max(1, ...globalHours);
   const totalFeeds = globalHours.reduce((a, b) => a + b, 0);
-  // Find the peak hour
   const peakHour = totalFeeds > 0 ? globalHours.indexOf(max) : null;
-  const fmtHour = h => {
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    return `${h % 12 || 12}${ampm}`;
-  };
+  const fmtHour = h => { const ampm = h >= 12 ? 'PM' : 'AM'; return `${h % 12 || 12}${ampm}`; };
 
   const cells = globalHours.map((count, h) => {
     const ratio = count / max;
-    // 5 intensity levels
     let level = 0;
-    if (ratio > 0)    level = 1;
+    if (ratio > 0) level = 1;
     if (ratio >= 0.25) level = 2;
     if (ratio >= 0.50) level = 3;
     if (ratio >= 0.75) level = 4;
-
     const pct = totalFeeds > 0 ? Math.round(count / totalFeeds * 100) : 0;
     const label = `${fmtHour(h)} NST · ${count.toLocaleString()} feeds (${pct}%)`;
-
     return `<div class="kad-hour-cell" data-level="${level}" data-tip="${label}" title="${label}"></div>`;
   }).join('');
-  // Hour labels — show every 3 hours
-  const labels = Array.from({length: 24}, (_, h) => {
-    if (h % 3 !== 0) return `<div class="kad-hour-label"></div>`;
-    return `<div class="kad-hour-label">${fmtHour(h)}</div>`;
-  }).join('');
+
+  const labels = Array.from({length: 24}, (_, h) => h % 3 !== 0 ? `<div class="kad-hour-label"></div>` : `<div class="kad-hour-label">${fmtHour(h)}</div>`).join('');
   return `
     <div class="kad-board-card" style="grid-column: 1 / -1;">
       <div class="kad-board-header">
@@ -2567,7 +2493,6 @@ function buildHourHeatmap(globalHours, playerCount) {
 
 function buildBoard(title, subtitle, rows, me, valueFn, limit = 10) {
   const visible = rows.slice(0, limit);
-  // Check if "me" falls outside top limit
   const myIdx = rows.findIndex(r => r.username === me);
   const myRowOutside = myIdx >= limit ? rows[myIdx] : null;
   return `
@@ -2605,13 +2530,10 @@ function renderLog(data) {
   document.getElementById('log-count-label').textContent = `Showing ${Math.min(300, data.length)} of ${data.length.toLocaleString()}`;
   const html = arr.map(e => {
     const { price, inflated } = getCached(e.item);
-    const priceHtml = price != null
-      ? `<span class="log-price${inflated ? ' inflated' : ''}">${price.toLocaleString()} NP</span>`
-      : `<span class="log-price no-data">no price</span>`;
+    const priceHtml = price != null ? `<span class="log-price${inflated ? ' inflated' : ''}">${price.toLocaleString()} NP</span>` : `<span class="log-price no-data">no price</span>`;
     const safeName = e.item.replace(/"/g, '&quot;');
     const info = getMemoizedDateInfo(e);
-    let h = info.hour % 12;
-    if (h === 0) h = 12;
+    let h = info.hour % 12; if (h === 0) h = 12;
     const ampm = info.hour >= 12 ? 'PM' : 'AM';
     const m = new Date(e.timestamp).getMinutes().toString().padStart(2, '0');
     const dStr = info.nstDateStr.split('-');
