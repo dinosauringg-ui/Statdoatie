@@ -172,6 +172,24 @@ body.theme-faerieland {
   --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z'/%3E%3C/svg%3E");
 }
 
+body.theme-haunted-woods {
+  --bg: #0a0c0a;
+  background: radial-gradient(circle at top right, #162214 0%, #0a0c0a 100%);
+  --glass: rgba(22, 34, 20, 0.5);
+  --glass-hover: rgba(30, 48, 28, 0.7);
+  --border: rgba(132, 204, 22, 0.2);
+  --border-strong: rgba(132, 204, 22, 0.5);
+  --text: #e4e4e7; --text2: #a1a1aa; --text3: #71717a;
+  --green: #84cc16; --green-glow: rgba(132, 204, 22, 0.2);
+  --red: #f97316; --blue: #8b5cf6; --amber: #f59e0b; --purple: #d946ef; --teal: #14b8a6;
+  --theme-radius: 16px;
+  --theme-card-border: 1px solid rgba(132, 204, 22, 0.2);
+  --theme-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(132, 204, 22, 0.05);
+  --heatmap-1: rgba(132, 204, 22, 0.2); --heatmap-2: rgba(132, 204, 22, 0.4);
+  --heatmap-3: rgba(132, 204, 22, 0.65); --heatmap-4: rgba(132, 204, 22, 1);
+  --theme-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zm-1-17.93c3.95-.49 7 3.85 7 7.93 0 .62-.08 1.21-.21 1.79L9 15v1c0 1.1.9 2 2 2v1.93c-4.1-.7-7.23-4.16-7.85-8.38l6.32-3.41C8.75 6.94 9.5 5.57 11 4.07z'/%3E%3C/svg%3E");
+}
+
 body.theme-classic {
   --bg: #ffffff; 
   --glass: #eeeeee;
@@ -716,7 +734,14 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
 }
 .kad-board {
   display: flex; flex-direction: column; gap: 6px;
+  max-height: 380px; 
+  overflow-y: auto; 
+  padding-right: 8px;
 }
+.kad-board::-webkit-scrollbar { width: 4px; }
+.kad-board::-webkit-scrollbar-track { background: transparent; }
+.kad-board::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
+
 .kad-row {
   display: grid; grid-template-columns: 28px 1fr auto;
   align-items: center; gap: 12px;
@@ -978,6 +1003,7 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
         <button class="btn theme-btn" data-theme="moltara" onclick="setTheme('moltara')">Moltara</button>
         <button class="btn theme-btn" data-theme="faerieland" onclick="setTheme('faerieland')">Faerieland (Light)</button>
         <button class="btn theme-btn" data-theme="classic" onclick="setTheme('classic')">Neopets Classic</button>
+        <button class="btn theme-btn" data-theme="haunted-woods" onclick="setTheme('haunted-woods')">Haunted Woods</button>
       </div>
     </div>
     <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
@@ -1018,9 +1044,13 @@ body.theme-classic .tab-btn.active { background: var(--text); color: var(--bg); 
     <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
     <div>
       <div class="card-meta" style="margin-bottom:12px; letter-spacing:0.05em;">RESOURCES</div>
-      <a href="https://greasyfork.org/en/scripts/581360-statdoatie-analytics-sync" target="_blank" class="btn" style="width: 100%; justify-content: center; background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; border: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
+      <a href="https://greasyfork.org/en/scripts/581360-statdoatie-analytics-sync" target="_blank" class="btn" style="width: 100%; justify-content: center; background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; border: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); margin-bottom: 8px;">
         <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:currentColor; margin-right:8px;"><path d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"/></svg>
         Get Tracker Extension
+      </a>
+      <a href="https://greasyfork.org/en/scripts/582378-kadwatch" target="_blank" class="btn" style="width: 100%; justify-content: center; background: var(--table-row); border: var(--theme-card-border); color: var(--text);">
+        <svg viewBox="0 0 24 24" style="width:16px; height:16px; fill:currentColor; margin-right:6px;"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        KadWatch
       </a>
     </div>
   </div>
@@ -2457,12 +2487,12 @@ async function loadKadmmunity() {
       </div>` : ''}
 
       <div class="kad-boards-grid">
-        ${buildBoard('🐾 Top Feeders', 'This week\'s feeds', byFeedsWeek, me, r => ({ primary: r.feeds_week.toLocaleString(), sub: 'kads fed' }))}
-        ${buildBoard('😬 Bottom Feeders', 'This week\'s snipes', bySnipedWeek, me, r => ({ primary: r.sniped_week.toLocaleString(), sub: 'times sniped' }))}
-        ${buildBoard('💰 NP Spent', 'All-time', byNPAlltime, me, r => ({ primary: r.np_spent_alltime >= 1000000 ? (r.np_spent_alltime / 1000000).toFixed(1) + 'M' : Math.round(r.np_spent_alltime / 1000) + 'k', sub: 'NP spent' }))}
-        ${buildBoard('🎯 All-Time Feeders', 'Total kads fed', byFeedsAll, me, r => ({ primary: r.feeds_alltime.toLocaleString(), sub: 'kads fed' }))}
+        ${buildBoard('🐾 Top Feeders', 'This week\'s feeds', byFeedsWeek, me, r => ({ primary: r.feeds_week.toLocaleString(), sub: 'kads fed' }), 50)}
+        ${buildBoard('😬 Bottom Feeders', 'This week\'s snipes', bySnipedWeek, me, r => ({ primary: r.sniped_week.toLocaleString(), sub: 'times sniped' }), 50)}
+        ${buildBoard('💰 NP Spent', 'All-time', byNPAlltime, me, r => ({ primary: r.np_spent_alltime >= 1000000 ? (r.np_spent_alltime / 1000000).toFixed(1) + 'M' : Math.round(r.np_spent_alltime / 1000) + 'k', sub: 'NP spent' }), 50)}
+        ${buildBoard('🎯 All-Time Feeders', 'Total kads fed', byFeedsAll, me, r => ({ primary: r.feeds_alltime.toLocaleString(), sub: 'kads fed' }), 50)}
         ${buildHourHeatmap(globalHours, rows.length)}
-        ${byWinRate.length > 0 ? buildBoard('🎲 Win Rate', 'Min. 50 tracked feeds', byWinRate, me, r => ({ primary: r.win_rate_pct + '%', sub: `${r.tracked_feeds || r.feeds_alltime} tracked` })) : ''}
+        ${byWinRate.length > 0 ? buildBoard('🎲 Win Rate', 'Min. 50 tracked feeds', byWinRate, me, r => ({ primary: r.win_rate_pct + '%', sub: `${r.tracked_feeds || r.feeds_alltime} tracked` }), 50) : ''}
       </div>
       <div style="text-align:center; margin-top:20px; font-size:.75rem; color:var(--text3);">
         ${rows.length} players on the board · <button class="kad-refresh-btn" onclick="loadKadmmunity()">Refresh</button>
