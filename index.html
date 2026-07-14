@@ -1508,7 +1508,11 @@ window.addEventListener('KadData_ExtToPage', e => {
   try { payload = typeof e.detail === 'string' ? JSON.parse(e.detail) : e.detail; } catch (err) { return; }
   const records = Array.isArray(payload) ? payload : (payload.records || []);
   const prices = payload.prices || {};
-
+  
+if (payload.username) {
+      saveKadUsername(payload.username, true);
+  }
+  
   if (payload.total_feeds) {
       localStorage.setItem('statdoatie_total_feeds', payload.total_feeds);
   }
@@ -2332,21 +2336,32 @@ function switchTab(tab) {
 // ─── USERNAME PERSISTENCE ───
 let kadUsername = localStorage.getItem('statdoatie_kad_username') || '';
 
-function saveKadUsername(val) {
-  kadUsername = val.trim();
+function saveKadUsername(val, isVerified = false) {
+  // Strip out the verified tag if it was passed back in by accident
+  kadUsername = val.replace(' ✓', '').trim();
   localStorage.setItem('statdoatie_kad_username', kadUsername);
-  const bar     = document.getElementById('kad-username-bar');
+  
+  const bar = document.getElementById('kad-username-bar');
   const setting = document.getElementById('kad-username-setting');
-  if (bar     && bar.value !== kadUsername) bar.value = kadUsername;
-  if (setting && setting.value !== kadUsername) setting.value = kadUsername;
+  
+  if (bar) {
+      bar.value = isVerified && kadUsername ? kadUsername + " ✓" : kadUsername;
+      if (isVerified && kadUsername) { 
+          bar.readOnly = true; 
+          bar.style.color = "var(--green)";
+          bar.style.borderColor = "var(--green)";
+      }
+  }
+  if (setting) {
+      setting.value = isVerified && kadUsername ? kadUsername + " ✓" : kadUsername;
+      if (isVerified && kadUsername) { 
+          setting.readOnly = true; 
+          setting.style.color = "var(--green)";
+          setting.style.borderColor = "var(--green)";
+      }
+  }
 }
 
-function initKadUsernameFields() {
-  const bar     = document.getElementById('kad-username-bar');
-  const setting = document.getElementById('kad-username-setting');
-  if (bar)     bar.value     = kadUsername;
-  if (setting) setting.value = kadUsername;
-}
 
 // ─── COMPUTE WEEK STATS FROM FEEDLOG ───
 function computeWeekStats() {
